@@ -1,0 +1,52 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  test:
+    name: Datos generados y pruebas
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Regenerar datos y verificar que estan al dia
+        run: |
+          python scripts/build_data.py
+          python scripts/build_seed_sql.py
+          git diff --exit-code -- app/js/data.js db/seed.sql
+      - name: Pruebas del motor de calculo
+        run: node --test "tests/**/*.test.js"
+      - name: Sintaxis JS
+        run: |
+          node --check app/js/engine.js
+          node --check app/js/app.js
+
+  deploy:
+    name: Publicar app en GitHub Pages
+    needs: test
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: app
+      - id: deployment
+        uses: actions/deploy-pages@v4

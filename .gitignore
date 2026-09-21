@@ -1,0 +1,25 @@
+# Sistema
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editores
+.vscode/
+.idea/
+*.swp
+
+# Dependencias / builds
+node_modules/
+__pycache__/
+*.pyc
+.venv/
+dist/
+
+# Entregables y descargas temporales
+*.zip
+legacy/original-drive-download.zip
+docs/entregables/*.pdf
+docs/entregables/*.docx
+
+# Configuracion local de Claude Code
+.claude/settings.local.json

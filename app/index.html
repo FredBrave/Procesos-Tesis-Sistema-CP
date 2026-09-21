@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="light">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>GUIOS PRO · Evaluación de adopción de software</title>
+  <meta name="description" content="Herramienta que automatiza la guía GUIOS para evaluar la adopción de soluciones de software (FLOSS) en una organización: factores, subfactores, FODA y recomendación." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/tokens.css" />
+  <link rel="stylesheet" href="css/components.css" />
+  <link rel="stylesheet" href="css/app.css" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='14' fill='%234f5bf5'/><text x='32' y='42' font-family='Arial' font-weight='800' font-size='28' fill='white' text-anchor='middle'>G</text></svg>" />
+</head>
+<body>
+  <header class="app-header">
+    <div class="inner">
+      <a class="brand" href="#inicio" data-nav="0">
+        <span class="logo" aria-hidden="true">G</span>
+        <span>
+          <div class="name">GUIOS PRO</div>
+          <div class="tag">Guía para la adopción de software · v1.0</div>
+        </span>
+      </a>
+      <nav class="header-stepper" aria-label="Pasos de la evaluación" id="stepper"></nav>
+    </div>
+  </header>
+
+  <main class="app-main" id="screen" aria-live="polite"></main>
+
+  <footer class="app-footer" id="footer"></footer>
+
+  <div id="overlay"></div>
+  <div id="toast"></div>
+
+  <script src="js/data.js"></script>
+  <script src="js/engine.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

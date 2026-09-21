@@ -1,0 +1,35 @@
+{
+  "_comment": "Matriz de recomendación GUIOSAD 2021 (legacy/MATRIZ RECOMENDACION GUIOSAD 2021.xlsx). Se evalúa en orden: la primera regla que se cumple define la recomendación.",
+  "niveles_importancia": ["Irrelevante", "Opcional", "Importante", "Fundamental"],
+  "niveles_subfactor": ["No cumple el requisito", "Desconozco si cumple el requisito", "Cumple parcialmente el requisito", "Cumple el requisito"],
+  "umbral_foda": 3,
+  "reglas": [
+    {
+      "codigo": "A",
+      "titulo": "No es posible adoptar",
+      "tono": "danger",
+      "condicion": {
+        "foda": ["Amenaza", "Debilidad"],
+        "importancia_relativa": ["Importante", "Fundamental"]
+      },
+      "texto": "No es posible adoptar. Se han detectado amenazas y/o debilidades en factores cuya importancia relativa es fundamental o importante, por lo tanto, es indispensable que el decisor revise los subfactores que no cumplen con lo mínimo requerido para adoptar la solución FLOSS. Esta revisión consistiría en proporcionar recursos (humano, tecnológico, económico, etc.) para mitigar en gran medida los subfactores con baja valoración."
+    },
+    {
+      "codigo": "B",
+      "titulo": "Es posible adoptar con reservas",
+      "tono": "warning",
+      "condicion": {
+        "foda": ["Amenaza", "Debilidad"],
+        "importancia_relativa": ["Opcional"]
+      },
+      "texto": "Es posible adoptar. A pesar de que se han detectado amenazas y/o debilidades, estas corresponden a factores cuya importancia relativa es opcional; por lo tanto, se sugiere revisar los criterios que no cumplen con lo mínimo requerido para adoptar."
+    },
+    {
+      "codigo": "C",
+      "titulo": "Adoptar",
+      "tono": "success",
+      "condicion": null,
+      "texto": "Es posible adoptar. Todos los factores han sido identificados como Oportunidades y/o Fortalezas. Esto quiere decir que la organización cumple satisfactoriamente con la mayoría de requisitos para adoptar la solución FLOSS."
+    }
+  ]
+}

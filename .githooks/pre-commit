@@ -1,0 +1,10 @@
+#!/bin/sh
+# Activar con: git config core.hooksPath .githooks
+# Regenera los datos derivados, falla si estaban desactualizados y ejecuta las pruebas.
+set -e
+npm run --silent build:data
+if ! git diff --quiet -- app/js/data.js db/seed.sql; then
+  echo "[pre-commit] app/js/data.js o db/seed.sql estaban desactualizados; se regeneraron. Añádelos al commit (git add) y vuelve a intentarlo."
+  exit 1
+fi
+npm test --silent
