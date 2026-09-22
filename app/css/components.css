@@ -125,6 +125,12 @@ textarea {
 .btn-ghost:hover:not(:disabled) {
   background: var(--color-primary-subtle);
 }
+.btn-ghost.is-danger {
+  color: var(--color-danger);
+}
+.btn-ghost.is-danger:hover:not(:disabled) {
+  background: var(--color-danger-subtle);
+}
 .btn-danger {
   background: var(--color-surface);
   color: var(--color-danger);

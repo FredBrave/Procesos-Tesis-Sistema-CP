@@ -88,7 +88,7 @@ Interfaz sin guía                          → UI kit consistente, responsive y
 | RF-06 | Clasificar cada factor evaluado en la matriz FODA según alcance y umbral. | Alta | 0 ✔ |
 | RF-07 | Emitir la recomendación A/B/C con el texto de la matriz e indicar los factores críticos. | Alta | 0 ✔ |
 | RF-08 | Exportar el informe (PDF) y los datos (JSON); importar una evaluación previa. | Media | 0 ✔ |
-| RF-09 | Guardar el avance automáticamente y permitir reiniciar la evaluación con confirmación. | Media | 0 ✔ |
+| RF-09 | Guardar el avance automáticamente y permitir limpiar los datos de una evaluación anterior, con confirmación. | Media | 0 ✔ |
 | RF-10 | Autenticación con roles Administrador / Evaluador / Decisor. | Alta | 2 |
 | RF-11 | Persistir evaluaciones en servidor con historial por organización. | Alta | 2-3 |
 | RF-12 | Administrar el catálogo (factores, subfactores, reglas) desde la interfaz. | Media | 3 |
@@ -118,7 +118,7 @@ Interfaz sin guía                          → UI kit consistente, responsive y
 | HU-04 | Como evaluador quiero valorar los subfactores de cada factor relevante. | Lista lateral con progreso n/N por factor; dropdown de 4 niveles por subfactor; ponderación visible al completar. | Alta | 5 | 0 ✔ |
 | HU-05 | Como decisor quiero ver la matriz FODA y la recomendación para decidir. | KPIs F/O/D/A, cuadrantes con factores y ponderación, tarjeta de recomendación A/B/C con factores críticos, tabla detallada. | Alta | 8 | 0 ✔ |
 | HU-06 | Como decisor quiero exportar el informe para presentarlo al comité. | Botón Exportar PDF (impresión con cabecera del informe) y JSON; importar JSON restaura la evaluación. | Media | 3 | 0 ✔ |
-| HU-07 | Como usuario quiero que mi avance no se pierda al cerrar el navegador. | Estado en localStorage; reinicio con pop-up de confirmación. | Media | 2 | 0 ✔ |
+| HU-07 | Como usuario quiero que mi avance no se pierda al cerrar el navegador y poder empezar de cero cuando cambie de proyecto. | Estado en localStorage; botón «Limpiar datos» en Inicio y en el menú ⋯, con pop-up de confirmación. | Media | 2 | 0 ✔ |
 | HU-13 | Como usuario quiero una interfaz simple, con modo oscuro y navegación clara. | Tres pasos con lenguaje llano; detalle de cálculo oculto tras "Ver cálculo"/secciones plegables; botón de tema; barra lateral con los pasos uno a uno y secciones futuras (Historial, Administración). | Media | 3 | 0 ✔ |
 | HU-08 | Como administrador quiero gestionar usuarios y roles. | CRUD de usuarios, roles Administrador/Evaluador/Decisor, contraseñas cifradas. | Alta | 5 | 2 |
 | HU-09 | Como evaluador quiero guardar evaluaciones en el servidor y consultarlas después. | API REST + PostgreSQL (`db/schema.sql`); listado por organización; estados En proceso/Completada. | Alta | 8 | 2-3 |

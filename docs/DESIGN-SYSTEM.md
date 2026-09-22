@@ -36,7 +36,7 @@ Implementación en CSS del UI kit de referencia (capturas: Pop-Up, List, Action 
 
 | Clase | UI kit | Notas |
 |---|---|---|
-| `.btn.btn-primary` / `.btn-secondary` / `.btn-ghost` / `.btn-danger` | Button (filled / outline) | `.btn-sm`, `.btn-block`, `.btn-icon` (circular) |
+| `.btn.btn-primary` / `.btn-secondary` / `.btn-ghost` / `.btn-danger` | Button (filled / outline) | `.btn-sm`, `.btn-block`, `.btn-icon` (circular), `.btn-ghost.is-danger` (acción destructiva discreta, como «Limpiar datos») |
 | `.input`, `.field > label` | Placeholder input del Pop-Up | `textarea.input` |
 | `.select` | Dropdown (Default / Hover / Expanded / Disabled) | `select` nativo estilizado; `.is-level-N` colorea por valor |
 | `.segmented` | — (extensión) | Alternativa compacta al dropdown para Interno/Externo |

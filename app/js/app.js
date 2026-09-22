@@ -263,7 +263,7 @@
       <button role="menuitem" data-action="export-json">${icon("download", 16)} Exportar evaluación (JSON)</button>
       <button role="menuitem" data-action="print">${icon("printer", 16)} Exportar informe (PDF)</button>
       <hr />
-      <button role="menuitem" class="is-danger" data-action="reset">${icon("trash", 16)} Reiniciar evaluación</button>
+      <button role="menuitem" class="is-danger" data-action="reset">${icon("trash", 16)} Limpiar datos</button>
     </div>`;
   }
 
@@ -317,6 +317,7 @@
   function renderInicio(result) {
     const sw = state.software;
     const started = Object.keys(state.subfactores).length > 0;
+    const hayDatos = started || state.paso1Confirmado || Object.values(sw).some((v) => v);
     return `
       <div class="screen-header">
         <div>
@@ -353,6 +354,7 @@
           <div class="card-footer">
             <button class="btn btn-ghost" data-action="how">${icon("help")} ¿Cómo funciona?</button>
             <span class="spacer"></span>
+            ${hayDatos ? `<button class="btn btn-ghost is-danger" data-action="reset">${icon("trash")} Limpiar datos</button>` : ""}
             <button class="btn btn-primary" data-nav="1">${started ? "Continuar" : "Comenzar"} ${icon("chevronRight")}</button>
           </div>
         </section>
@@ -716,9 +718,9 @@
 
   function reset() {
     popup({
-      title: "¿Reiniciar la evaluación?",
-      html: "<p>Se borrarán las respuestas y los datos del software guardados en este navegador.</p>",
-      confirmLabel: "Reiniciar",
+      title: "¿Limpiar los datos de la evaluación?",
+      html: "<p>Se borrarán el software registrado, las importancias y todas las respuestas guardadas en este navegador. Exporte el JSON antes si desea conservarlos.</p>",
+      confirmLabel: "Limpiar datos",
       danger: true,
       onConfirm: () => {
         state = E.initialState(DATA);
@@ -726,7 +728,7 @@
         ui.screen = 0;
         ui.factor = null;
         render();
-        toast("Evaluación reiniciada");
+        toast("Datos borrados: puede iniciar una nueva evaluación");
       },
     });
   }

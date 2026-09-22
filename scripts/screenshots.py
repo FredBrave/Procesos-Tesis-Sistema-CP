@@ -30,7 +30,7 @@ BROWSER = next((c for c in CANDIDATES if c and Path(c).exists()), None)
 
 # (nombre, hash, query, ancho, alto)
 SHOTS = [
-    ("00-inicio", "inicio", "?theme=light", 1280, 900),
+    ("00-inicio", "inicio", "?demo=1&theme=light", 1280, 900),
     ("01-paso-1-2", "paso-1-2", "?theme=light", 1280, 1300),
     ("02-paso-3-4", "paso-3-4", "?demo=1&theme=light", 1280, 1000),
     ("03-paso-5-6", "paso-5-6", "?demo=1&theme=light", 1280, 1300),
