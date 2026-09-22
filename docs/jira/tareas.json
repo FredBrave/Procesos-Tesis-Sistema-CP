@@ -1,0 +1,1053 @@
+{
+  "_comment": "Fuente de verdad del reparto de tareas. Editar aquí y ejecutar: python scripts/build_jira.py",
+  "proyecto": {
+    "nombre": "GUIOS PRO",
+    "clave": "GP",
+    "velocidad_por_dev": 10,
+    "duracion_sprint_semanas": 2
+  },
+  "equipo": [
+    {
+      "id": "A",
+      "alias": "dev-a",
+      "rol": "IA e integraciones (líder técnico)",
+      "responsable_de": "Asistente inteligente, capa ai/, prompts, guardarraíles, evals, paridad del motor de cálculo",
+      "code_owner": [
+        "ai/",
+        "app/js/engine.js",
+        "tests/"
+      ]
+    },
+    {
+      "id": "B",
+      "alias": "dev-b",
+      "rol": "Backend y base de datos",
+      "responsable_de": "API REST, PostgreSQL, migraciones, contratos y rendimiento de datos",
+      "code_owner": [
+        "api/",
+        "db/",
+        "scripts/build_seed_sql.py"
+      ]
+    },
+    {
+      "id": "C",
+      "alias": "dev-c",
+      "rol": "Seguridad y DevOps",
+      "responsable_de": "Autenticación, roles, secretos, CI/CD, despliegue, monitoreo y backups",
+      "code_owner": [
+        ".github/",
+        ".githooks/",
+        "api/auth/",
+        "docker-compose.yml"
+      ]
+    },
+    {
+      "id": "D",
+      "alias": "dev-d",
+      "rol": "Frontend y experiencia de evaluación",
+      "responsable_de": "Pantallas de los 3 pasos, historial, sincronización con la API, navegación y estado",
+      "code_owner": [
+        "app/js/app.js",
+        "app/index.html"
+      ]
+    },
+    {
+      "id": "E",
+      "alias": "dev-e",
+      "rol": "Diseño, reportes, calidad y documentación",
+      "responsable_de": "Sistema de diseño, informes y gráficos, pruebas E2E, accesibilidad, manuales e informe académico",
+      "code_owner": [
+        "app/css/",
+        "docs/",
+        "tests/ui/"
+      ]
+    }
+  ],
+  "sprints": [
+    {
+      "n": 0,
+      "nombre": "Sprint 0 · Cimentación",
+      "inicio": "2026-09-08",
+      "fin": "2026-09-21",
+      "objetivo": "Repositorio, prototipo web rediseñado, motor probado, datos maestros, esquema de BD y CI",
+      "estado": "Completado"
+    },
+    {
+      "n": 1,
+      "nombre": "Sprint 1 · Prototipo pulido y cimientos",
+      "inicio": "2026-09-22",
+      "fin": "2026-10-05",
+      "objetivo": "v1.1 publicada en Pages, decisiones técnicas cerradas (ADR de IA y de backend), pruebas E2E y accesibilidad",
+      "estado": "Activo"
+    },
+    {
+      "n": 2,
+      "nombre": "Sprint 2 · Backend, autenticación y primer servicio de IA",
+      "inicio": "2026-10-06",
+      "fin": "2026-10-19",
+      "objetivo": "API con PostgreSQL, login con roles y primer endpoint de sugerencias con IA",
+      "estado": "Planificado"
+    },
+    {
+      "n": 3,
+      "nombre": "Sprint 3 · Persistencia, administración y asistente en la UI",
+      "inicio": "2026-10-20",
+      "fin": "2026-11-02",
+      "objetivo": "Evaluaciones guardadas en servidor, historial, administración del catálogo y asistente de IA en el paso 2",
+      "estado": "Planificado"
+    },
+    {
+      "n": 4,
+      "nombre": "Sprint 4 · Valor para el decisor e IA analítica",
+      "inicio": "2026-11-03",
+      "fin": "2026-11-16",
+      "objetivo": "Comparador de candidatos, evidencias, gráficos del informe y resumen ejecutivo generado por IA",
+      "estado": "Planificado"
+    },
+    {
+      "n": 5,
+      "nombre": "Sprint 5 · Estabilización y entrega final",
+      "inicio": "2026-11-17",
+      "fin": "2026-11-30",
+      "objetivo": "Calidad de las salidas de IA, seguridad, rendimiento, manuales e informe final del curso",
+      "estado": "Planificado"
+    }
+  ],
+  "epicas": [
+    {
+      "id": "EP-IA",
+      "nombre": "Asistente inteligente y automatización con IA",
+      "dev": "A",
+      "componente": "IA",
+      "descripcion": "Integración con un modelo de lenguaje (Claude API) para sugerir valoraciones, explicar resultados y redactar el resumen ejecutivo, con guardarraíles, trazabilidad y modo sin IA."
+    },
+    {
+      "id": "EP-API",
+      "nombre": "Backend, API y base de datos",
+      "dev": "B",
+      "componente": "Backend",
+      "descripcion": "Servicio REST sobre PostgreSQL (db/schema.sql) que persiste organizaciones, software candidato, evaluaciones y su detalle."
+    },
+    {
+      "id": "EP-SEC",
+      "nombre": "Seguridad, autenticación y DevOps",
+      "dev": "C",
+      "componente": "DevOps",
+      "descripcion": "Autenticación con roles, gestión de secretos, CI/CD, despliegue, monitoreo, backups y auditoría de seguridad."
+    },
+    {
+      "id": "EP-UX",
+      "nombre": "Frontend y experiencia de evaluación",
+      "dev": "D",
+      "componente": "Frontend",
+      "descripcion": "Pantallas de la guía GUIOS, historial, sincronización con la API y navegación accesible en escritorio y móvil."
+    },
+    {
+      "id": "EP-QA",
+      "nombre": "Diseño, reportes y calidad",
+      "dev": "E",
+      "componente": "Calidad",
+      "descripcion": "Sistema de diseño, informes PDF con gráficos, pruebas E2E, accesibilidad y documentación de usuario."
+    },
+    {
+      "id": "EP-PM",
+      "nombre": "Gestión del proyecto y entregables académicos",
+      "dev": "E",
+      "componente": "Gestión",
+      "descripcion": "Tablero, ceremonias SCRUM, informes de avance y entrega final de la asignatura."
+    }
+  ],
+  "tareas": [
+    {
+      "id": "GP-A01",
+      "epica": "EP-IA",
+      "sprint": 1,
+      "dev": "A",
+      "tipo": "Spike",
+      "prioridad": "Highest",
+      "puntos": 3,
+      "resumen": "Spike: arquitectura de integración con IA (ADR-001)",
+      "descripcion": "Comparar opciones para integrar un modelo de lenguaje en GUIOS PRO y dejar la decisión escrita en docs/adr/001-integracion-ia.md.",
+      "criterios": "ADR publicado con: proveedor y modelo elegidos (Claude API, modelo y versión), dónde vive la clave (nunca en el navegador), coste estimado por evaluación, latencia aceptable, política de datos y modo degradado sin IA; revisado por el Product Owner.",
+      "depende_de": []
+    },
+    {
+      "id": "GP-A02",
+      "epica": "EP-IA",
+      "sprint": 1,
+      "dev": "A",
+      "tipo": "Tarea",
+      "prioridad": "High",
+      "puntos": 5,
+      "resumen": "Capa ai/ con cliente del modelo y proveedor simulado",
+      "descripcion": "Módulo ai/ independiente del framework, con interfaz única (sugerir, resumir) y dos implementaciones: cliente real y mock determinista para pruebas y desarrollo sin clave.",
+      "criterios": "La interfaz no expone detalles del proveedor; el mock devuelve respuestas fijas; pruebas unitarias del parseo de respuestas; si no hay clave configurada la app funciona igual sin IA.",
+      "depende_de": [
+        "GP-A01"
+      ]
+    },
+    {
+      "id": "GP-A03",
+      "epica": "EP-IA",
+      "sprint": 1,
+      "dev": "A",
+      "tipo": "Tarea",
+      "prioridad": "Medium",
+      "puntos": 2,
+      "resumen": "Catálogo de prompts versionados",
+      "descripcion": "Crear ai/prompts/ con un archivo por caso de uso, versión en el nombre y contexto de la guía GUIOS (dimensiones, factores, escalas 1..4).",
+      "criterios": "Cada prompt documenta entrada, salida esperada (JSON) y versión; los textos de la guía se inyectan desde data/, no se copian a mano.",
+      "depende_de": [
+        "GP-A02"
+      ]
+    },
+    {
+      "id": "GP-B01",
+      "epica": "EP-API",
+      "sprint": 1,
+      "dev": "B",
+      "tipo": "Spike",
+      "prioridad": "High",
+      "puntos": 2,
+      "resumen": "Spike: elección del stack backend (ADR-002)",
+      "descripcion": "Decidir entre FastAPI + SQLAlchemy y Node + Express reutilizando engine.js, según el equipo y el manual técnico original.",
+      "criterios": "ADR con criterios (curva de aprendizaje, paridad del motor, despliegue), decisión y consecuencias; aprobado en la Planning del Sprint 2.",
+      "depende_de": []
+    },
+    {
+      "id": "GP-B02",
+      "epica": "EP-API",
+      "sprint": 1,
+      "dev": "B",
+      "tipo": "Tarea",
+      "prioridad": "High",
+      "puntos": 5,
+      "resumen": "Esqueleto de la API y docker-compose con PostgreSQL",
+      "descripcion": "Crear api/ con healthcheck y docker-compose.yml que levante PostgreSQL 16 cargando db/schema.sql y db/seed.sql.",
+      "criterios": "docker compose up deja la API respondiendo en /health y la BD con los 18 factores y 61 subfactores; README con los pasos.",
+      "depende_de": [
+        "GP-B01"
+      ]
+    },
+    {
+      "id": "GP-B03",
+      "epica": "EP-API",
+      "sprint": 1,
+      "dev": "B",
+      "tipo": "Tarea",
+      "prioridad": "Medium",
+      "puntos": 3,
+      "resumen": "Modelos ORM y migraciones alineados con db/schema.sql",
+      "descripcion": "Definir los modelos de datos y configurar migraciones (Alembic o equivalente) partiendo del esquema del Sprint 0.",
+      "criterios": "La migración inicial reproduce db/schema.sql sin diferencias; seed cargado como migración de datos; prueba que verifica los conteos del catálogo.",
+      "depende_de": [
+        "GP-B02"
+      ]
+    },
+    {
+      "id": "GP-C01",
+      "epica": "EP-SEC",
+      "sprint": 1,
+      "dev": "C",
+      "tipo": "Tarea",
+      "prioridad": "High",
+      "puntos": 3,
+      "resumen": "Endurecer el pipeline de CI",
+      "descripcion": "Ampliar .github/workflows/ci.yml con verificación de formato, caché de dependencias y ejecución de las pruebas E2E.",
+      "criterios": "CI falla si los datos generados están desactualizados, si falla una prueba o si hay error de sintaxis; tiempo total menor a 5 minutos.",
+      "depende_de": []
+    },
+    {
+      "id": "GP-C02",
+      "epica": "EP-SEC",
+      "sprint": 1,
+      "dev": "C",
+      "tipo": "Tarea",
+      "prioridad": "Highest",
+      "puntos": 2,
+      "resumen": "Activar GitHub Pages y verificar el despliegue",
+      "descripcion": "Configurar Settings › Pages › Source: GitHub Actions y comprobar que cada merge a main publica app/.",
+      "criterios": "URL pública funcionando, enlace en el README y en la descripción del repositorio; despliegue verificado tras un commit de prueba.",
+      "depende_de": []
+    },
+    {
+      "id": "GP-C03",
+      "epica": "EP-SEC",
+      "sprint": 1,
+      "dev": "C",
+      "tipo": "Tarea",
+      "prioridad": "Medium",
+      "puntos": 3,
+      "resumen": "Reglas de colaboración: hook, plantillas y protección de main",
+      "descripcion": "Activar .githooks/pre-commit en el equipo, añadir plantilla de pull request y proteger la rama main.",
+      "criterios": "main exige pull request con CI en verde y una aprobación; plantilla de PR con checklist de la Definición de Hecho; instrucciones en el README.",
+      "depende_de": [
+        "GP-C01"
+      ]
+    },
+    {
+      "id": "GP-D01",
+      "epica": "EP-UX",
+      "sprint": 1,
+      "dev": "D",
+      "tipo": "Historia",
+      "prioridad": "High",
+      "puntos": 3,
+      "resumen": "HU-14 Ayuda contextual en cada paso",
+      "descripcion": "Como evaluador quiero entender qué significa cada nivel de la escala para responder con criterio.",
+      "criterios": "Cada paso muestra una ayuda breve plegable; el paso 2 explica los 4 niveles de cumplimiento; los textos salen de data/ y no se duplican en el código.",
+      "depende_de": []
+    },
+    {
+      "id": "GP-D02",
+      "epica": "EP-UX",
+      "sprint": 1,
+      "dev": "D",
+      "tipo": "Historia",
+      "prioridad": "High",
+      "puntos": 3,
+      "resumen": "HU-15 Validaciones y avisos antes de avanzar",
+      "descripcion": "Como evaluador quiero que el sistema me avise si dejo factores sin responder antes de ver el resultado.",
+      "criterios": "Al pasar al paso 3 con respuestas pendientes se muestra un aviso con la lista de factores y opción de ir directo a cada uno; el resultado se marca como parcial.",
+      "depende_de": []
+    },
+    {
+      "id": "GP-D03",
+      "epica": "EP-UX",
+      "sprint": 1,
+      "dev": "D",
+      "tipo": "Tarea",
+      "prioridad": "Low",
+      "puntos": 2,
+      "resumen": "Navegación por teclado y gestión del foco",
+      "descripcion": "Permitir recorrer toda la evaluación sin ratón y devolver el foco al contenido al cambiar de pantalla.",
+      "criterios": "Tabulación en orden lógico; Escape cierra menús y diálogos; el foco entra al encabezado de la pantalla tras navegar; sin trampas de foco.",
+      "depende_de": []
+    },
+    {
+      "id": "GP-E01",
+      "epica": "EP-QA",
+      "sprint": 1,
+      "dev": "E",
+      "tipo": "Tarea",
+      "prioridad": "High",
+      "puntos": 5,
+      "resumen": "Pruebas E2E de los tres pasos con Playwright",
+      "descripcion": "Automatizar el recorrido completo de la evaluación sobre la app estática, incluyendo el caso de ejemplo (?demo=1).",
+      "criterios": "tests/ui/ cubre: registrar software, cambiar importancias, responder subfactores y obtener recomendación B en el ejemplo; se ejecuta en CI.",
+      "depende_de": []
+    },
+    {
+      "id": "GP-E02",
+      "epica": "EP-QA",
+      "sprint": 1,
+      "dev": "E",
+      "tipo": "Tarea",
+      "prioridad": "Medium",
+      "puntos": 3,
+      "resumen": "Auditoría de accesibilidad y responsive",
+      "descripcion": "Revisar contraste, roles ARIA, etiquetas y comportamiento a 390 px en tema claro y oscuro.",
+      "criterios": "Informe con hallazgos corregidos; contraste AA en ambos temas; todos los controles con nombre accesible; sin desbordamiento horizontal.",
+      "depende_de": []
+    },
+    {
+      "id": "GP-E03",
+      "epica": "EP-QA",
+      "sprint": 2,
+      "dev": "E",
+      "tipo": "Tarea",
+      "prioridad": "Medium",
+      "puntos": 2,
+      "resumen": "Mejorar el informe PDF impreso",
+      "descripcion": "Ajustar encabezado, pie, saltos de página y despliegue de secciones plegables al imprimir.",
+      "criterios": "El PDF incluye datos del software, fecha y evaluador; sin cortes dentro de una tarjeta; máximo 3 páginas para una evaluación completa.",
+      "depende_de": []
+    },
+    {
+      "id": "GP-P01",
+      "epica": "EP-PM",
+      "sprint": 1,
+      "dev": "C",
+      "tipo": "Tarea",
+      "prioridad": "Highest",
+      "puntos": 2,
+      "resumen": "Configurar el tablero de Jira e importar el backlog",
+      "descripcion": "Crear el proyecto Scrum, los componentes, el campo de puntos y los sprints; importar docs/jira/backlog-jira.csv.",
+      "criterios": "Tablero con las 6 épicas, tareas asignadas a los 5 desarrolladores y sprints con fechas; tablero enlazado en el README.",
+      "depende_de": []
+    },
+    {
+      "id": "GP-P02",
+      "epica": "EP-PM",
+      "sprint": 1,
+      "dev": "E",
+      "tipo": "Tarea",
+      "prioridad": "Highest",
+      "puntos": 3,
+      "resumen": "Entregar el informe de avance del Sprint 0 (S4-TAREA_1)",
+      "descripcion": "Compilar docs/SPRINT-0.md con portada, diagrama ER renderizado y capturas, y entregarlo en PDF en la plataforma.",
+      "criterios": "PDF con portada completa, gráficos a 300 DPI, ortografía revisada y verificación en Turnitin; entregado antes del 30/09/2026.",
+      "depende_de": []
+    },
+    {
+      "id": "GP-A04",
+      "epica": "EP-IA",
+      "sprint": 2,
+      "dev": "A",
+      "tipo": "Historia",
+      "prioridad": "Highest",
+      "puntos": 8,
+      "resumen": "HU-16 Sugerencia de valoración asistida por IA",
+      "descripcion": "Como evaluador quiero que el sistema me proponga una valoración para cada subfactor a partir de la información pública del software, para acelerar la evaluación sin perder criterio.",
+      "criterios": "Endpoint POST /ai/sugerencias que recibe software y lista de subfactores y devuelve, por subfactor, valor 1..4, justificación breve y nivel de confianza; validación estricta del JSON de salida; la sugerencia nunca se guarda sola, requiere aceptación del evaluador.",
+      "depende_de": [
+        "GP-A02",
+        "GP-B02"
+      ]
+    },
+    {
+      "id": "GP-A05",
+      "epica": "EP-IA",
+      "sprint": 2,
+      "dev": "A",
+      "tipo": "Tarea",
+      "prioridad": "High",
+      "puntos": 3,
+      "resumen": "Guardarraíles de la integración con IA",
+      "descripcion": "Límite de tokens por petición, timeout, reintentos con retroceso, caché por software+subfactor y contador de coste.",
+      "criterios": "Una evaluación completa no supera el presupuesto definido en el ADR; ante error o timeout la app sigue funcionando en modo manual; el coste acumulado se registra por evaluación.",
+      "depende_de": [
+        "GP-A04"
+      ]
+    },
+    {
+      "id": "GP-B04",
+      "epica": "EP-API",
+      "sprint": 2,
+      "dev": "B",
+      "tipo": "Historia",
+      "prioridad": "High",
+      "puntos": 5,
+      "resumen": "HU-17 API de software candidato",
+      "descripcion": "Como evaluador quiero registrar y consultar los softwares candidatos de mi organización.",
+      "criterios": "CRUD completo con validación; solo se ven los de la propia organización; documentado en OpenAPI; pruebas de contrato.",
+      "depende_de": [
+        "GP-B03"
+      ]
+    },
+    {
+      "id": "GP-B05",
+      "epica": "EP-API",
+      "sprint": 2,
+      "dev": "B",
+      "tipo": "Historia",
+      "prioridad": "Highest",
+      "puntos": 8,
+      "resumen": "HU-09a API de evaluaciones (crear y guardar avance)",
+      "descripcion": "Como evaluador quiero que mi evaluación se guarde en el servidor para no depender del navegador.",
+      "criterios": "Endpoints para crear evaluación, guardar importancia/alcance por factor, guardar valoración por subfactor y completar; escrituras idempotentes; estados En proceso/Completada/Cancelada.",
+      "depende_de": [
+        "GP-B03"
+      ]
+    },
+    {
+      "id": "GP-C04",
+      "epica": "EP-SEC",
+      "sprint": 2,
+      "dev": "C",
+      "tipo": "Historia",
+      "prioridad": "Highest",
+      "puntos": 5,
+      "resumen": "HU-08a Autenticación con JWT y contraseñas cifradas",
+      "descripcion": "Como administrador quiero que los usuarios inicien sesión de forma segura.",
+      "criterios": "Registro e inicio de sesión; contraseñas con argon2 o bcrypt; token con expiración y refresco; bloqueo tras intentos fallidos; pruebas de los casos de error.",
+      "depende_de": [
+        "GP-B02"
+      ]
+    },
+    {
+      "id": "GP-C05",
+      "epica": "EP-SEC",
+      "sprint": 2,
+      "dev": "C",
+      "tipo": "Historia",
+      "prioridad": "High",
+      "puntos": 3,
+      "resumen": "HU-08b Roles y autorización por endpoint",
+      "descripcion": "Como administrador quiero que cada rol solo acceda a lo que le corresponde.",
+      "criterios": "Roles Administrador, Evaluador y Decisor aplicados en cada endpoint; matriz de permisos documentada; pruebas que verifican 403 en accesos indebidos.",
+      "depende_de": [
+        "GP-C04"
+      ]
+    },
+    {
+      "id": "GP-C06",
+      "epica": "EP-SEC",
+      "sprint": 2,
+      "dev": "C",
+      "tipo": "Tarea",
+      "prioridad": "High",
+      "puntos": 2,
+      "resumen": "Gestión de secretos y CORS",
+      "descripcion": "Variables de entorno, GitHub Secrets y política CORS para el front publicado en Pages.",
+      "criterios": "Ninguna clave en el repositorio; .env.example documentado; la clave del modelo de IA solo existe en el servidor; CORS restringido a los orígenes propios.",
+      "depende_de": [
+        "GP-C04"
+      ]
+    },
+    {
+      "id": "GP-D04",
+      "epica": "EP-UX",
+      "sprint": 2,
+      "dev": "D",
+      "tipo": "Historia",
+      "prioridad": "High",
+      "puntos": 5,
+      "resumen": "HU-18 Inicio de sesión en la aplicación",
+      "descripcion": "Como usuario quiero iniciar sesión para acceder a mis evaluaciones guardadas.",
+      "criterios": "Pantalla de login y registro con el sistema de diseño; sesión persistida; cierre de sesión; la app sigue usable sin cuenta en modo local.",
+      "depende_de": [
+        "GP-C04"
+      ]
+    },
+    {
+      "id": "GP-D05",
+      "epica": "EP-UX",
+      "sprint": 2,
+      "dev": "D",
+      "tipo": "Tarea",
+      "prioridad": "Highest",
+      "puntos": 5,
+      "resumen": "Cliente de API en el frontend con modo offline",
+      "descripcion": "Módulo app/js/api.js que habla con el backend y degrada a localStorage cuando no hay conexión o sesión.",
+      "criterios": "Una sola capa de acceso a datos usada por app.js; reintentos y estados de carga; la app abierta desde file:// sigue funcionando sin API.",
+      "depende_de": [
+        "GP-B05"
+      ]
+    },
+    {
+      "id": "GP-E04",
+      "epica": "EP-QA",
+      "sprint": 2,
+      "dev": "E",
+      "tipo": "Tarea",
+      "prioridad": "Medium",
+      "puntos": 3,
+      "resumen": "Nuevos componentes: estados vacíos, carga y tabla de datos",
+      "descripcion": "Ampliar components.css con skeletons, estado vacío ilustrado y tabla ordenable, documentados en DESIGN-SYSTEM.md.",
+      "criterios": "Componentes con variante clara y oscura, accesibles y usados por las pantallas de login e historial; documentación actualizada.",
+      "depende_de": []
+    },
+    {
+      "id": "GP-E05",
+      "epica": "EP-QA",
+      "sprint": 2,
+      "dev": "E",
+      "tipo": "Tarea",
+      "prioridad": "High",
+      "puntos": 3,
+      "resumen": "Pruebas de contrato de la API",
+      "descripcion": "Suite con pytest (o equivalente) que valida los endpoints contra el esquema OpenAPI.",
+      "criterios": "Cobertura de los caminos felices y de error de software candidato y evaluaciones; ejecución en CI con base de datos efímera.",
+      "depende_de": [
+        "GP-B05"
+      ]
+    },
+    {
+      "id": "GP-E06",
+      "epica": "EP-QA",
+      "sprint": 2,
+      "dev": "E",
+      "tipo": "Tarea",
+      "prioridad": "Medium",
+      "puntos": 3,
+      "resumen": "Manual de usuario v1",
+      "descripcion": "Guía breve con capturas: registrar software, responder los pasos, leer el resultado y exportar el informe.",
+      "criterios": "docs/MANUAL-USUARIO.md con capturas generadas por scripts/screenshots.py; lenguaje sin tecnicismos; revisado por una persona ajena al equipo.",
+      "depende_de": []
+    },
+    {
+      "id": "GP-A06",
+      "epica": "EP-IA",
+      "sprint": 3,
+      "dev": "A",
+      "tipo": "Historia",
+      "prioridad": "Highest",
+      "puntos": 8,
+      "resumen": "HU-19 Asistente de IA dentro del paso 2",
+      "descripcion": "Como evaluador quiero ver las sugerencias de la IA junto a cada pregunta y aceptarlas o descartarlas una por una.",
+      "criterios": "Botón Sugerir por factor; cada sugerencia muestra valor propuesto, justificación y confianza; aceptar rellena el control y marca el origen; descartar no deja rastro en la respuesta; indicador visible de que hubo asistencia de IA.",
+      "depende_de": [
+        "GP-A04",
+        "GP-D05"
+      ]
+    },
+    {
+      "id": "GP-A07",
+      "epica": "EP-IA",
+      "sprint": 3,
+      "dev": "A",
+      "tipo": "Tarea",
+      "prioridad": "High",
+      "puntos": 3,
+      "resumen": "Trazabilidad de las sugerencias de IA",
+      "descripcion": "Registrar en la base de datos qué sugirió el modelo, con qué versión de prompt y si el evaluador la aceptó o modificó.",
+      "criterios": "Tabla sugerencia_ia con evaluación, subfactor, valor sugerido, valor final, versión del prompt y fecha; el informe indica cuántas respuestas fueron asistidas.",
+      "depende_de": [
+        "GP-A06",
+        "GP-B05"
+      ]
+    },
+    {
+      "id": "GP-B06",
+      "epica": "EP-API",
+      "sprint": 3,
+      "dev": "B",
+      "tipo": "Historia",
+      "prioridad": "High",
+      "puntos": 5,
+      "resumen": "HU-09b Historial de evaluaciones por organización",
+      "descripcion": "Como decisor quiero consultar las evaluaciones anteriores de mi organización.",
+      "criterios": "Listado paginado con filtros por software, estado y fecha; incluye recomendación y conteos FODA; consultas con índices verificados.",
+      "depende_de": [
+        "GP-B05"
+      ]
+    },
+    {
+      "id": "GP-B07",
+      "epica": "EP-API",
+      "sprint": 3,
+      "dev": "B",
+      "tipo": "Tarea",
+      "prioridad": "Highest",
+      "puntos": 5,
+      "resumen": "Paridad del cálculo entre servidor y navegador",
+      "descripcion": "Recalcular ponderaciones, FODA y recomendación en el servidor con el mismo algoritmo que engine.js.",
+      "criterios": "Suite de casos compartida que compara servidor y navegador y exige resultados idénticos; cualquier diferencia rompe el CI.",
+      "depende_de": [
+        "GP-B05"
+      ]
+    },
+    {
+      "id": "GP-C07",
+      "epica": "EP-SEC",
+      "sprint": 3,
+      "dev": "C",
+      "tipo": "Tarea",
+      "prioridad": "Highest",
+      "puntos": 5,
+      "resumen": "Despliegue continuo de la API",
+      "descripcion": "Publicar la API y la base de datos en un entorno accesible (Render, Railway o servidor institucional) desde el pipeline.",
+      "criterios": "Merge a main despliega la API; migraciones aplicadas automáticamente; variables de entorno gestionadas como secretos; rollback documentado.",
+      "depende_de": [
+        "GP-B05",
+        "GP-C06"
+      ]
+    },
+    {
+      "id": "GP-C08",
+      "epica": "EP-SEC",
+      "sprint": 3,
+      "dev": "C",
+      "tipo": "Tarea",
+      "prioridad": "Medium",
+      "puntos": 2,
+      "resumen": "Backups y retención de datos",
+      "descripcion": "Copia de seguridad diaria de PostgreSQL y política de retención y borrado de evaluaciones.",
+      "criterios": "Backup automatizado y restauración probada al menos una vez; política escrita en el manual técnico.",
+      "depende_de": [
+        "GP-C07"
+      ]
+    },
+    {
+      "id": "GP-C09",
+      "epica": "EP-SEC",
+      "sprint": 3,
+      "dev": "C",
+      "tipo": "Tarea",
+      "prioridad": "High",
+      "puntos": 3,
+      "resumen": "Revisión de seguridad OWASP básica",
+      "descripcion": "Revisar inyección, autenticación rota, exposición de datos, control de acceso y cabeceras de seguridad.",
+      "criterios": "Checklist OWASP Top 10 aplicada con hallazgos registrados como incidencias; cabeceras de seguridad activas; sin secretos en logs.",
+      "depende_de": [
+        "GP-C05"
+      ]
+    },
+    {
+      "id": "GP-D06",
+      "epica": "EP-UX",
+      "sprint": 3,
+      "dev": "D",
+      "tipo": "Historia",
+      "prioridad": "High",
+      "puntos": 5,
+      "resumen": "HU-09c Pantalla de historial",
+      "descripcion": "Como decisor quiero ver y reabrir las evaluaciones guardadas desde la sección Historial del menú lateral.",
+      "criterios": "Sección Historial activa (sin etiqueta Pronto) con lista, filtros, estado y recomendación; abrir una evaluación restaura todos los pasos.",
+      "depende_de": [
+        "GP-B06",
+        "GP-D05"
+      ]
+    },
+    {
+      "id": "GP-D07",
+      "epica": "EP-UX",
+      "sprint": 3,
+      "dev": "D",
+      "tipo": "Tarea",
+      "prioridad": "High",
+      "puntos": 5,
+      "resumen": "Sincronización entre el navegador y el servidor",
+      "descripcion": "Subir la evaluación local al iniciar sesión y resolver conflictos cuando existan dos versiones.",
+      "criterios": "Aviso claro al usuario con opción de conservar la versión local o la del servidor; sin pérdida silenciosa de respuestas; pruebas de los tres escenarios.",
+      "depende_de": [
+        "GP-D05"
+      ]
+    },
+    {
+      "id": "GP-E07",
+      "epica": "EP-QA",
+      "sprint": 3,
+      "dev": "E",
+      "tipo": "Historia",
+      "prioridad": "Medium",
+      "puntos": 5,
+      "resumen": "HU-10 Administración del catálogo de la guía",
+      "descripcion": "Como administrador quiero editar factores, subfactores y reglas sin tocar archivos.",
+      "criterios": "Sección Administración con edición validada (escalas 1..4, alcance válido); los cambios quedan versionados y no afectan a evaluaciones ya completadas.",
+      "depende_de": [
+        "GP-B06",
+        "GP-C05"
+      ]
+    },
+    {
+      "id": "GP-E08",
+      "epica": "EP-QA",
+      "sprint": 3,
+      "dev": "E",
+      "tipo": "Tarea",
+      "prioridad": "Medium",
+      "puntos": 3,
+      "resumen": "Pruebas E2E de historial, sesión y administración",
+      "descripcion": "Ampliar la suite de Playwright a los flujos con backend usando una base de datos de prueba.",
+      "criterios": "Escenarios: iniciar sesión, guardar evaluación, reabrirla desde el historial y editar el catálogo; ejecución en CI contra el entorno de pruebas.",
+      "depende_de": [
+        "GP-D06",
+        "GP-E07"
+      ]
+    },
+    {
+      "id": "GP-A08",
+      "epica": "EP-IA",
+      "sprint": 4,
+      "dev": "A",
+      "tipo": "Historia",
+      "prioridad": "Highest",
+      "puntos": 8,
+      "resumen": "HU-20 Resumen ejecutivo del informe generado por IA",
+      "descripcion": "Como decisor quiero un resumen en lenguaje natural que explique la recomendación para presentarla al comité.",
+      "criterios": "Genera entre 150 y 250 palabras citando factores concretos y sus ponderaciones; no contradice la recomendación calculada; el usuario puede editarlo antes de exportar; se marca como generado con IA en el PDF.",
+      "depende_de": [
+        "GP-A05",
+        "GP-B07"
+      ]
+    },
+    {
+      "id": "GP-A09",
+      "epica": "EP-IA",
+      "sprint": 4,
+      "dev": "A",
+      "tipo": "Historia",
+      "prioridad": "High",
+      "puntos": 5,
+      "resumen": "HU-21 Comparación asistida entre candidatos",
+      "descripcion": "Como decisor quiero que el sistema explique las diferencias entre dos o más softwares evaluados.",
+      "criterios": "A partir de los resultados calculados, la IA redacta las diferencias por dimensión y los riesgos principales; siempre referida a datos existentes, sin inventar factores.",
+      "depende_de": [
+        "GP-A08",
+        "GP-B08"
+      ]
+    },
+    {
+      "id": "GP-B08",
+      "epica": "EP-API",
+      "sprint": 4,
+      "dev": "B",
+      "tipo": "Tarea",
+      "prioridad": "High",
+      "puntos": 5,
+      "resumen": "API de comparación de evaluaciones",
+      "descripcion": "Endpoint que devuelve, para varias evaluaciones, los resultados por dimensión, factor y FODA en una estructura comparable.",
+      "criterios": "Acepta de 2 a 5 evaluaciones; respuesta menor a 500 ms con datos de prueba; documentado en OpenAPI y con pruebas de contrato.",
+      "depende_de": [
+        "GP-B07"
+      ]
+    },
+    {
+      "id": "GP-B09",
+      "epica": "EP-API",
+      "sprint": 4,
+      "dev": "B",
+      "tipo": "Tarea",
+      "prioridad": "Low",
+      "puntos": 2,
+      "resumen": "Optimización de consultas e índices",
+      "descripcion": "Revisar los planes de ejecución de las consultas del historial y de la comparación.",
+      "criterios": "Sin escaneos secuenciales en tablas de detalle; índices justificados en el manual técnico; medición antes y después.",
+      "depende_de": [
+        "GP-B08"
+      ]
+    },
+    {
+      "id": "GP-C10",
+      "epica": "EP-SEC",
+      "sprint": 4,
+      "dev": "C",
+      "tipo": "Tarea",
+      "prioridad": "High",
+      "puntos": 3,
+      "resumen": "Cuotas y límite de uso de la IA por organización",
+      "descripcion": "Evitar el abuso y el gasto descontrolado del servicio de IA con límites por usuario y organización.",
+      "criterios": "Límite configurable de peticiones por hora y de coste mensual; mensaje claro al alcanzarlo; métricas de consumo consultables por el administrador.",
+      "depende_de": [
+        "GP-A05",
+        "GP-C07"
+      ]
+    },
+    {
+      "id": "GP-C11",
+      "epica": "EP-SEC",
+      "sprint": 4,
+      "dev": "C",
+      "tipo": "Tarea",
+      "prioridad": "Medium",
+      "puntos": 3,
+      "resumen": "Monitoreo, logs y alertas",
+      "descripcion": "Registrar peticiones, errores y latencia; alertar si la API cae o si los errores superan un umbral.",
+      "criterios": "Panel o endpoint de métricas; logs sin datos sensibles; alerta configurada y probada; disponibilidad medida frente al objetivo del 99 %.",
+      "depende_de": [
+        "GP-C07"
+      ]
+    },
+    {
+      "id": "GP-D08",
+      "epica": "EP-UX",
+      "sprint": 4,
+      "dev": "D",
+      "tipo": "Historia",
+      "prioridad": "Highest",
+      "puntos": 8,
+      "resumen": "HU-11 Tablero comparativo de candidatos",
+      "descripcion": "Como decisor quiero comparar varios softwares evaluados en una sola pantalla para elegir el más adecuado.",
+      "criterios": "Selección de 2 a 5 evaluaciones; tabla comparativa por dimensión y factor con recomendaciones; resaltado de diferencias; exportable a PDF.",
+      "depende_de": [
+        "GP-B08"
+      ]
+    },
+    {
+      "id": "GP-D09",
+      "epica": "EP-UX",
+      "sprint": 4,
+      "dev": "D",
+      "tipo": "Historia",
+      "prioridad": "Low",
+      "puntos": 3,
+      "resumen": "HU-12 Evidencias y observaciones por subfactor",
+      "descripcion": "Como evaluador quiero justificar mis respuestas con una nota o un enlace.",
+      "criterios": "Campo de observación opcional por subfactor, guardado en el servidor y visible en el informe; no entorpece el flujo rápido de respuesta.",
+      "depende_de": [
+        "GP-B05"
+      ]
+    },
+    {
+      "id": "GP-E09",
+      "epica": "EP-QA",
+      "sprint": 4,
+      "dev": "E",
+      "tipo": "Historia",
+      "prioridad": "High",
+      "puntos": 5,
+      "resumen": "HU-22 Gráficos del informe",
+      "descripcion": "Como decisor quiero ver gráficos que resuman el cumplimiento por dimensión y la matriz FODA.",
+      "criterios": "Gráfico radar por dimensión y barras de FODA en SVG accesible, legibles en claro, oscuro e impresión; con tabla equivalente para lectores de pantalla.",
+      "depende_de": []
+    },
+    {
+      "id": "GP-E10",
+      "epica": "EP-QA",
+      "sprint": 4,
+      "dev": "E",
+      "tipo": "Tarea",
+      "prioridad": "Medium",
+      "puntos": 3,
+      "resumen": "Informe PDF generado en el servidor",
+      "descripcion": "Endpoint que devuelve el informe completo en PDF con gráficos y resumen ejecutivo, sin depender de la impresión del navegador.",
+      "criterios": "PDF idéntico en cualquier navegador; incluye logo institucional, fecha, evaluador y aviso de contenido generado con IA cuando corresponda.",
+      "depende_de": [
+        "GP-E09",
+        "GP-A08"
+      ]
+    },
+    {
+      "id": "GP-A10",
+      "epica": "EP-IA",
+      "sprint": 5,
+      "dev": "A",
+      "tipo": "Tarea",
+      "prioridad": "Highest",
+      "puntos": 5,
+      "resumen": "Evaluación de calidad de las salidas de IA (evals)",
+      "descripcion": "Conjunto de casos de referencia con respuesta esperada para medir la calidad de las sugerencias y del resumen.",
+      "criterios": "Al menos 30 casos; métricas de acierto y de alucinación; ejecución reproducible por comando; resultados documentados y umbral mínimo acordado con el Product Owner.",
+      "depende_de": [
+        "GP-A08"
+      ]
+    },
+    {
+      "id": "GP-A11",
+      "epica": "EP-IA",
+      "sprint": 5,
+      "dev": "A",
+      "tipo": "Tarea",
+      "prioridad": "High",
+      "puntos": 2,
+      "resumen": "Documentar costes, límites y desactivación de la IA",
+      "descripcion": "Sección del manual técnico con coste por evaluación, límites, versión de prompts y cómo apagar la IA por completo.",
+      "criterios": "Instrucción verificada: con la IA desactivada la aplicación conserva toda su funcionalidad manual; aviso ético sobre el uso de IA en la decisión.",
+      "depende_de": [
+        "GP-A10"
+      ]
+    },
+    {
+      "id": "GP-B10",
+      "epica": "EP-API",
+      "sprint": 5,
+      "dev": "B",
+      "tipo": "Tarea",
+      "prioridad": "High",
+      "puntos": 3,
+      "resumen": "Script de despliegue inicial y carga de datos",
+      "descripcion": "Procedimiento de instalación desde cero: base de datos, migraciones, catálogo y usuario administrador.",
+      "criterios": "Un solo comando deja el sistema operativo en un entorno limpio; probado por otro miembro del equipo siguiendo solo la documentación.",
+      "depende_de": [
+        "GP-C07"
+      ]
+    },
+    {
+      "id": "GP-B11",
+      "epica": "EP-API",
+      "sprint": 5,
+      "dev": "B",
+      "tipo": "Bug",
+      "prioridad": "High",
+      "puntos": 3,
+      "resumen": "Corrección de incidencias del backend",
+      "descripcion": "Bolsa de trabajo para los errores detectados en las pruebas de regresión y en la revisión de seguridad.",
+      "criterios": "Todas las incidencias de prioridad alta cerradas con prueba que evita la regresión.",
+      "depende_de": []
+    },
+    {
+      "id": "GP-C12",
+      "epica": "EP-SEC",
+      "sprint": 5,
+      "dev": "C",
+      "tipo": "Tarea",
+      "prioridad": "Highest",
+      "puntos": 5,
+      "resumen": "Prueba de penetración ligera y corrección de hallazgos",
+      "descripcion": "Revisión de seguridad final sobre el entorno desplegado, con corrección de lo encontrado.",
+      "criterios": "Informe con hallazgos clasificados por severidad; todo lo crítico y alto corregido y verificado antes de la entrega.",
+      "depende_de": [
+        "GP-C09",
+        "GP-C11"
+      ]
+    },
+    {
+      "id": "GP-C13",
+      "epica": "EP-SEC",
+      "sprint": 5,
+      "dev": "C",
+      "tipo": "Tarea",
+      "prioridad": "High",
+      "puntos": 3,
+      "resumen": "Manual técnico de instalación y despliegue",
+      "descripcion": "Actualizar el manual técnico original con la arquitectura actual, requisitos y pasos de despliegue.",
+      "criterios": "docs/MANUAL-TECNICO.md con arquitectura, requisitos, despliegue, variables de entorno, backups y resolución de problemas.",
+      "depende_de": [
+        "GP-B10"
+      ]
+    },
+    {
+      "id": "GP-D10",
+      "epica": "EP-UX",
+      "sprint": 5,
+      "dev": "D",
+      "tipo": "Bug",
+      "prioridad": "High",
+      "puntos": 5,
+      "resumen": "Pulido de la interfaz y corrección de incidencias",
+      "descripcion": "Cerrar los ajustes de usabilidad y los errores de interfaz detectados en las pruebas con usuarios.",
+      "criterios": "Incidencias altas cerradas; prueba con al menos 3 usuarios reales sin bloqueos; consola del navegador sin errores.",
+      "depende_de": []
+    },
+    {
+      "id": "GP-D11",
+      "epica": "EP-UX",
+      "sprint": 5,
+      "dev": "D",
+      "tipo": "Tarea",
+      "prioridad": "Medium",
+      "puntos": 3,
+      "resumen": "Rendimiento del frontend",
+      "descripcion": "Medir y optimizar carga y respuesta de la aplicación publicada.",
+      "criterios": "Lighthouse de rendimiento y accesibilidad igual o mayor a 90; recálculo de resultados por debajo de 100 ms; tipografía con respaldo local.",
+      "depende_de": []
+    },
+    {
+      "id": "GP-E11",
+      "epica": "EP-PM",
+      "sprint": 5,
+      "dev": "E",
+      "tipo": "Tarea",
+      "prioridad": "Highest",
+      "puntos": 5,
+      "resumen": "Informe final y presentación del proyecto",
+      "descripcion": "Documento final de la asignatura y presentación de la solución con demostración en vivo.",
+      "criterios": "Informe con portada, metodología, resultados por sprint, métricas y conclusiones; presentación ensayada; verificación en Turnitin.",
+      "depende_de": []
+    },
+    {
+      "id": "GP-E12",
+      "epica": "EP-QA",
+      "sprint": 5,
+      "dev": "E",
+      "tipo": "Tarea",
+      "prioridad": "Highest",
+      "puntos": 3,
+      "resumen": "Regresión completa y publicación de la versión 2.1",
+      "descripcion": "Ejecutar toda la suite, verificar los criterios de aceptación pendientes y etiquetar la versión.",
+      "criterios": "Suite unitaria, de contrato y E2E en verde; etiqueta v2.1 con notas de versión; aplicación desplegada y verificada.",
+      "depende_de": [
+        "GP-D10",
+        "GP-B11",
+        "GP-C12"
+      ]
+    },
+    {
+      "id": "GP-P03",
+      "epica": "EP-PM",
+      "sprint": 5,
+      "dev": "E",
+      "tipo": "Tarea",
+      "prioridad": "Medium",
+      "puntos": 1,
+      "resumen": "Retrospectiva final y cierre del tablero",
+      "descripcion": "Retrospectiva del proyecto completo y cierre de sprints e incidencias abiertas en Jira.",
+      "criterios": "Acta de retrospectiva con lecciones aprendidas; tablero sin incidencias huérfanas; informe de velocidad de los 5 sprints.",
+      "depende_de": [
+        "GP-E12"
+      ]
+    }
+  ]
+}

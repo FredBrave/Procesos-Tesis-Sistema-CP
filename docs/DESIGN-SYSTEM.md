@@ -27,6 +27,10 @@ Implementación en CSS del UI kit de referencia (capturas: Pop-Up, List, Action 
 | `--control-h / -sm` | 40 / 32 px | Altura de botones, inputs y selects |
 | `--sp-1 … --sp-10` | 4 … 40 px | Escala de espaciado (múltiplos de 4) |
 | `--focus-ring` | `0 0 0 3px rgba(79,91,245,.25)` | Foco visible en todos los controles |
+| `--sidebar-bg / -bg-2` | `#232a6b` → `#1c2259` | Degradado sólido de marca del sidebar (casi negro en tema oscuro) |
+| `--sidebar-fg / -fg-2 / -fg-3` | `#ffffff` / `#aeb4e8` / `#7f88c9` | Texto del sidebar: principal, secundario y atenuado |
+| `--sidebar-hover / -active / -line` | blancos translúcidos | Estados y conectores sobre la superficie de marca |
+| `--sidebar-accent` | `#8b95ff` | Paso actual y barra de progreso del sidebar |
 
 ## Componentes (clase → equivalente del UI kit)
 
@@ -50,8 +54,8 @@ Implementación en CSS del UI kit de referencia (capturas: Pop-Up, List, Action 
 | `.progress` | — | Barra de progreso |
 | `.alert`, `.alert-warning` | — | Mensajes inline |
 | `.toast` | — | Notificación efímera |
-| `.sidebar` (`.side-top`, `.side-nav`, `.side-link`, `.side-title`, `.side-bottom`) | List + Card | Barra lateral fija de 272 px con marca, Inicio, pasos, secciones futuras (`app.js → NAV_EXTRA`, `soon: true` = "Pronto"), tarjeta de evaluación con progreso y acciones (tema, ayuda, menú ⋯). Por debajo de 960 px se convierte en cajón (`.is-open`) con `.sidebar-backdrop` |
-| `.side-steps > .side-step` | Pagination / Page Control (vertical) | Pasos uno a uno con círculo numerado, conector vertical, icono y subtítulo de estado; `.is-current`, `.is-done` |
+| `.sidebar` (`.side-top`, `.side-nav`, `.side-link`, `.side-title`, `.side-bottom`) | List + Card | Barra lateral fija de 300 px sobre superficie sólida de marca, con logo, Inicio, línea de tiempo, secciones futuras (`app.js → NAV_EXTRA`, `soon: true` = "Pronto"), tarjeta de evaluación con progreso y acciones (tema, ayuda, menú ⋯). Por debajo de 960 px se convierte en cajón (`.is-open`) con `.sidebar-backdrop` |
+| `.side-steps > .side-step` | Page Control (vertical) | **Línea de tiempo**: nodo de 44 px con el icono del paso (o un check al completarse), conector vertical que se colorea al avanzar, y texto en tres niveles (`.step-kicker` "Paso 1 de 3", `.step-title`, `.step-state`); `.is-current`, `.is-done` |
 | `.topbar` | — | Barra superior solo en móvil: hamburguesa, título del paso y tema |
 | `.menu.menu-up` | Context Menu | Variante que se despliega hacia arriba (usada en el pie del sidebar) |
 | `.details > summary` | — | Sección plegable (`<details>`); `.details.card` para tarjetas plegables. Se despliegan automáticamente al imprimir |

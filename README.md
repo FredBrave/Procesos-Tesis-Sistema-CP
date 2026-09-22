@@ -8,6 +8,7 @@ Sistema informático que automatiza la **guía GUIOS** para evaluar si una soluc
 | **Flujo** | 3 pasos para el usuario: Importancia (GUIOS 1-2) → Cumplimiento (GUIOS 3-4) → Resultado: FODA y recomendación A/B/C (GUIOS 5-6) |
 | **Stack actual** | HTML + CSS + JavaScript sin dependencias. Se abre con doble clic. |
 | **Metodología** | SCRUM · ver [`docs/SPRINT-0.md`](docs/SPRINT-0.md) |
+| **Equipo y plan** | 5 desarrolladores · 5 sprints · [`docs/EQUIPO-Y-CRONOGRAMA.md`](docs/EQUIPO-Y-CRONOGRAMA.md) y [`docs/jira/TAREAS.md`](docs/jira/TAREAS.md) |
 
 ## Ejecutar
 
@@ -30,7 +31,8 @@ app/                 Aplicación web (entregable ejecutable)
   js/app.js          Interfaz: render por pantallas, estado en localStorage, exportar/importar
 data/                Fuente de verdad de los datos maestros (TSV + JSON)
 db/                  Diseño físico PostgreSQL (schema.sql) y seed GENERADO (seed.sql)
-docs/                Sprint 0, sistema de diseño, plan de desarrollo con IA
+docs/                Sprint 0, sistema de diseño, plan con IA, equipo y cronograma
+  jira/              Reparto de tareas (tareas.json) y CSV importable a Jira
 legacy/              Prototipo GUIOSAD original, manual técnico y matriz de recomendación
 scripts/             Generadores: CSV -> data.js, data.js -> seed.sql
 tests/               Pruebas del motor de cálculo
@@ -44,6 +46,7 @@ npm test               # pruebas del motor (node --test)
 npm run build:data     # regenerar app/js/data.js y db/seed.sql desde data/
 npm run check:generated# falla si los archivos generados están desactualizados
 npm run serve          # servidor estático en :8080
+npm run build:jira     # regenera docs/jira/backlog-jira.csv y docs/jira/TAREAS.md
 ```
 
 Requisitos de desarrollo: Node ≥ 20 y Python ≥ 3.10 (solo para los generadores). La app final no necesita ninguno.

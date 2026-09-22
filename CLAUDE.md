@@ -37,7 +37,8 @@ Sistema de evaluación de adopción de software basado en la guía GUIOS (tesis 
 | Mostrar más información en un paso | Preferir un `<details class="details">` o el interruptor "Ver cálculo"; las pantallas deben quedar simples por defecto |
 | Cambiar colores / tipografía | `tokens.css` (light y dark) |
 | Cambiar el esquema de BD | `db/schema.sql`; el seed se regenera |
+| Cambiar tareas, sprints o reparto del equipo | `docs/jira/tareas.json` → `npm run build:jira` (nunca editar `TAREAS.md` ni el CSV a mano) |
 
 ## Estado y hoja de ruta
 
-Ver `docs/PLAN-DESARROLLO-IA.md` (backlog priorizado, sprints, prompts sugeridos y automatizaciones) y `docs/SPRINT-0.md` (modelado del negocio, requisitos, diseño de datos).
+Ver `docs/EQUIPO-Y-CRONOGRAMA.md` (equipo, reparto, cronograma y tablero Jira), `docs/PLAN-DESARROLLO-IA.md` (backlog priorizado, sprints, prompts sugeridos y automatizaciones) y `docs/SPRINT-0.md` (modelado del negocio, requisitos, diseño de datos).

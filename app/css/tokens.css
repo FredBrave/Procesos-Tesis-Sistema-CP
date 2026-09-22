@@ -35,6 +35,17 @@
   --color-info: var(--color-primary);
   --color-info-subtle: var(--color-primary-subtle);
 
+  /* Sidebar (superficie sólida de marca) */
+  --sidebar-bg: #232a6b;
+  --sidebar-bg-2: #1c2259;
+  --sidebar-fg: #ffffff;
+  --sidebar-fg-2: #aeb4e8;
+  --sidebar-fg-3: #7f88c9;
+  --sidebar-hover: rgba(255, 255, 255, 0.08);
+  --sidebar-active: rgba(255, 255, 255, 0.14);
+  --sidebar-line: rgba(255, 255, 255, 0.18);
+  --sidebar-accent: #8b95ff;
+
   /* FODA */
   --foda-fortaleza: #1f9d61;
   --foda-oportunidad: #4f5bf5;
@@ -103,6 +114,15 @@
     --color-warning-subtle: #35290f;
     --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.4);
     --shadow-lg: 0 12px 32px rgba(0, 0, 0, 0.5);
+    --sidebar-bg: #16171f;
+    --sidebar-bg-2: #101119;
+    --sidebar-fg: #f2f2f6;
+    --sidebar-fg-2: #a4a7b8;
+    --sidebar-fg-3: #70738a;
+    --sidebar-hover: rgba(255, 255, 255, 0.06);
+    --sidebar-active: rgba(107, 118, 255, 0.22);
+    --sidebar-line: rgba(255, 255, 255, 0.14);
+    --sidebar-accent: #8b95ff;
   }
 }
 :root[data-theme="dark"] {
@@ -125,4 +145,13 @@
   --color-warning-subtle: #35290f;
   --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.4);
   --shadow-lg: 0 12px 32px rgba(0, 0, 0, 0.5);
+  --sidebar-bg: #16171f;
+  --sidebar-bg-2: #101119;
+  --sidebar-fg: #f2f2f6;
+  --sidebar-fg-2: #a4a7b8;
+  --sidebar-fg-3: #70738a;
+  --sidebar-hover: rgba(255, 255, 255, 0.06);
+  --sidebar-active: rgba(107, 118, 255, 0.22);
+  --sidebar-line: rgba(255, 255, 255, 0.14);
+  --sidebar-accent: #8b95ff;
 }

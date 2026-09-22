@@ -202,8 +202,12 @@
         const done = stepDone(idx, result);
         return `<li class="side-step ${current ? "is-current" : ""} ${done ? "is-done" : ""}">
           <a href="#${x.id}" data-nav="${idx}" ${current ? 'aria-current="page"' : ""}>
-            <span class="step-num">${done && !current ? icon("check", 13) : x.step}</span>
-            <span class="step-text"><span class="step-title">${icon(x.icon, 15)}${esc(x.label)}</span><small>${esc(stepSubtitle(idx, result))}</small></span>
+            <span class="step-num">${done && !current ? icon("check", 20) : icon(x.icon, 20)}</span>
+            <span class="step-text">
+              <small class="step-kicker">Paso ${x.step} de 3</small>
+              <span class="step-title">${esc(x.label)}</span>
+              <small class="step-state">${esc(stepSubtitle(idx, result))}</small>
+            </span>
           </a>
         </li>`;
       })
@@ -313,12 +317,6 @@
   function renderInicio(result) {
     const sw = state.software;
     const started = Object.keys(state.subfactores).length > 0;
-    const rec = result.recomendacion;
-    const steps = [
-      { i: 1, t: "Importancia de los factores", s: state.paso1Confirmado ? `${plural(result.relevantes, "factor", "factores")} se evaluarán` : "Pendiente", done: stepDone(1, result) },
-      { i: 2, t: "Cumplimiento del software", s: result.pendientes.length ? `Faltan ${plural(result.pendientes.length, "factor", "factores")}` : started ? "Completo" : "Pendiente", done: stepDone(2, result) },
-      { i: 3, t: "Resultado", s: rec && !result.pendientes.length ? `Recomendación ${rec.codigo} · ${rec.titulo}` : "Pendiente", done: stepDone(3, result) },
-    ];
     return `
       <div class="screen-header">
         <div>
@@ -359,20 +357,6 @@
           </div>
         </section>
 
-        <section class="card steps-overview">
-          <div class="card-header"><h2 class="h3">Progreso</h2>${rec && !result.pendientes.length ? '<span class="badge badge-success">Completa</span>' : started ? '<span class="badge badge-primary">En curso</span>' : ""}</div>
-          <div class="list">
-            ${steps
-              .map(
-                (s) => `<button class="list-item" data-nav="${s.i}">
-                  <span class="leading ${s.done ? "" : "is-muted"}">${s.done ? icon("check", 14) : s.i}</span>
-                  <span class="title">${esc(s.t)}<small>${esc(s.s)}</small></span>
-                  <span class="chevron">${icon("chevronRight")}</span>
-                </button>`
-              )
-              .join("")}
-          </div>
-        </section>
       </div>`;
   }
 
