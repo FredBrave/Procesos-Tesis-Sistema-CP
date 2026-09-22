@@ -50,8 +50,10 @@ Implementación en CSS del UI kit de referencia (capturas: Pop-Up, List, Action 
 | `.progress` | — | Barra de progreso |
 | `.alert`, `.alert-warning` | — | Mensajes inline |
 | `.toast` | — | Notificación efímera |
-| `.navbar`, `.nav-links > .nav-link`, `.nav-actions`, `.nav-burger` | — | Barra de navegación; ítems definidos en `app.js → NAV_ITEMS` (`soon: true` = deshabilitado con etiqueta "Pronto"); colapsa a menú hamburguesa < 760 px |
-| `.steps > .step` | Pagination (adaptado) | Barra de 3 pasos con conector; `.is-current`, `.is-done` |
+| `.sidebar` (`.side-top`, `.side-nav`, `.side-link`, `.side-title`, `.side-bottom`) | List + Card | Barra lateral fija de 272 px con marca, Inicio, pasos, secciones futuras (`app.js → NAV_EXTRA`, `soon: true` = "Pronto"), tarjeta de evaluación con progreso y acciones (tema, ayuda, menú ⋯). Por debajo de 960 px se convierte en cajón (`.is-open`) con `.sidebar-backdrop` |
+| `.side-steps > .side-step` | Pagination / Page Control (vertical) | Pasos uno a uno con círculo numerado, conector vertical, icono y subtítulo de estado; `.is-current`, `.is-done` |
+| `.topbar` | — | Barra superior solo en móvil: hamburguesa, título del paso y tema |
+| `.menu.menu-up` | Context Menu | Variante que se despliega hacia arriba (usada en el pie del sidebar) |
 | `.details > summary` | — | Sección plegable (`<details>`); `.details.card` para tarjetas plegables. Se despliegan automáticamente al imprimir |
 | `.switch` + `.toggle` | List → toggle | Interruptor con etiqueta ("Ver cálculo") |
 | `.factor-row` | List | Fila de factor: nombre + sugerencia, dropdown, alcance; `.has-detail` muestra la importancia relativa |
@@ -62,7 +64,7 @@ Iconos: SVG inline estilo *feather* (24 px, trazo 2) definidos en `app.js → IC
 
 - El atributo `data-theme="light|dark"` en `<html>` decide el tema; `tokens.css` redefine las variables bajo `:root[data-theme="dark"]`.
 - Un script inline en `index.html` aplica antes del primer pintado el tema guardado (`localStorage: guiospro.theme`), o el del sistema si no hay preferencia. `?theme=dark|light` en la URL fuerza uno (para capturas).
-- El botón sol/luna del navbar (`data-action="theme"`) alterna y persiste la preferencia.
+- El botón sol/luna del sidebar (o de la barra superior en móvil, `data-action="theme"`) alterna y persiste la preferencia.
 
 ## Principios
 
@@ -70,6 +72,6 @@ Iconos: SVG inline estilo *feather* (24 px, trazo 2) definidos en `app.js → IC
 2. Superficies planas con borde de 1 px y sombra mínima; la elevación fuerte (`--shadow-lg`) solo en overlays.
 3. Altura de control uniforme (40 px) y radios coherentes (8 px control / 12 px tarjeta).
 4. Estados siempre accesibles: `aria-current`, `aria-pressed`, `aria-checked`, `:focus-visible`.
-5. Mobile first en el contenido: las tablas se convierten en fichas por debajo de 720 px; la barra lateral desaparece por debajo de 960 px y se sustituye por un dropdown.
+5. Mobile first: por debajo de 960 px el sidebar pasa a cajón lateral y aparece la barra superior; la lista de factores del paso 2 se sustituye por un dropdown; por debajo de 760 px las filas se apilan.
 6. La impresión (`@media print`) oculta la navegación y muestra la cabecera del informe (`.print-only`).
 7. Menos es más: cada pantalla muestra una sola pregunta y un solo control por fila; los datos de cálculo (importancia relativa, ponderaciones, tabla) van detrás de un interruptor o una sección plegable.

@@ -16,19 +16,16 @@
   /** Pantallas. `id` es el hash de la URL; `step` es el número que ve el usuario. */
   const SCREENS = [
     { id: "inicio", label: "Inicio" },
-    { id: "paso-1-2", step: 1, label: "Importancia", title: "¿Qué tan importante es cada factor para su organización?", guios: "Pasos 1 y 2 de la guía GUIOS" },
-    { id: "paso-3-4", step: 2, label: "Cumplimiento", title: "¿En qué medida el software cumple cada requisito?", guios: "Pasos 3 y 4 de la guía GUIOS" },
-    { id: "paso-5-6", step: 3, label: "Resultado", title: "Resultado de la evaluación", guios: "Pasos 5 y 6 de la guía GUIOS" },
+    { id: "paso-1-2", step: 1, icon: "sliders", label: "Importancia", title: "¿Qué tan importante es cada factor para su organización?", guios: "Pasos 1 y 2 de la guía GUIOS" },
+    { id: "paso-3-4", step: 2, icon: "checkSquare", label: "Cumplimiento", title: "¿En qué medida el software cumple cada requisito?", guios: "Pasos 3 y 4 de la guía GUIOS" },
+    { id: "paso-5-6", step: 3, icon: "pie", label: "Resultado", title: "Resultado de la evaluación", guios: "Pasos 5 y 6 de la guía GUIOS" },
   ];
 
   /**
-   * Navbar. Para añadir una sección futura basta con agregar un ítem:
-   * { label, screen (índice de SCREENS) | href, icon, soon: true (deshabilitado con etiqueta "Pronto") }
+   * Secciones adicionales del sidebar (además de Inicio y los 3 pasos).
+   * Para activar una: quitar `soon: true` y asignar `screen` (índice de SCREENS) o `href`.
    */
-  const NAV_ITEMS = [
-    { label: "Inicio", screen: 0, icon: "home" },
-    { label: "Evaluación", screen: 1, screens: [1, 2], icon: "sliders" },
-    { label: "Resultado", screen: 3, icon: "grid" },
+  const NAV_EXTRA = [
     { label: "Historial", icon: "clock", soon: true },
     { label: "Administración", icon: "settings", soon: true },
   ];
@@ -117,6 +114,8 @@
     settings: '<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.6 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.6a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>',
     sun: '<circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>',
     moon: '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>',
+    checkSquare: '<polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>',
+    pie: '<path d="M21.21 15.89A10 10 0 1 1 8 2.83"/><path d="M22 12A10 10 0 0 0 12 2v10z"/>',
     star: '<polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>',
   };
   function icon(name, size) {
@@ -150,7 +149,7 @@
   function render() {
     const result = E.evaluate(DATA, state);
     ensureSelectedFactor(result);
-    renderNavbar();
+    renderSidebar(result);
     $("#screen").innerHTML = [renderInicio, renderPaso1, renderPaso2, renderPaso3][ui.screen](result);
     renderFooter(result);
     const wantedHash = "#" + SCREENS[ui.screen].id;
@@ -175,37 +174,86 @@
     return true;
   }
 
-  /* ---------- Navbar ---------- */
-  function renderNavbar() {
-    const links = NAV_ITEMS.map((item) => {
-      const active = item.screens ? item.screens.includes(ui.screen) : item.screen === ui.screen;
-      if (item.soon) {
-        return `<span class="nav-link is-disabled" title="Disponible en una próxima versión">${icon(item.icon, 16)}<span>${esc(item.label)}</span><span class="badge badge-plain">Pronto</span></span>`;
-      }
-      return `<a class="nav-link" href="#${SCREENS[item.screen].id}" data-nav="${item.screen}" ${active ? 'aria-current="page"' : ""}>${icon(item.icon, 16)}<span>${esc(item.label)}</span></a>`;
-    });
+  /* ---------- Sidebar (navegación principal) ---------- */
+  function stepSubtitle(i, result) {
+    if (i === 1) return state.paso1Confirmado ? `${plural(result.relevantes, "factor", "factores")} a evaluar` : "Pendiente";
+    if (i === 2) {
+      const relevant = result.factores.filter((f) => f.relevante);
+      const total = relevant.reduce((n, f) => n + f.subfactoresTotal, 0);
+      const done = relevant.reduce((n, f) => n + f.subfactoresRespondidos, 0);
+      return done ? `${done} de ${total} respuestas` : "Pendiente";
+    }
+    const rec = result.recomendacion;
+    return rec && !result.pendientes.length ? `Recomendación ${rec.codigo}` : "Pendiente";
+  }
+
+  function renderSidebar(result) {
+    const relevant = result.factores.filter((f) => f.relevante);
+    const total = relevant.reduce((n, f) => n + f.subfactoresTotal, 0);
+    const answered = relevant.reduce((n, f) => n + f.subfactoresRespondidos, 0);
+    const pct = total ? Math.round((answered / total) * 100) : 0;
     const dark = currentTheme() === "dark";
-    $("#navbar").innerHTML = `
-      <div class="inner">
-        <a class="brand" href="#inicio" data-nav="0">
-          <span class="logo" aria-hidden="true">G</span>
-          <span class="name">GUIOS PRO</span>
-        </a>
-        <nav class="nav-links ${ui.nav ? "is-open" : ""}" aria-label="Secciones">${links.join("")}</nav>
-        <div class="nav-actions">
-          <button class="btn btn-icon btn-ghost" data-action="theme" title="${dark ? "Cambiar a modo claro" : "Cambiar a modo oscuro"}" aria-label="${dark ? "Cambiar a modo claro" : "Cambiar a modo oscuro"}">${icon(dark ? "sun" : "moon")}</button>
+    const sw = state.software.nombre;
+
+    const steps = SCREENS.filter((x) => x.step)
+      .map((x, i) => {
+        const idx = i + 1;
+        const current = idx === ui.screen;
+        const done = stepDone(idx, result);
+        return `<li class="side-step ${current ? "is-current" : ""} ${done ? "is-done" : ""}">
+          <a href="#${x.id}" data-nav="${idx}" ${current ? 'aria-current="page"' : ""}>
+            <span class="step-num">${done && !current ? icon("check", 13) : x.step}</span>
+            <span class="step-text"><span class="step-title">${icon(x.icon, 15)}${esc(x.label)}</span><small>${esc(stepSubtitle(idx, result))}</small></span>
+          </a>
+        </li>`;
+      })
+      .join("");
+
+    const extra = NAV_EXTRA.map((item) =>
+      item.soon
+        ? `<span class="side-link is-disabled" title="Disponible en una próxima versión">${icon(item.icon, 18)}<span>${esc(item.label)}</span><span class="badge badge-plain">Pronto</span></span>`
+        : `<a class="side-link" href="${item.href || "#" + SCREENS[item.screen].id}" ${item.screen != null ? `data-nav="${item.screen}"` : ""} ${item.screen === ui.screen ? 'aria-current="page"' : ""}>${icon(item.icon, 18)}<span>${esc(item.label)}</span></a>`
+    ).join("");
+
+    $("#sidebar").innerHTML = `
+      <div class="side-top">
+        <a class="brand" href="#inicio" data-nav="0"><span class="logo" aria-hidden="true">G</span><span><span class="name">GUIOS PRO</span><small>Adopción de software</small></span></a>
+        <button class="btn btn-icon btn-ghost side-close" data-action="nav-close" aria-label="Cerrar menú">${icon("x")}</button>
+      </div>
+      <nav class="side-nav">
+        <a class="side-link" href="#inicio" data-nav="0" ${ui.screen === 0 ? 'aria-current="page"' : ""}>${icon("home", 18)}<span>Inicio</span></a>
+        <div class="side-title">Evaluación</div>
+        <ol class="side-steps">${steps}</ol>
+        <div class="side-title">Más</div>
+        ${extra}
+      </nav>
+      <div class="side-bottom">
+        <div class="side-eval">
+          <div class="row-between"><span class="side-eval-name">${sw ? esc(sw) : "Sin software"}</span><span class="xs muted">${pct}%</span></div>
+          <div class="progress"><span style="width:${pct}%"></span></div>
+        </div>
+        <div class="side-actions">
+          <button class="btn btn-icon btn-ghost" data-action="theme" title="${dark ? "Modo claro" : "Modo oscuro"}" aria-label="${dark ? "Cambiar a modo claro" : "Cambiar a modo oscuro"}">${icon(dark ? "sun" : "moon")}</button>
+          <button class="btn btn-icon btn-ghost" data-action="how" title="¿Cómo funciona?" aria-label="¿Cómo funciona?">${icon("help")}</button>
+          <span class="spacer"></span>
           <div class="menu-anchor">
             <button class="btn btn-icon btn-ghost" data-action="menu" aria-haspopup="menu" aria-expanded="${ui.menu}" aria-label="Más opciones">${icon("more")}</button>
             ${ui.menu ? renderMenu() : ""}
           </div>
-          <button class="btn btn-icon btn-ghost nav-burger" data-action="nav" aria-expanded="${ui.nav}" aria-label="Abrir menú">${icon(ui.nav ? "x" : "menu")}</button>
         </div>
       </div>`;
+    $("#sidebar").classList.toggle("is-open", ui.nav);
+    $("#sidebar-backdrop").classList.toggle("is-open", ui.nav);
+
+    const cur = SCREENS[ui.screen];
+    $("#topbar").innerHTML = `
+      <button class="btn btn-icon btn-ghost" data-action="nav" aria-label="Abrir menú" aria-expanded="${ui.nav}">${icon("menu")}</button>
+      <span class="topbar-title">${cur.step ? `Paso ${cur.step} · ` : ""}${esc(cur.label)}</span>
+      <button class="btn btn-icon btn-ghost" data-action="theme" aria-label="Cambiar tema">${icon(dark ? "sun" : "moon")}</button>`;
   }
 
   function renderMenu() {
-    return `<div class="menu" role="menu">
-      <button role="menuitem" data-action="how">${icon("help", 16)} ¿Cómo funciona?</button>
+    return `<div class="menu menu-up" role="menu">
       <button role="menuitem" data-action="demo">${icon("star", 16)} Cargar ejemplo</button>
       <label role="menuitem" class="menu-file" data-action="import-label">${icon("upload", 16)} Importar evaluación<input type="file" accept="application/json" class="sr-only" data-action="import-file" /></label>
       <button role="menuitem" data-action="export-json">${icon("download", 16)} Exportar evaluación (JSON)</button>
@@ -215,29 +263,9 @@
     </div>`;
   }
 
-  /* ---------- Barra de pasos (dentro del contenido) ---------- */
-  function renderSteps(result) {
-    return `<ol class="steps" aria-label="Pasos de la evaluación">
-      ${SCREENS.filter((s) => s.step)
-        .map((s, i) => {
-          const idx = i + 1;
-          const current = idx === ui.screen;
-          const done = !current && stepDone(idx, result);
-          return `<li class="step ${current ? "is-current" : ""} ${done ? "is-done" : ""}">
-            <button data-nav="${idx}" ${current ? 'aria-current="step"' : ""}>
-              <span class="step-num">${done ? icon("check", 14) : s.step}</span>
-              <span class="step-label">${esc(s.label)}</span>
-            </button>
-          </li>`;
-        })
-        .join("")}
-    </ol>`;
-  }
-
   function screenHeader(result, extra) {
     const s = SCREENS[ui.screen];
-    return `${renderSteps(result)}
-      <div class="screen-header">
+    return `<div class="screen-header">
         <div>
           <div class="kicker">Paso ${s.step} de 3 · ${esc(s.guios)}</div>
           <h1 class="h1">${esc(s.title)}</h1>
@@ -731,10 +759,9 @@
   document.addEventListener("click", (ev) => {
     const t = ev.target.closest("[data-nav],[data-action],[data-factor],[data-scope]");
     if (!t) {
-      if (ui.menu || ui.nav) {
+      if (ui.menu) {
         ui.menu = false;
-        ui.nav = false;
-        renderNavbar();
+        renderSidebar(E.evaluate(DATA, state));
       }
       return;
     }
@@ -774,20 +801,24 @@
     if (action === "menu") {
       ui.menu = !ui.menu;
       ui.nav = false;
-      renderNavbar();
+      renderSidebar(E.evaluate(DATA, state));
     } else if (action === "nav") {
       ui.nav = !ui.nav;
       ui.menu = false;
-      renderNavbar();
+      renderSidebar(E.evaluate(DATA, state));
+    } else if (action === "nav-close") {
+      ui.nav = false;
+      ui.menu = false;
+      renderSidebar(E.evaluate(DATA, state));
     } else if (action === "theme") {
       setTheme(currentTheme() === "dark" ? "light" : "dark");
-      renderNavbar();
+      renderSidebar(E.evaluate(DATA, state));
     } else if (action === "detail") {
       ui.detail = !ui.detail;
       render();
     } else if (action === "how") {
       ui.menu = false;
-      renderNavbar();
+      renderSidebar(E.evaluate(DATA, state));
       howItWorks();
     } else if (action === "close-overlay") {
       const isBackdrop = t.classList.contains("popup-backdrop") || t.classList.contains("sheet-backdrop");
@@ -798,7 +829,7 @@
       closeOverlay();
       ui.menu = false;
       exportJson();
-      renderNavbar();
+      renderSidebar(E.evaluate(DATA, state));
     } else if (action === "print") {
       closeOverlay();
       ui.menu = false;
@@ -813,7 +844,7 @@
       toast("Ejemplo cargado (Moodle)");
     } else if (action === "reset") {
       ui.menu = false;
-      renderNavbar();
+      renderSidebar(E.evaluate(DATA, state));
       reset();
     }
   });
@@ -852,7 +883,7 @@
       if (ui.menu || ui.nav) {
         ui.menu = false;
         ui.nav = false;
-        renderNavbar();
+        renderSidebar(E.evaluate(DATA, state));
       }
     }
   });

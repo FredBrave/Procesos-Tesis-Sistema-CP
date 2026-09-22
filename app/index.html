@@ -24,11 +24,15 @@
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='14' fill='%234f5bf5'/><text x='32' y='42' font-family='Arial' font-weight='800' font-size='28' fill='white' text-anchor='middle'>G</text></svg>" />
 </head>
 <body>
-  <header class="navbar" id="navbar"></header>
-
-  <main class="app-main" id="screen" aria-live="polite"></main>
-
-  <footer class="app-footer" id="footer"></footer>
+  <div class="layout">
+    <aside class="sidebar" id="sidebar" aria-label="Navegación principal"></aside>
+    <div class="sidebar-backdrop" id="sidebar-backdrop" data-action="nav-close"></div>
+    <div class="content">
+      <header class="topbar" id="topbar"></header>
+      <main class="app-main" id="screen" aria-live="polite"></main>
+      <footer class="app-footer" id="footer"></footer>
+    </div>
+  </div>
 
   <div id="overlay"></div>
   <div id="toast"></div>

@@ -33,7 +33,7 @@ Sistema de evaluación de adopción de software basado en la guía GUIOS (tesis 
 | Cambiar el texto o la condición de una recomendación | `data/recomendaciones.json` |
 | Cambiar una fórmula / umbral | `engine.js` + test en `tests/engine.test.js` (`umbralFoda` vive en `recomendaciones.json`) |
 | Añadir una pantalla | `SCREENS[]` y una función `renderX()` en `app.js`; estilos en `app.css` |
-| Añadir una sección al navbar | `NAV_ITEMS[]` en `app.js` (`soon: true` mientras no exista la pantalla) |
+| Añadir una sección al sidebar | `NAV_EXTRA[]` en `app.js` (`soon: true` mientras no exista la pantalla); los pasos salen de `SCREENS[]` |
 | Mostrar más información en un paso | Preferir un `<details class="details">` o el interruptor "Ver cálculo"; las pantallas deben quedar simples por defecto |
 | Cambiar colores / tipografía | `tokens.css` (light y dark) |
 | Cambiar el esquema de BD | `db/schema.sql`; el seed se regenera |
