@@ -1,8 +1,8 @@
 /**
  * GUIOS PRO — Interfaz (vanilla JS, sin build).
  *
- * Pantallas: 0 Inicio · 1 Paso 1-2 (factores) · 2 Paso 3-4 (subfactores) · 3 Paso 5-6 (resultados)
- * Estado persistido en localStorage (clave STORAGE_KEY). Toda la lógica de cálculo vive en engine.js.
+ * Pantallas: 0 Inicio · 1 Paso 1 Importancia (GUIOS 1-2) · 2 Paso 2 Cumplimiento (GUIOS 3-4) · 3 Paso 3 Resultado (GUIOS 5-6)
+ * Estado persistido en localStorage. Toda la lógica de cálculo vive en engine.js.
  */
 (function () {
   "use strict";
@@ -10,20 +10,34 @@
   const DATA = window.GUIOS_DATA;
   const E = window.GuiosEngine;
   const STORAGE_KEY = "guiospro.state.v1";
+  const THEME_KEY = "guiospro.theme";
   const LICENCIAS = ["FLOSS permisiva (MIT, Apache, BSD)", "FLOSS copyleft (GPL, AGPL)", "FLOSS copyleft débil (LGPL, MPL)", "Privativa", "Otra"];
 
+  /** Pantallas. `id` es el hash de la URL; `step` es el número que ve el usuario. */
   const SCREENS = [
-    { id: "inicio", short: "Inicio", label: "Inicio" },
-    { id: "paso-1-2", short: "1-2", label: "Paso 1 y 2 · Factores relevantes" },
-    { id: "paso-3-4", short: "3-4", label: "Paso 3 y 4 · Factores ponderados" },
-    { id: "paso-5-6", short: "5-6", label: "Paso 5 y 6 · Evaluación y recomendación" },
+    { id: "inicio", label: "Inicio" },
+    { id: "paso-1-2", step: 1, label: "Importancia", title: "¿Qué tan importante es cada factor para su organización?", guios: "Pasos 1 y 2 de la guía GUIOS" },
+    { id: "paso-3-4", step: 2, label: "Cumplimiento", title: "¿En qué medida el software cumple cada requisito?", guios: "Pasos 3 y 4 de la guía GUIOS" },
+    { id: "paso-5-6", step: 3, label: "Resultado", title: "Resultado de la evaluación", guios: "Pasos 5 y 6 de la guía GUIOS" },
+  ];
+
+  /**
+   * Navbar. Para añadir una sección futura basta con agregar un ítem:
+   * { label, screen (índice de SCREENS) | href, icon, soon: true (deshabilitado con etiqueta "Pronto") }
+   */
+  const NAV_ITEMS = [
+    { label: "Inicio", screen: 0, icon: "home" },
+    { label: "Evaluación", screen: 1, screens: [1, 2], icon: "sliders" },
+    { label: "Resultado", screen: 3, icon: "grid" },
+    { label: "Historial", icon: "clock", soon: true },
+    { label: "Administración", icon: "settings", soon: true },
   ];
 
   /* ------------------------------------------------------------------ */
   /* Estado                                                              */
   /* ------------------------------------------------------------------ */
   let state = load();
-  const ui = { screen: screenFromHash(), factor: null, menu: false };
+  const ui = { screen: screenFromHash(), factor: null, menu: false, nav: false, detail: false };
 
   function load() {
     try {
@@ -54,6 +68,21 @@
   }
 
   /* ------------------------------------------------------------------ */
+  /* Tema                                                                */
+  /* ------------------------------------------------------------------ */
+  function currentTheme() {
+    return document.documentElement.getAttribute("data-theme") === "dark" ? "dark" : "light";
+  }
+  function setTheme(theme) {
+    document.documentElement.setAttribute("data-theme", theme);
+    try {
+      localStorage.setItem(THEME_KEY, theme);
+    } catch (err) {
+      /* sin persistencia */
+    }
+  }
+
+  /* ------------------------------------------------------------------ */
   /* Utilidades                                                          */
   /* ------------------------------------------------------------------ */
   const $ = (sel, root) => (root || document).querySelector(sel);
@@ -69,18 +98,25 @@
   const ICONS = {
     chevronRight: '<polyline points="9 18 15 12 9 6"/>',
     chevronLeft: '<polyline points="15 18 9 12 15 6"/>',
+    chevronDown: '<polyline points="6 9 12 15 18 9"/>',
     check: '<polyline points="20 6 9 17 4 12"/>',
     more: '<circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/>',
+    menu: '<line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/>',
+    x: '<line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>',
     download: '<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>',
     upload: '<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/>',
     trash: '<polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/>',
     printer: '<polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/>',
     info: '<circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/>',
+    help: '<circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/>',
     alert: '<path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>',
-    layers: '<polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/>',
     sliders: '<line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/><line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/><line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/><line x1="1" y1="14" x2="7" y2="14"/><line x1="9" y1="8" x2="15" y2="8"/><line x1="17" y1="16" x2="23" y2="16"/>',
     grid: '<rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/>',
-    box: '<path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/>',
+    home: '<path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>',
+    clock: '<circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>',
+    settings: '<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.6 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.6a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>',
+    sun: '<circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>',
+    moon: '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>',
     star: '<polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>',
   };
   function icon(name, size) {
@@ -88,7 +124,7 @@
   }
 
   function fmt(n) {
-    return n == null ? "—" : n.toFixed(2);
+    return n == null ? "—" : n.toFixed(1);
   }
   function dimName(id) {
     const d = DATA.dimensiones.find((x) => x.id === id);
@@ -102,8 +138,10 @@
     return `<span class="badge ${cls}">${esc(DATA.nivelesImportancia[idx])}</span>`;
   }
   function fodaBadge(foda) {
-    if (!foda) return `<span class="badge badge-plain muted">Sin evaluar</span>`;
     return `<span class="badge badge-${foda}">${foda}</span>`;
+  }
+  function plural(n, s, p) {
+    return `${n} ${n === 1 ? s : p}`;
   }
 
   /* ------------------------------------------------------------------ */
@@ -112,13 +150,13 @@
   function render() {
     const result = E.evaluate(DATA, state);
     ensureSelectedFactor(result);
-    renderStepper(result);
-    const screen = $("#screen");
-    screen.innerHTML = [renderInicio, renderPaso12, renderPaso34, renderPaso56][ui.screen](result);
+    renderNavbar();
+    $("#screen").innerHTML = [renderInicio, renderPaso1, renderPaso2, renderPaso3][ui.screen](result);
     renderFooter(result);
     const wantedHash = "#" + SCREENS[ui.screen].id;
     if (location.hash !== wantedHash) history.replaceState(null, "", wantedHash);
-    document.title = `GUIOS PRO · ${SCREENS[ui.screen].label}`;
+    const s = SCREENS[ui.screen];
+    document.title = `GUIOS PRO · ${s.step ? `Paso ${s.step} · ` : ""}${s.label}`;
   }
 
   function ensureSelectedFactor(result) {
@@ -131,35 +169,100 @@
   }
 
   function stepDone(i, result) {
-    if (i === 1) return result.relevantes > 0;
-    if (i === 2) return result.relevantes > 0 && result.pendientes.length === 0;
+    if (i === 1) return result.relevantes > 0 && !!state.paso1Confirmado;
+    if (i === 2) return result.relevantes > 0 && result.pendientes.length === 0 && Object.keys(state.subfactores).length > 0;
     if (i === 3) return !!result.recomendacion && result.pendientes.length === 0;
     return true;
   }
 
-  function renderStepper(result) {
-    const items = SCREENS.map((s, i) => {
-      const current = i === ui.screen;
-      const done = i !== ui.screen && stepDone(i, result) && i !== 0;
-      return `<button class="page-btn is-step ${done ? "is-done" : ""}" data-nav="${i}" ${current ? 'aria-current="page"' : ""} title="${esc(s.label)}">${i === 0 ? icon("grid", 14) : esc(s.short)}</button>`;
+  /* ---------- Navbar ---------- */
+  function renderNavbar() {
+    const links = NAV_ITEMS.map((item) => {
+      const active = item.screens ? item.screens.includes(ui.screen) : item.screen === ui.screen;
+      if (item.soon) {
+        return `<span class="nav-link is-disabled" title="Disponible en una próxima versión">${icon(item.icon, 16)}<span>${esc(item.label)}</span><span class="badge badge-plain">Pronto</span></span>`;
+      }
+      return `<a class="nav-link" href="#${SCREENS[item.screen].id}" data-nav="${item.screen}" ${active ? 'aria-current="page"' : ""}>${icon(item.icon, 16)}<span>${esc(item.label)}</span></a>`;
     });
-    $("#stepper").innerHTML = `
-      <span class="step-label">${esc(SCREENS[ui.screen].label)}</span>
-      <div class="pagination">
-        <button class="page-btn" data-nav="${ui.screen - 1}" ${ui.screen === 0 ? "disabled" : ""} aria-label="Anterior">${icon("chevronLeft", 16)}</button>
-        ${items.join("")}
-        <button class="page-btn" data-nav="${ui.screen + 1}" ${ui.screen === SCREENS.length - 1 ? "disabled" : ""} aria-label="Siguiente">${icon("chevronRight", 16)}</button>
+    const dark = currentTheme() === "dark";
+    $("#navbar").innerHTML = `
+      <div class="inner">
+        <a class="brand" href="#inicio" data-nav="0">
+          <span class="logo" aria-hidden="true">G</span>
+          <span class="name">GUIOS PRO</span>
+        </a>
+        <nav class="nav-links ${ui.nav ? "is-open" : ""}" aria-label="Secciones">${links.join("")}</nav>
+        <div class="nav-actions">
+          <button class="btn btn-icon btn-ghost" data-action="theme" title="${dark ? "Cambiar a modo claro" : "Cambiar a modo oscuro"}" aria-label="${dark ? "Cambiar a modo claro" : "Cambiar a modo oscuro"}">${icon(dark ? "sun" : "moon")}</button>
+          <div class="menu-anchor">
+            <button class="btn btn-icon btn-ghost" data-action="menu" aria-haspopup="menu" aria-expanded="${ui.menu}" aria-label="Más opciones">${icon("more")}</button>
+            ${ui.menu ? renderMenu() : ""}
+          </div>
+          <button class="btn btn-icon btn-ghost nav-burger" data-action="nav" aria-expanded="${ui.nav}" aria-label="Abrir menú">${icon(ui.nav ? "x" : "menu")}</button>
+        </div>
       </div>`;
   }
 
+  function renderMenu() {
+    return `<div class="menu" role="menu">
+      <button role="menuitem" data-action="how">${icon("help", 16)} ¿Cómo funciona?</button>
+      <button role="menuitem" data-action="demo">${icon("star", 16)} Cargar ejemplo</button>
+      <label role="menuitem" class="menu-file" data-action="import-label">${icon("upload", 16)} Importar evaluación<input type="file" accept="application/json" class="sr-only" data-action="import-file" /></label>
+      <button role="menuitem" data-action="export-json">${icon("download", 16)} Exportar evaluación (JSON)</button>
+      <button role="menuitem" data-action="print">${icon("printer", 16)} Exportar informe (PDF)</button>
+      <hr />
+      <button role="menuitem" class="is-danger" data-action="reset">${icon("trash", 16)} Reiniciar evaluación</button>
+    </div>`;
+  }
+
+  /* ---------- Barra de pasos (dentro del contenido) ---------- */
+  function renderSteps(result) {
+    return `<ol class="steps" aria-label="Pasos de la evaluación">
+      ${SCREENS.filter((s) => s.step)
+        .map((s, i) => {
+          const idx = i + 1;
+          const current = idx === ui.screen;
+          const done = !current && stepDone(idx, result);
+          return `<li class="step ${current ? "is-current" : ""} ${done ? "is-done" : ""}">
+            <button data-nav="${idx}" ${current ? 'aria-current="step"' : ""}>
+              <span class="step-num">${done ? icon("check", 14) : s.step}</span>
+              <span class="step-label">${esc(s.label)}</span>
+            </button>
+          </li>`;
+        })
+        .join("")}
+    </ol>`;
+  }
+
+  function screenHeader(result, extra) {
+    const s = SCREENS[ui.screen];
+    return `${renderSteps(result)}
+      <div class="screen-header">
+        <div>
+          <div class="kicker">Paso ${s.step} de 3 · ${esc(s.guios)}</div>
+          <h1 class="h1">${esc(s.title)}</h1>
+        </div>
+        ${extra ? `<div class="actions">${extra}</div>` : ""}
+      </div>`;
+  }
+
+  /* ---------- Footer ---------- */
   function renderFooter(result) {
-    const totalSub = DATA.factores.filter((f) => result.factores.find((r) => r.id === f.id).relevante).reduce((s, f) => s + f.subfactores.length, 0);
-    const answered = result.factores.filter((f) => f.relevante).reduce((s, f) => s + f.subfactoresRespondidos, 0);
+    if (ui.screen === 0) {
+      $("#footer").innerHTML = "";
+      $("#footer").hidden = true;
+      return;
+    }
+    $("#footer").hidden = false;
+    const relevant = result.factores.filter((f) => f.relevante);
+    const totalSub = relevant.reduce((s, f) => s + f.subfactoresTotal, 0);
+    const answered = relevant.reduce((s, f) => s + f.subfactoresRespondidos, 0);
     const pct = totalSub ? Math.round((answered / totalSub) * 100) : 0;
-    const status = [
-      `${result.relevantes} de ${DATA.factores.length} factores relevantes`,
-      `${answered} de ${totalSub} subfactores valorados`,
-    ].join(" · ");
+    let status = "";
+    if (ui.screen === 1) status = `${plural(result.relevantes, "factor", "factores")} se evaluarán`;
+    else if (ui.screen === 2) status = `${answered} de ${totalSub} preguntas respondidas`;
+    else if (ui.screen === 3) status = result.pendientes.length ? `Faltan ${plural(result.pendientes.length, "factor", "factores")} por responder` : "Evaluación completa";
+    else status = answered ? `Evaluación en curso · ${pct}%` : "Sin evaluación en curso";
     const last = ui.screen === SCREENS.length - 1;
     $("#footer").innerHTML = `
       <div class="inner">
@@ -171,7 +274,7 @@
         ${
           last
             ? `<button class="btn btn-primary" data-action="export-sheet">${icon("download")}<span>Exportar</span></button>`
-            : `<button class="btn btn-primary" data-nav="${ui.screen + 1}"><span>Siguiente</span>${icon("chevronRight")}</button>`
+            : `<button class="btn btn-primary" data-nav="${ui.screen + 1}"><span>${ui.screen === 0 ? "Comenzar" : "Siguiente"}</span>${icon("chevronRight")}</button>`
         }
       </div>`;
   }
@@ -181,218 +284,165 @@
   /* ------------------------------------------------------------------ */
   function renderInicio(result) {
     const sw = state.software;
-    const totalSub = DATA.factores.reduce((s, f) => s + f.subfactores.length, 0);
-    const answered = result.factores.reduce((s, f) => s + (f.relevante ? f.subfactoresRespondidos : 0), 0);
+    const started = Object.keys(state.subfactores).length > 0;
     const rec = result.recomendacion;
     const steps = [
-      { i: 1, t: "Paso 1 y 2 · Factores relevantes", s: `${result.relevantes} de ${DATA.factores.length} factores marcados como relevantes`, done: stepDone(1, result) },
-      { i: 2, t: "Paso 3 y 4 · Factores ponderados", s: result.pendientes.length ? `${result.pendientes.length} factor(es) relevante(s) pendiente(s) de valorar` : `${answered} subfactores valorados`, done: stepDone(2, result) },
-      { i: 3, t: "Paso 5 y 6 · Evaluación y recomendación", s: rec && !result.pendientes.length ? `Recomendación ${rec.codigo}: ${rec.titulo}` : "Disponible cuando se completen los pasos anteriores", done: stepDone(3, result) },
+      { i: 1, t: "Importancia de los factores", s: state.paso1Confirmado ? `${plural(result.relevantes, "factor", "factores")} se evaluarán` : "Pendiente", done: stepDone(1, result) },
+      { i: 2, t: "Cumplimiento del software", s: result.pendientes.length ? `Faltan ${plural(result.pendientes.length, "factor", "factores")}` : started ? "Completo" : "Pendiente", done: stepDone(2, result) },
+      { i: 3, t: "Resultado", s: rec && !result.pendientes.length ? `Recomendación ${rec.codigo} · ${rec.titulo}` : "Pendiente", done: stepDone(3, result) },
     ];
     return `
       <div class="screen-header">
         <div>
-          <div class="kicker">Guía GUIOS · Modelo T-O-E</div>
-          <h1 class="h1">Evaluación de adopción de software</h1>
-          <p>Registre la solución candidata y siga los seis pasos de la guía para obtener la clasificación FODA de cada factor y una recomendación objetiva de adopción.</p>
-        </div>
-        <div class="actions">
-          <label class="btn btn-secondary">${icon("upload")} Importar<input type="file" accept="application/json" class="sr-only" data-action="import-file" /></label>
-          <div class="menu-anchor">
-            <button class="btn btn-icon btn-secondary" data-action="menu" aria-haspopup="menu" aria-expanded="${ui.menu}">${icon("more")}</button>
-            ${ui.menu ? renderMenu() : ""}
-          </div>
+          <div class="kicker">Guía GUIOS para la adopción de software</div>
+          <h1 class="h1">Evalúe si un software es adecuado para su organización</h1>
+          <p>Tres pasos: indique qué factores le importan, valore si el software los cumple y obtenga una recomendación.</p>
         </div>
       </div>
 
       <div class="hero">
         <section class="card">
-          <div class="card-header"><h2 class="h3">Software a evaluar</h2><span class="badge badge-primary badge-plain">Opcional</span></div>
+          <div class="card-header"><h2 class="h3">Software a evaluar</h2></div>
           <div class="card-body stack">
-            <div class="grid-2">
-              <div class="field"><label for="sw-nombre">Nombre del software</label><input id="sw-nombre" class="input" placeholder="Ej. Moodle, Odoo, LibreOffice" data-field="software.nombre" value="${esc(sw.nombre)}" /></div>
-              <div class="field"><label for="sw-version">Versión</label><input id="sw-version" class="input" placeholder="Ej. 4.3" data-field="software.version" value="${esc(sw.version)}" /></div>
-            </div>
-            <div class="grid-2">
-              <div class="field"><label for="sw-lic">Tipo de licencia</label>
-                <select id="sw-lic" class="select" data-field="software.licencia">
-                  <option value="">Seleccione…</option>
-                  ${LICENCIAS.map((l) => `<option ${sw.licencia === l ? "selected" : ""}>${esc(l)}</option>`).join("")}
-                </select></div>
-              <div class="field"><label for="sw-prov">Proveedor / comunidad</label><input id="sw-prov" class="input" placeholder="Ej. Moodle HQ" data-field="software.proveedor" value="${esc(sw.proveedor)}" /></div>
-            </div>
-            <div class="grid-2">
-              <div class="field"><label for="sw-org">Organización</label><input id="sw-org" class="input" placeholder="Ej. Universidad Estatal de Milagro" data-field="software.organizacion" value="${esc(sw.organizacion)}" /></div>
-              <div class="field"><label for="sw-eval">Evaluador</label><input id="sw-eval" class="input" placeholder="Nombre del decisor o evaluador" data-field="software.evaluador" value="${esc(sw.evaluador)}" /></div>
-            </div>
+            <div class="field"><label for="sw-nombre">Nombre del software</label><input id="sw-nombre" class="input" placeholder="Ej. Moodle, Odoo, LibreOffice" data-field="software.nombre" value="${esc(sw.nombre)}" /></div>
+            <details class="details" ${sw.version || sw.licencia || sw.proveedor || sw.organizacion || sw.evaluador ? "open" : ""}>
+              <summary>Más datos (opcional) ${icon("chevronDown", 16)}</summary>
+              <div class="stack" style="padding-top:var(--sp-3)">
+                <div class="grid-2">
+                  <div class="field"><label for="sw-version">Versión</label><input id="sw-version" class="input" placeholder="Ej. 4.3" data-field="software.version" value="${esc(sw.version)}" /></div>
+                  <div class="field"><label for="sw-lic">Tipo de licencia</label>
+                    <select id="sw-lic" class="select" data-field="software.licencia">
+                      <option value="">Seleccione…</option>
+                      ${LICENCIAS.map((l) => `<option ${sw.licencia === l ? "selected" : ""}>${esc(l)}</option>`).join("")}
+                    </select></div>
+                </div>
+                <div class="grid-2">
+                  <div class="field"><label for="sw-prov">Proveedor / comunidad</label><input id="sw-prov" class="input" data-field="software.proveedor" value="${esc(sw.proveedor)}" /></div>
+                  <div class="field"><label for="sw-org">Organización</label><input id="sw-org" class="input" data-field="software.organizacion" value="${esc(sw.organizacion)}" /></div>
+                </div>
+                <div class="field"><label for="sw-eval">Evaluador</label><input id="sw-eval" class="input" data-field="software.evaluador" value="${esc(sw.evaluador)}" /></div>
+              </div>
+            </details>
           </div>
-          <div class="card-footer"><button class="btn btn-primary" data-nav="1">Comenzar evaluación ${icon("chevronRight")}</button></div>
+          <div class="card-footer">
+            <button class="btn btn-ghost" data-action="how">${icon("help")} ¿Cómo funciona?</button>
+            <span class="spacer"></span>
+            <button class="btn btn-primary" data-nav="1">${started ? "Continuar" : "Comenzar"} ${icon("chevronRight")}</button>
+          </div>
         </section>
 
-        <div class="stack">
-          <section class="card steps-overview">
-            <div class="card-header"><h2 class="h3">Progreso</h2><span class="badge ${result.pendientes.length || !result.relevantes ? "" : "badge-success"}">${rec && !result.pendientes.length ? "Completa" : "En proceso"}</span></div>
-            <div class="list">
-              ${steps
-                .map(
-                  (s) => `<button class="list-item" data-nav="${s.i}">
-                    <span class="leading ${s.done ? "" : "is-muted"}">${s.done ? icon("check", 14) : s.i}</span>
-                    <span class="title">${esc(s.t)}<small>${esc(s.s)}</small></span>
-                    <span class="chevron">${icon("chevronRight")}</span>
-                  </button>`
-                )
-                .join("")}
-            </div>
-          </section>
-
-          <section class="card card-soft dim-summary">
-            <div class="list-title">Modelo de evaluación</div>
-            <div class="list">
-              ${DATA.dimensiones
-                .map((d) => {
-                  const fs = DATA.factores.filter((f) => f.dimension === d.id);
-                  const subs = fs.reduce((s, f) => s + f.subfactores.length, 0);
-                  return `<div class="list-item"><span class="leading">${d.nombre.charAt(0)}</span><span class="title">${esc(d.nombre)}</span><span class="detail">${fs.length} ${fs.length === 1 ? "factor" : "factores"} · ${subs} subfactores</span></div>`;
-                })
-                .join("")}
-              <div class="list-item"><span class="leading is-muted">Σ</span><span class="title">Total</span><span class="detail">${DATA.factores.length} factores · ${totalSub} subfactores</span></div>
-            </div>
-          </section>
-        </div>
-      </div>
-
-      <section class="grid-3" style="margin-top:var(--sp-4)">
-        ${[
-          ["layers", "1. Factores relevantes", "Compare la importancia sugerida por la guía con la de su organización y defina el alcance interno/externo."],
-          ["sliders", "2. Valoración de subfactores", "Indique en qué medida la solución cumple cada requisito. La media define la ponderación del factor."],
-          ["grid", "3. FODA y recomendación", "Cada factor se clasifica como Fortaleza, Oportunidad, Debilidad o Amenaza y se aplica la matriz de decisión."],
-        ]
-          .map(
-            ([ic, t, d]) => `<div class="card card-horizontal card-body"><span class="thumb">${icon(ic)}</span><div><div class="h4">${t}</div><p class="small muted">${d}</p></div></div>`
-          )
-          .join("")}
-      </section>`;
-  }
-
-  function renderMenu() {
-    return `<div class="menu" role="menu">
-      <button role="menuitem" data-action="export-json">${icon("download", 16)} Exportar evaluación (JSON)</button>
-      <button role="menuitem" data-action="print">${icon("printer", 16)} Exportar informe (PDF)</button>
-      <button role="menuitem" data-action="demo">${icon("star", 16)} Cargar evaluación de ejemplo</button>
-      <hr />
-      <button role="menuitem" class="is-danger" data-action="reset">${icon("trash", 16)} Reiniciar evaluación</button>
-    </div>`;
+        <section class="card steps-overview">
+          <div class="card-header"><h2 class="h3">Progreso</h2>${rec && !result.pendientes.length ? '<span class="badge badge-success">Completa</span>' : started ? '<span class="badge badge-primary">En curso</span>' : ""}</div>
+          <div class="list">
+            ${steps
+              .map(
+                (s) => `<button class="list-item" data-nav="${s.i}">
+                  <span class="leading ${s.done ? "" : "is-muted"}">${s.done ? icon("check", 14) : s.i}</span>
+                  <span class="title">${esc(s.t)}<small>${esc(s.s)}</small></span>
+                  <span class="chevron">${icon("chevronRight")}</span>
+                </button>`
+              )
+              .join("")}
+          </div>
+        </section>
+      </div>`;
   }
 
   /* ------------------------------------------------------------------ */
-  /* Pantalla 1 · Paso 1 y 2                                             */
+  /* Pantalla 1 · Importancia (GUIOS 1-2)                                */
   /* ------------------------------------------------------------------ */
-  function renderPaso12(result) {
+  function renderPaso1(result) {
     const byDim = DATA.dimensiones.map((d) => ({ d, rows: result.factores.filter((f) => f.dimension === d.id) }));
-    let n = 0;
-    return `
-      <div class="screen-header">
-        <div>
-          <div class="kicker">Paso 1 y 2</div>
-          <h1 class="h1">Obtención de factores relevantes</h1>
-          <p>Evalúe la importancia que tiene cada factor para su organización. La importancia relativa combina la sugerida por la guía con la del decisor; los factores <em>Irrelevantes</em> quedan fuera del análisis. Clasifique el alcance de los factores que pueden ser internos o externos.</p>
-        </div>
-        <div class="actions"><span class="badge badge-primary">${result.relevantes} relevantes</span></div>
-      </div>
+    const toggle = `<label class="switch"><button type="button" class="toggle" role="switch" aria-checked="${ui.detail}" data-action="detail"></button><span>Ver cálculo</span></label>`;
+    return (
+      screenHeader(result, toggle) +
+      `<p class="lead">Elija la importancia de cada factor. Los marcados como <strong>Irrelevante</strong> no se evaluarán.</p>
       <div class="stack">
       ${byDim
         .map(
           ({ d, rows }) => `
         <section class="card">
-          <div class="card-header"><h2 class="h3">Dimensión ${esc(d.nombre)}</h2><span class="badge badge-plain">${rows.filter((r) => r.relevante).length}/${rows.length} relevantes</span></div>
-          <div class="card-body">
-            <div class="factor-table">
-              <div class="th thead">Factor</div><div class="th thead">Imp. sugerida</div><div class="th thead">Imp. decisor</div><div class="th thead">Imp. relativa</div><div class="th thead">Alcance</div>
-              ${rows
-                .map((f, i) => {
-                  n++;
-                  const def = factorById(f.id);
-                  return `${i ? '<div class="row-sep"></div>' : ""}
-                  <div class="cell cell-name ${f.relevante ? "" : "is-irrelevant"}"><span class="idx">${n}</span><span>${esc(f.nombre)}</span></div>
-                  <div class="cell"><span class="cell-label">Imp. sugerida</span>${levelBadge(f.importanciaSugerida - 1, true)}</div>
-                  <div class="cell"><span class="cell-label">Imp. decisor</span>
-                    <select class="select select-sm is-level-${f.importanciaDecisor}" data-decisor="${f.id}" aria-label="Importancia del decisor para ${esc(f.nombre)}">
+          <div class="card-header"><h2 class="h3">${esc(d.nombre)}</h2><span class="muted small">${plural(rows.filter((r) => r.relevante).length, "factor", "factores")} de ${rows.length}</span></div>
+          <div class="factor-list ${ui.detail ? "has-detail" : ""}">
+            ${rows
+              .map((f) => {
+                const def = factorById(f.id);
+                return `<div class="factor-row ${f.relevante ? "" : "is-irrelevant"}">
+                  <div class="factor-name">
+                    <span>${esc(f.nombre)}</span>
+                    <small class="muted">Sugerido: ${esc(DATA.nivelesImportancia[f.importanciaSugerida - 1])}${def.alcance !== "Ambos" ? ` · ${esc(def.alcance)}` : ""}</small>
+                  </div>
+                  <div class="factor-control">
+                    <select class="select select-sm is-level-${f.importanciaDecisor}" data-decisor="${f.id}" aria-label="Importancia de ${esc(f.nombre)}">
                       ${DATA.nivelesImportancia.map((l, k) => `<option value="${k + 1}" ${f.importanciaDecisor === k + 1 ? "selected" : ""}>${esc(l)}</option>`).join("")}
-                    </select></div>
-                  <div class="cell"><span class="cell-label">Imp. relativa</span>${levelBadge(f.importanciaRelativaIdx, f.relevante)}</div>
-                  <div class="cell"><span class="cell-label">Alcance</span>${
-                    def.alcance === "Ambos"
-                      ? `<div class="segmented" role="group" aria-label="Alcance de ${esc(f.nombre)}">
-                          <button type="button" data-scope="${f.id}" data-value="Interno" aria-pressed="${f.alcance === "Interno"}">Interno</button>
-                          <button type="button" data-scope="${f.id}" data-value="Externo" aria-pressed="${f.alcance === "Externo"}">Externo</button>
-                        </div>`
-                      : `<span class="badge badge-plain">${esc(f.alcance)}</span>`
-                  }</div>`;
-                })
-                .join("")}
-            </div>
+                    </select>
+                    ${
+                      def.alcance === "Ambos"
+                        ? `<div class="segmented" role="group" aria-label="Alcance de ${esc(f.nombre)}">
+                            <button type="button" data-scope="${f.id}" data-value="Interno" aria-pressed="${f.alcance === "Interno"}">Interno</button>
+                            <button type="button" data-scope="${f.id}" data-value="Externo" aria-pressed="${f.alcance === "Externo"}">Externo</button>
+                          </div>`
+                        : ""
+                    }
+                  </div>
+                  <div class="factor-detail"><span class="xs muted">Importancia relativa</span>${levelBadge(f.importanciaRelativaIdx, f.relevante)}</div>
+                </div>`;
+              })
+              .join("")}
           </div>
         </section>`
         )
         .join("")}
-      </div>`;
+      </div>`
+    );
   }
 
   /* ------------------------------------------------------------------ */
-  /* Pantalla 2 · Paso 3 y 4                                             */
+  /* Pantalla 2 · Cumplimiento (GUIOS 3-4)                               */
   /* ------------------------------------------------------------------ */
-  function renderPaso34(result) {
+  function renderPaso2(result) {
     const relevant = result.factores.filter((f) => f.relevante);
-    const header = `
-      <div class="screen-header">
-        <div>
-          <div class="kicker">Paso 3 y 4</div>
-          <h1 class="h1">Obtención de factores ponderados</h1>
-          <p>Para cada factor relevante indique en qué medida la solución cumple cada subfactor. La ponderación del factor es la media de sus subfactores (1 a 4); a partir de ${DATA.umbralFoda} se considera favorable.</p>
-        </div>
-        <div class="actions"><span class="badge ${result.pendientes.length ? "badge-warning" : "badge-success"}">${result.pendientes.length ? `${result.pendientes.length} pendientes` : "Todos valorados"}</span></div>
-      </div>`;
+    const header = screenHeader(result);
     if (!relevant.length) {
-      return header + `<div class="alert alert-warning">${icon("alert")}<div>No hay factores relevantes. Regrese al <a href="#paso-1-2" data-nav="1">Paso 1 y 2</a> y asigne una importancia distinta de <em>Irrelevante</em>.</div></div>`;
+      return header + `<div class="alert alert-warning">${icon("alert")}<div>No hay factores para evaluar. Vuelva al <a href="#paso-1-2" data-nav="1">paso 1</a> y asigne una importancia distinta de <em>Irrelevante</em>.</div></div>`;
     }
     const cur = relevant.find((f) => f.id === ui.factor) || relevant[0];
     const def = factorById(cur.id);
     const pos = relevant.indexOf(cur);
     const side = `
       <aside class="side card">
-        <div class="list-title">Factores relevantes · ${relevant.length}</div>
         <div class="list">
           ${relevant
             .map(
               (f, i) => `<button class="list-item" data-factor="${f.id}" ${f.id === cur.id ? 'aria-current="true"' : ""}>
                 <span class="leading ${f.completo ? "" : "is-muted"}">${f.completo ? icon("check", 14) : i + 1}</span>
                 <span class="title">${esc(f.nombre)}</span>
-                <span class="count ${f.completo ? "count-success" : f.subfactoresRespondidos ? "count-primary" : "count-muted"}">${f.subfactoresRespondidos}/${f.subfactoresTotal}</span>
+                <span class="detail">${f.subfactoresRespondidos}/${f.subfactoresTotal}</span>
               </button>`
             )
             .join("")}
         </div>
       </aside>`;
-    const mobileSelect = `<div class="mobile-factor-select field"><label for="mf">Factor</label>
-      <select id="mf" class="select" data-factor-select>
-        ${relevant.map((f) => `<option value="${f.id}" ${f.id === cur.id ? "selected" : ""}>${esc(f.nombre)} (${f.subfactoresRespondidos}/${f.subfactoresTotal})</option>`).join("")}
+    const mobileSelect = `<div class="mobile-factor-select field">
+      <select class="select" data-factor-select aria-label="Factor">
+        ${relevant.map((f) => `<option value="${f.id}" ${f.id === cur.id ? "selected" : ""}>${f.completo ? "✓ " : ""}${esc(f.nombre)} (${f.subfactoresRespondidos}/${f.subfactoresTotal})</option>`).join("")}
       </select></div>`;
     const panel = `
       <section class="card">
-        <div class="card-header factor-panel-header">
-          <h2 class="h3">${esc(cur.nombre)}</h2>
-          <span class="badge badge-plain">${esc(dimName(cur.dimension))}</span>
-          ${levelBadge(cur.importanciaRelativaIdx, true)}
-          <span class="badge badge-plain">${esc(cur.alcance)}</span>
-          ${cur.foda ? `${fodaBadge(cur.foda)}<span class="badge badge-plain">Ponderación ${fmt(cur.ponderacion)}</span>` : ""}
+        <div class="card-header">
+          <div>
+            <h2 class="h3">${esc(cur.nombre)}</h2>
+            <div class="small muted">${esc(dimName(cur.dimension))} · ${pos + 1} de ${relevant.length}</div>
+          </div>
+          <span class="badge ${cur.completo ? "badge-success" : "badge-plain"}">${cur.subfactoresRespondidos} de ${cur.subfactoresTotal}</span>
         </div>
         <div class="card-body">
           ${def.subfactores
             .map(
               (s, i) => `<div class="subfactor-row">
-                <div class="text"><span class="idx">${i + 1}.</span><span>${esc(s.nombre)}</span></div>
-                <select class="select select-sm ${state.subfactores[s.id] ? "is-level-" + state.subfactores[s.id] : ""}" data-sub="${s.id}" aria-label="Valoración: ${esc(s.nombre)}">
-                  <option value="">Sin valorar</option>
+                <div class="text"><span class="idx">${i + 1}</span><span>${esc(s.nombre)}</span></div>
+                <select class="select select-sm ${state.subfactores[s.id] ? "is-level-" + state.subfactores[s.id] : ""}" data-sub="${s.id}" aria-label="Respuesta: ${esc(s.nombre)}">
+                  <option value="">Seleccione…</option>
                   ${DATA.nivelesSubfactor.map((l, k) => `<option value="${k + 1}" ${state.subfactores[s.id] === k + 1 ? "selected" : ""}>${esc(l)}</option>`).join("")}
                 </select>
               </div>`
@@ -400,126 +450,113 @@
             .join("")}
         </div>
         <div class="card-footer">
-          <button class="btn btn-ghost btn-sm" data-action="fill-factor" data-id="${cur.id}" title="Marca todos los subfactores pendientes como 'Cumple el requisito'">Marcar pendientes como cumple</button>
+          <button class="btn btn-secondary" data-factor="${pos > 0 ? relevant[pos - 1].id : ""}" ${pos === 0 ? "disabled" : ""}>${icon("chevronLeft")} Anterior</button>
           <span class="spacer"></span>
-          <button class="btn btn-secondary" data-factor="${pos > 0 ? relevant[pos - 1].id : ""}" ${pos === 0 ? "disabled" : ""}>${icon("chevronLeft")} Anterior factor</button>
-          <button class="btn btn-primary" data-factor="${pos < relevant.length - 1 ? relevant[pos + 1].id : ""}" ${pos === relevant.length - 1 ? "disabled" : ""}>Siguiente factor ${icon("chevronRight")}</button>
+          ${
+            pos < relevant.length - 1
+              ? `<button class="btn btn-primary" data-factor="${relevant[pos + 1].id}">Siguiente factor ${icon("chevronRight")}</button>`
+              : `<button class="btn btn-primary" data-nav="3">Ver resultado ${icon("chevronRight")}</button>`
+          }
         </div>
       </section>`;
     return header + mobileSelect + `<div class="split">${side}<div>${panel}</div></div>`;
   }
 
   /* ------------------------------------------------------------------ */
-  /* Pantalla 3 · Paso 5 y 6                                             */
+  /* Pantalla 3 · Resultado (GUIOS 5-6)                                  */
   /* ------------------------------------------------------------------ */
-  function renderPaso56(result) {
+  function renderPaso3(result) {
     const sw = state.software;
     const rec = result.recomendacion;
     const evaluated = result.factores.filter((f) => f.foda);
     const pending = result.pendientes.map((id) => factorById(id).nombre);
-    const tiles = [
-      ["Fortalezas", result.foda.Fortaleza, "var(--foda-fortaleza)", "Internos favorables"],
-      ["Oportunidades", result.foda.Oportunidad, "var(--foda-oportunidad)", "Externos favorables"],
-      ["Debilidades", result.foda.Debilidad, "var(--foda-debilidad)", "Internos desfavorables"],
-      ["Amenazas", result.foda.Amenaza, "var(--foda-amenaza)", "Externos desfavorables"],
-    ];
+    const actions = `<button class="btn btn-secondary" data-action="print">${icon("printer")} Exportar PDF</button>`;
     const printHeader = `
       <div class="print-only" style="margin-bottom:24px">
-        <h1 class="h1">GUIOS PRO · Informe de evaluación de adopción</h1>
+        <h1 class="h1">GUIOS PRO · Informe de evaluación</h1>
         <p class="muted small">${esc(sw.nombre || "Software sin nombre")}${sw.version ? " " + esc(sw.version) : ""}${sw.licencia ? " · " + esc(sw.licencia) : ""}${sw.organizacion ? " · " + esc(sw.organizacion) : ""}${sw.evaluador ? " · Evaluador: " + esc(sw.evaluador) : ""} · ${new Date().toLocaleDateString("es-EC", { year: "numeric", month: "long", day: "numeric" })}</p>
       </div>`;
-    const recCard = !evaluated.length
-      ? `<div class="alert alert-warning">${icon("alert")}<div>Aún no hay factores evaluados. Complete el <a href="#paso-3-4" data-nav="2">Paso 3 y 4</a> para obtener la clasificación FODA y la recomendación.</div></div>`
-      : `<section class="card recommendation tone-${rec.tono}">
-          <div class="card-body body">
-            <span class="code">${rec.codigo}</span>
-            <div>
-              <div class="kicker" style="font-size:var(--text-xs);font-weight:700;color:var(--rec-color);text-transform:uppercase;letter-spacing:.08em">Recomendación ${rec.codigo}</div>
-              <h2 class="h2">${esc(rec.titulo)}</h2>
-              <p>${esc(rec.texto)}</p>
-              ${
-                rec.factoresCriticos.length
-                  ? `<div class="critical"><span class="small muted" style="align-self:center">Factores a revisar:</span>${rec.factoresCriticos.map((f) => `<span class="badge badge-${f.foda}">${esc(f.nombre)} · ${esc(f.importanciaRelativa)}</span>`).join("")}</div>`
-                  : ""
-              }
-              ${
-                pending.length
-                  ? `<div class="alert alert-warning" style="margin-top:var(--sp-3)">${icon("alert")}<div>Resultado parcial: faltan por valorar <strong>${pending.length}</strong> factor(es) relevante(s): ${esc(pending.join(", "))}.</div></div>`
-                  : ""
-              }
-            </div>
+
+    if (!evaluated.length) {
+      return screenHeader(result) + `<div class="alert alert-warning">${icon("alert")}<div>Todavía no hay respuestas. Complete el <a href="#paso-3-4" data-nav="2">paso 2</a> para ver el resultado.</div></div>`;
+    }
+
+    const recCard = `<section class="card recommendation tone-${rec.tono}">
+        <div class="card-body body">
+          <span class="code">${rec.codigo}</span>
+          <div>
+            <div class="rec-kicker">Recomendación ${rec.codigo}${sw.nombre ? ` para ${esc(sw.nombre)}` : ""}</div>
+            <h2 class="h2">${esc(rec.titulo)}</h2>
+            <p>${esc(rec.texto)}</p>
+            ${
+              rec.factoresCriticos.length
+                ? `<div class="critical"><span class="small muted">Factores a revisar:</span>${rec.factoresCriticos.map((f) => `<span class="badge badge-${f.foda}">${esc(f.nombre)}</span>`).join("")}</div>`
+                : ""
+            }
           </div>
-        </section>`;
-    const quadrant = (name, color) => {
+        </div>
+        ${
+          pending.length
+            ? `<div class="alert alert-warning" style="border-radius:0 0 var(--radius-lg) 0">${icon("alert")}<div>Resultado parcial: faltan por responder ${esc(pending.join(", "))}.</div></div>`
+            : ""
+        }
+      </section>`;
+
+    const quadrant = (name, plural, color, hint) => {
       const fs = evaluated.filter((f) => f.foda === name);
-      return `<div class="foda-quadrant" style="--q-color:${color}"><div class="h4"><span>${name}s</span><span>${fs.length}</span></div>${
-        fs.length ? `<ul>${fs.map((f) => `<li>${esc(f.nombre)} <span class="muted">(${fmt(f.ponderacion)})</span></li>`).join("")}</ul>` : `<div class="empty">Ninguno</div>`
-      }</div>`;
+      return `<div class="foda-quadrant" style="--q-color:${color}">
+        <div class="h4"><span>${plural} <small class="muted">· ${hint}</small></span><span>${fs.length}</span></div>
+        ${fs.length ? `<ul>${fs.map((f) => `<li>${esc(f.nombre)}</li>`).join("")}</ul>` : `<div class="empty">Ninguna</div>`}
+      </div>`;
     };
-    return `
-      <div class="screen-header">
-        <div>
-          <div class="kicker">Paso 5 y 6</div>
-          <h1 class="h1">Evaluación y recomendación sobre la adopción</h1>
-          <p>Clasificación FODA de cada factor según su ponderación y alcance, y recomendación derivada de la matriz de decisión GUIOS. Los factores sin valores no fueron considerados relevantes o no tienen sus subfactores valorados.</p>
+
+    const details = `
+      <details class="details card">
+        <summary class="card-header">Ver detalle por factor ${icon("chevronDown", 16)}</summary>
+        <div class="card-body dim-bars">
+          ${result.dimensiones
+            .map(
+              (d) => `<div class="bar-row"><span>${esc(d.nombre)}</span>
+                <div class="progress"><span style="width:${d.ponderacion ? (d.ponderacion / 4) * 100 : 0}%"></span></div>
+                <span class="num">${fmt(d.ponderacion)}</span></div>`
+            )
+            .join("")}
+          <p class="xs muted" style="margin-top:var(--sp-2)">Cumplimiento medio por dimensión (1 = no cumple, 4 = cumple).</p>
         </div>
-        <div class="actions">
-          <button class="btn btn-secondary" data-action="print">${icon("printer")} Exportar PDF</button>
-          <button class="btn btn-secondary" data-action="export-json">${icon("download")} JSON</button>
-          <button class="btn btn-danger btn-icon" data-action="reset" title="Reiniciar evaluación" aria-label="Reiniciar evaluación">${icon("trash")}</button>
-        </div>
-      </div>
-      ${printHeader}
-      <div class="stack">
-        <div class="grid-4">
-          ${tiles.map(([l, v, c, h]) => `<div class="stat-tile" style="--tile-color:${c}"><span class="label">${l}</span><span class="value">${v}</span><span class="hint">${h}</span></div>`).join("")}
-        </div>
-        ${recCard}
-        <div class="grid-2">
-          <section class="card">
-            <div class="card-header"><h2 class="h3">Matriz FODA</h2><span class="badge badge-plain">${result.positivos} favorables · ${result.negativos} desfavorables</span></div>
-            <div class="card-body foda-grid">
-              ${quadrant("Fortaleza", "var(--foda-fortaleza)")}${quadrant("Oportunidad", "var(--foda-oportunidad)")}${quadrant("Debilidad", "var(--foda-debilidad)")}${quadrant("Amenaza", "var(--foda-amenaza)")}
-            </div>
-          </section>
-          <section class="card">
-            <div class="card-header"><h2 class="h3">Ponderación por dimensión</h2></div>
-            <div class="card-body dim-bars">
-              ${result.dimensiones
+        <div class="table-wrap">
+          <table class="table">
+            <thead><tr><th>Factor</th><th>Importancia</th><th class="num">Cumplimiento</th><th>Alcance</th><th>Clasificación</th></tr></thead>
+            <tbody>
+              ${result.factores
                 .map(
-                  (d) => `<div class="bar-row"><span>${esc(d.nombre)}<br /><span class="xs muted">${d.factoresEvaluados} factor(es)</span></span>
-                    <div class="progress"><span style="width:${d.ponderacion ? (d.ponderacion / 4) * 100 : 0}%"></span></div>
-                    <span class="num">${fmt(d.ponderacion)}</span></div>`
+                  (f) => `<tr class="${f.relevante ? "" : "is-muted"}">
+                    <td>${esc(f.nombre)}<br /><span class="xs muted">${esc(dimName(f.dimension))}</span></td>
+                    <td>${levelBadge(f.importanciaRelativaIdx, f.relevante)}</td>
+                    <td class="num">${fmt(f.ponderacion)}</td>
+                    <td class="muted">${f.relevante ? esc(f.alcance) : "—"}</td>
+                    <td>${f.relevante ? (f.foda ? fodaBadge(f.foda) : `<span class="badge badge-plain badge-warning">Pendiente</span>`) : `<span class="badge badge-plain muted">No evaluado</span>`}</td>
+                  </tr>`
                 )
                 .join("")}
-              <p class="xs muted" style="margin-top:var(--sp-3)">Escala 1–4. Umbral favorable: ${DATA.umbralFoda}.</p>
-            </div>
-          </section>
+            </tbody>
+          </table>
         </div>
+      </details>`;
+
+    return (
+      screenHeader(result, actions) +
+      printHeader +
+      `<div class="stack">
+        ${recCard}
         <section class="card">
-          <div class="card-header"><h2 class="h3">Detalle por factor</h2><span class="badge badge-plain">${evaluated.length} de ${DATA.factores.length} evaluados</span></div>
-          <div class="table-wrap">
-            <table class="table">
-              <thead><tr><th>#</th><th>Factor</th><th>Dimensión</th><th>Imp. relativa</th><th class="num">Ponderación</th><th>Alcance</th><th>FODA</th></tr></thead>
-              <tbody>
-                ${result.factores
-                  .map(
-                    (f, i) => `<tr>
-                      <td class="muted">${i + 1}</td>
-                      <td>${esc(f.nombre)}</td>
-                      <td class="muted">${esc(dimName(f.dimension))}</td>
-                      <td>${levelBadge(f.importanciaRelativaIdx, f.relevante)}</td>
-                      <td class="num">${fmt(f.ponderacion)}</td>
-                      <td class="muted">${f.relevante ? esc(f.alcance) : "—"}</td>
-                      <td>${f.relevante ? (f.foda ? fodaBadge(f.foda) : `<span class="badge badge-plain badge-warning">Pendiente ${f.subfactoresRespondidos}/${f.subfactoresTotal}</span>`) : `<span class="badge badge-plain muted">No relevante</span>`}</td>
-                    </tr>`
-                  )
-                  .join("")}
-              </tbody>
-            </table>
+          <div class="card-header"><h2 class="h3">Matriz FODA</h2><span class="muted small">${result.positivos} a favor · ${result.negativos} en contra</span></div>
+          <div class="card-body foda-grid">
+            ${quadrant("Fortaleza", "Fortalezas", "var(--foda-fortaleza)", "internas")}${quadrant("Oportunidad", "Oportunidades", "var(--foda-oportunidad)", "externas")}${quadrant("Debilidad", "Debilidades", "var(--foda-debilidad)", "internas")}${quadrant("Amenaza", "Amenazas", "var(--foda-amenaza)", "externas")}
           </div>
         </section>
-      </div>`;
+        ${details}
+      </div>`
+    );
   }
 
   /* ------------------------------------------------------------------ */
@@ -529,23 +566,38 @@
     $("#overlay").innerHTML = "";
   }
 
-  function popup({ title, text, confirmLabel, danger, onConfirm }) {
+  function popup({ title, html, confirmLabel, danger, onConfirm }) {
     $("#overlay").innerHTML = `
       <div class="popup-backdrop" data-action="close-overlay">
         <div class="popup" role="dialog" aria-modal="true" aria-labelledby="popup-title">
           <h3 class="h3" id="popup-title">${esc(title)}</h3>
-          <p>${esc(text)}</p>
+          ${html}
           <div class="actions">
-            <button class="btn ${danger ? "btn-danger" : "btn-primary"}" data-action="popup-confirm">${esc(confirmLabel)}</button>
-            <button class="btn btn-secondary" data-action="close-overlay">Cancelar</button>
+            ${onConfirm ? `<button class="btn ${danger ? "btn-danger" : "btn-primary"}" data-action="popup-confirm">${esc(confirmLabel)}</button>` : ""}
+            <button class="btn ${onConfirm ? "btn-secondary" : "btn-primary"}" data-action="close-overlay">${onConfirm ? "Cancelar" : "Entendido"}</button>
           </div>
         </div>
       </div>`;
-    $("#overlay [data-action='popup-confirm']").addEventListener("click", () => {
-      closeOverlay();
-      onConfirm();
+    const confirm = $("#overlay [data-action='popup-confirm']");
+    if (confirm) {
+      confirm.addEventListener("click", () => {
+        closeOverlay();
+        onConfirm();
+      });
+      confirm.focus();
+    }
+  }
+
+  function howItWorks() {
+    popup({
+      title: "¿Cómo funciona?",
+      html: `<ol class="how">
+        <li><strong>Importancia.</strong> Indique qué tan importante es cada factor (tecnológico, organizacional y económico) para su organización.</li>
+        <li><strong>Cumplimiento.</strong> Responda, para cada factor importante, si el software cumple los requisitos.</li>
+        <li><strong>Resultado.</strong> Cada factor se clasifica como Fortaleza, Oportunidad, Debilidad o Amenaza y se obtiene una recomendación: <em>A</em> no adoptar, <em>B</em> adoptar con reservas, <em>C</em> adoptar.</li>
+      </ol>
+      <p class="xs muted">Basado en la guía GUIOS: ${DATA.factores.length} factores y ${DATA.factores.reduce((s, f) => s + f.subfactores.length, 0)} criterios. Su avance se guarda automáticamente en este navegador.</p>`,
     });
-    $("#overlay [data-action='popup-confirm']").focus();
   }
 
   function actionSheet() {
@@ -553,8 +605,8 @@
       <div class="sheet-backdrop" data-action="close-overlay">
         <div class="sheet" role="dialog" aria-modal="true">
           <div class="group">
-            <header><div class="h4">Exportar evaluación</div><p>Elija el formato del entregable.</p></header>
-            <button class="action" data-action="print">Informe en PDF (imprimir)</button>
+            <header><div class="h4">Exportar</div><p>Elija el formato.</p></header>
+            <button class="action" data-action="print">Informe en PDF</button>
             <button class="action" data-action="export-json">Datos de la evaluación (JSON)</button>
           </div>
           <button class="btn btn-primary cancel" data-action="close-overlay">Cancelar</button>
@@ -604,7 +656,7 @@
     a.click();
     a.remove();
     setTimeout(() => URL.revokeObjectURL(a.href), 1000);
-    toast("Evaluación exportada en JSON");
+    toast("Evaluación exportada");
   }
 
   function importJson(file) {
@@ -619,6 +671,7 @@
           alcance: src.alcance || {},
           subfactores: src.subfactores,
           software: Object.assign(E.initialState(DATA).software, parsed.software || {}),
+          paso1Confirmado: true,
         });
         save();
         render();
@@ -643,6 +696,7 @@
         st.subfactores[s.id] = low.has(f.nombre) ? (i % 2 ? 2 : 1) : i % 4 === 3 ? 3 : 4;
       });
     });
+    st.paso1Confirmado = true;
     state = st;
     save();
     ui.factor = null;
@@ -651,7 +705,7 @@
   function reset() {
     popup({
       title: "¿Reiniciar la evaluación?",
-      text: "Se borrarán las importancias, valoraciones y datos del software registrados en este navegador. Esta acción no se puede deshacer.",
+      html: "<p>Se borrarán las respuestas y los datos del software guardados en este navegador.</p>",
       confirmLabel: "Reiniciar",
       danger: true,
       onConfirm: () => {
@@ -677,9 +731,10 @@
   document.addEventListener("click", (ev) => {
     const t = ev.target.closest("[data-nav],[data-action],[data-factor],[data-scope]");
     if (!t) {
-      if (ui.menu) {
+      if (ui.menu || ui.nav) {
         ui.menu = false;
-        render();
+        ui.nav = false;
+        renderNavbar();
       }
       return;
     }
@@ -687,8 +742,13 @@
       ev.preventDefault();
       const n = Number(t.getAttribute("data-nav"));
       if (n >= 0 && n < SCREENS.length) {
+        if (ui.screen === 1 && n > 1) {
+          state.paso1Confirmado = true;
+          save();
+        }
         ui.screen = n;
         ui.menu = false;
+        ui.nav = false;
         render();
         window.scrollTo({ top: 0 });
       }
@@ -710,9 +770,25 @@
       return;
     }
     const action = t.getAttribute("data-action");
+    if (action === "import-file" || action === "import-label") return; // el <label> abre el selector; se maneja en "change"
     if (action === "menu") {
       ui.menu = !ui.menu;
+      ui.nav = false;
+      renderNavbar();
+    } else if (action === "nav") {
+      ui.nav = !ui.nav;
+      ui.menu = false;
+      renderNavbar();
+    } else if (action === "theme") {
+      setTheme(currentTheme() === "dark" ? "light" : "dark");
+      renderNavbar();
+    } else if (action === "detail") {
+      ui.detail = !ui.detail;
       render();
+    } else if (action === "how") {
+      ui.menu = false;
+      renderNavbar();
+      howItWorks();
     } else if (action === "close-overlay") {
       const isBackdrop = t.classList.contains("popup-backdrop") || t.classList.contains("sheet-backdrop");
       if (!isBackdrop || ev.target === t) closeOverlay();
@@ -722,7 +798,7 @@
       closeOverlay();
       ui.menu = false;
       exportJson();
-      render();
+      renderNavbar();
     } else if (action === "print") {
       closeOverlay();
       ui.menu = false;
@@ -734,18 +810,11 @@
       loadDemo();
       ui.screen = 3;
       render();
-      toast("Evaluación de ejemplo cargada (Moodle)");
+      toast("Ejemplo cargado (Moodle)");
     } else if (action === "reset") {
       ui.menu = false;
-      render();
+      renderNavbar();
       reset();
-    } else if (action === "fill-factor") {
-      const def = factorById(t.getAttribute("data-id"));
-      def.subfactores.forEach((s) => {
-        if (!state.subfactores[s.id]) state.subfactores[s.id] = 4;
-      });
-      save();
-      render();
     }
   });
 
@@ -753,6 +822,7 @@
     const t = ev.target;
     if (t.matches("[data-decisor]")) {
       state.decisor[t.getAttribute("data-decisor")] = Number(t.value);
+      state.paso1Confirmado = true;
       save();
       render();
     } else if (t.matches("[data-sub]")) {
@@ -765,6 +835,7 @@
       ui.factor = t.value;
       render();
     } else if (t.matches("[data-action='import-file']")) {
+      ui.menu = false;
       if (t.files && t.files[0]) importJson(t.files[0]);
       t.value = "";
     }
@@ -778,11 +849,17 @@
   document.addEventListener("keydown", (ev) => {
     if (ev.key === "Escape") {
       closeOverlay();
-      if (ui.menu) {
+      if (ui.menu || ui.nav) {
         ui.menu = false;
-        render();
+        ui.nav = false;
+        renderNavbar();
       }
     }
+  });
+
+  // Al imprimir, desplegar los detalles plegados para que salgan en el PDF.
+  window.addEventListener("beforeprint", () => {
+    document.querySelectorAll("details").forEach((d) => (d.open = true));
   });
 
   window.addEventListener("hashchange", () => {

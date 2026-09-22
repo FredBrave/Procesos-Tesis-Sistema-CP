@@ -5,7 +5,7 @@ Sistema informático que automatiza la **guía GUIOS** para evaluar si una soluc
 | | |
 |---|---|
 | **Modelo** | 3 dimensiones (Tecnológica, Organizacional, Económica) · 18 factores · 61 subfactores |
-| **Flujo** | Paso 1-2 factores relevantes → Paso 3-4 factores ponderados → Paso 5-6 FODA y recomendación (A/B/C) |
+| **Flujo** | 3 pasos para el usuario: Importancia (GUIOS 1-2) → Cumplimiento (GUIOS 3-4) → Resultado: FODA y recomendación A/B/C (GUIOS 5-6) |
 | **Stack actual** | HTML + CSS + JavaScript sin dependencias. Se abre con doble clic. |
 | **Metodología** | SCRUM · ver [`docs/SPRINT-0.md`](docs/SPRINT-0.md) |
 
@@ -15,7 +15,7 @@ Sistema informático que automatiza la **guía GUIOS** para evaluar si una soluc
 2. Abrir [`app/index.html`](app/index.html) en Chrome, Edge o Firefox (no requiere servidor ni instalación).
 3. Opcional, con servidor local: `npm run serve` → http://localhost:8080
 
-Para ver el flujo completo con datos de prueba: menú **⋯ → Cargar evaluación de ejemplo** o abrir `app/index.html?demo=1`.
+Para ver el flujo completo con datos de prueba: menú **⋯ → Cargar ejemplo** o abrir `app/index.html?demo=1`. El botón sol/luna del navbar cambia entre modo claro y oscuro.
 
 ## Estructura
 

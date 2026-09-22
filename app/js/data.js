@@ -432,10 +432,10 @@ window.GUIOS_DATA = {
     "Fundamental"
   ],
   "nivelesSubfactor": [
-    "No cumple el requisito",
-    "Desconozco si cumple el requisito",
-    "Cumple parcialmente el requisito",
-    "Cumple el requisito"
+    "No cumple",
+    "Desconozco si cumple",
+    "Cumple parcialmente",
+    "Cumple"
   ],
   "umbralFoda": 3,
   "reglas": [

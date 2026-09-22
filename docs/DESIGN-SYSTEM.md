@@ -50,9 +50,19 @@ Implementación en CSS del UI kit de referencia (capturas: Pop-Up, List, Action 
 | `.progress` | — | Barra de progreso |
 | `.alert`, `.alert-warning` | — | Mensajes inline |
 | `.toast` | — | Notificación efímera |
-| `.stat-tile` | — | KPI (dataviz) |
+| `.navbar`, `.nav-links > .nav-link`, `.nav-actions`, `.nav-burger` | — | Barra de navegación; ítems definidos en `app.js → NAV_ITEMS` (`soon: true` = deshabilitado con etiqueta "Pronto"); colapsa a menú hamburguesa < 760 px |
+| `.steps > .step` | Pagination (adaptado) | Barra de 3 pasos con conector; `.is-current`, `.is-done` |
+| `.details > summary` | — | Sección plegable (`<details>`); `.details.card` para tarjetas plegables. Se despliegan automáticamente al imprimir |
+| `.switch` + `.toggle` | List → toggle | Interruptor con etiqueta ("Ver cálculo") |
+| `.factor-row` | List | Fila de factor: nombre + sugerencia, dropdown, alcance; `.has-detail` muestra la importancia relativa |
 
 Iconos: SVG inline estilo *feather* (24 px, trazo 2) definidos en `app.js → ICONS`. Añadir uno nuevo = añadir la ruta al diccionario.
+
+## Tema claro / oscuro
+
+- El atributo `data-theme="light|dark"` en `<html>` decide el tema; `tokens.css` redefine las variables bajo `:root[data-theme="dark"]`.
+- Un script inline en `index.html` aplica antes del primer pintado el tema guardado (`localStorage: guiospro.theme`), o el del sistema si no hay preferencia. `?theme=dark|light` en la URL fuerza uno (para capturas).
+- El botón sol/luna del navbar (`data-action="theme"`) alterna y persiste la preferencia.
 
 ## Principios
 
@@ -62,3 +72,4 @@ Iconos: SVG inline estilo *feather* (24 px, trazo 2) definidos en `app.js → IC
 4. Estados siempre accesibles: `aria-current`, `aria-pressed`, `aria-checked`, `:focus-visible`.
 5. Mobile first en el contenido: las tablas se convierten en fichas por debajo de 720 px; la barra lateral desaparece por debajo de 960 px y se sustituye por un dropdown.
 6. La impresión (`@media print`) oculta la navegación y muestra la cabecera del informe (`.print-only`).
+7. Menos es más: cada pantalla muestra una sola pregunta y un solo control por fila; los datos de cálculo (importancia relativa, ponderaciones, tabla) van detrás de un interruptor o una sección plegable.

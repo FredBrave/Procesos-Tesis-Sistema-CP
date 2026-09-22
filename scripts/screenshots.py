@@ -30,11 +30,12 @@ BROWSER = next((c for c in CANDIDATES if c and Path(c).exists()), None)
 
 # (nombre, hash, query, ancho, alto)
 SHOTS = [
-    ("00-inicio", "inicio", "", 1280, 1000),
-    ("01-paso-1-2", "paso-1-2", "", 1280, 1400),
-    ("02-paso-3-4", "paso-3-4", "?demo=1", 1280, 1100),
-    ("03-paso-5-6", "paso-5-6", "?demo=1", 1280, 1700),
-    ("04-movil-paso-5-6", "paso-5-6", "?demo=1", 500, 1400),  # Chrome no baja de ~500 px de ventana
+    ("00-inicio", "inicio", "?theme=light", 1280, 900),
+    ("01-paso-1-2", "paso-1-2", "?theme=light", 1280, 1300),
+    ("02-paso-3-4", "paso-3-4", "?demo=1&theme=light", 1280, 1000),
+    ("03-paso-5-6", "paso-5-6", "?demo=1&theme=light", 1280, 1300),
+    ("04-movil-paso-5-6", "paso-5-6", "?demo=1&theme=light", 500, 1400),  # Chrome no baja de ~500 px de ventana
+    ("05-modo-oscuro", "paso-5-6", "?demo=1&theme=dark", 1280, 1100),
 ]
 
 

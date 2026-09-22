@@ -1,7 +1,7 @@
 {
   "_comment": "Matriz de recomendación GUIOSAD 2021 (legacy/MATRIZ RECOMENDACION GUIOSAD 2021.xlsx). Se evalúa en orden: la primera regla que se cumple define la recomendación.",
   "niveles_importancia": ["Irrelevante", "Opcional", "Importante", "Fundamental"],
-  "niveles_subfactor": ["No cumple el requisito", "Desconozco si cumple el requisito", "Cumple parcialmente el requisito", "Cumple el requisito"],
+  "niveles_subfactor": ["No cumple", "Desconozco si cumple", "Cumple parcialmente", "Cumple"],
   "umbral_foda": 3,
   "reglas": [
     {

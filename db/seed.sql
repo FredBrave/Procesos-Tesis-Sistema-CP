@@ -9,10 +9,10 @@ INSERT INTO nivel_importancia (valor, etiqueta) VALUES
   (4, 'Fundamental');
 
 INSERT INTO nivel_cumplimiento (valor, etiqueta) VALUES
-  (1, 'No cumple el requisito'),
-  (2, 'Desconozco si cumple el requisito'),
-  (3, 'Cumple parcialmente el requisito'),
-  (4, 'Cumple el requisito');
+  (1, 'No cumple'),
+  (2, 'Desconozco si cumple'),
+  (3, 'Cumple parcialmente'),
+  (4, 'Cumple');
 
 INSERT INTO dimension (codigo, nombre) VALUES
   ('D1', 'Tecnológica'),
