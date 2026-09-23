@@ -1,6 +1,6 @@
 -- ============================================================================
 -- GUIOS PRO — Diseño físico de base de datos (PostgreSQL 14+)
--- Sprint 0 · Modelo de datos para la versión multiusuario (Sprint 2+).
+-- Sprint 0 · Modelo de datos para la versión con servidor (Sprint 2+).
 -- La app web actual (app/) funciona sin servidor; este esquema es el destino
 -- de la migración descrita en docs/PLAN-DESARROLLO-IA.md.
 --
@@ -63,23 +63,14 @@ CREATE TABLE regla_recomendacion (
 );
 
 -- ---------------------------------------------------------------------------
--- Usuarios y organizaciones
+-- Organizaciones
+-- El sistema no gestiona cuentas de usuario: el evaluador se registra como un
+-- dato de la evaluación. Simplifica el despliegue y evita almacenar credenciales.
 -- ---------------------------------------------------------------------------
 CREATE TABLE organizacion (
     id_organizacion SERIAL PRIMARY KEY,
     nombre          VARCHAR(150) NOT NULL,
     sector          VARCHAR(80),
-    creado_en       TIMESTAMPTZ  NOT NULL DEFAULT now()
-);
-
-CREATE TABLE usuario (
-    id_usuario      SERIAL PRIMARY KEY,
-    id_organizacion INT          REFERENCES organizacion(id_organizacion) ON DELETE SET NULL,
-    nombre          VARCHAR(120) NOT NULL,
-    email           VARCHAR(160) NOT NULL UNIQUE,
-    password_hash   VARCHAR(255) NOT NULL,                 -- bcrypt / argon2
-    rol             VARCHAR(20)  NOT NULL CHECK (rol IN ('Administrador', 'Evaluador', 'Decisor')),
-    activo          BOOLEAN      NOT NULL DEFAULT TRUE,
     creado_en       TIMESTAMPTZ  NOT NULL DEFAULT now()
 );
 
@@ -94,14 +85,14 @@ CREATE TABLE software_candidato (
     tipo_licencia   VARCHAR(60),                           -- FLOSS permisiva, copyleft, privativa...
     proveedor       VARCHAR(120),
     url             VARCHAR(255),
-    registrado_por  INT          REFERENCES usuario(id_usuario) ON DELETE SET NULL,
+    notas           TEXT,
     creado_en       TIMESTAMPTZ  NOT NULL DEFAULT now()
 );
 
 CREATE TABLE evaluacion (
     id_evaluacion   SERIAL PRIMARY KEY,
     id_software     INT          NOT NULL REFERENCES software_candidato(id_software) ON DELETE CASCADE,
-    id_evaluador    INT          NOT NULL REFERENCES usuario(id_usuario) ON DELETE RESTRICT,
+    evaluador       VARCHAR(120),                          -- nombre o área que realiza la evaluación
     estado          VARCHAR(15)  NOT NULL DEFAULT 'En proceso'
                     CHECK (estado IN ('En proceso', 'Completada', 'Cancelada')),
     -- Resultados consolidados (se recalculan al completar; fuente de verdad = detalle)
@@ -158,7 +149,7 @@ JOIN dimension d         ON d.id_dimension = f.id_dimension
 JOIN nivel_importancia ni ON ni.valor = ((f.importancia_sugerida - 1 + ef.importancia_decisor - 1) / 2) + 1;
 
 CREATE INDEX idx_evaluacion_software  ON evaluacion(id_software);
-CREATE INDEX idx_evaluacion_evaluador ON evaluacion(id_evaluador);
+CREATE INDEX idx_evaluacion_fecha     ON evaluacion(creado_en DESC);
 CREATE INDEX idx_subfactor_factor     ON subfactor(id_factor);
 
 COMMIT;

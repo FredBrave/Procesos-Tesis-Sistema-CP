@@ -35,7 +35,7 @@ La decisión de adoptar un software (por ejemplo, migrar de una suite privativa 
 |---|---|
 | **Decisor** (gerencia / dirección de TI) | Fija la importancia de cada factor para la organización (Paso 1) y toma la decisión final (Paso 6). |
 | **Evaluador técnico** (analista de TI) | Valora el cumplimiento de cada subfactor por parte del software candidato (Paso 3). |
-| **Administrador del sistema** | Gestiona usuarios, organizaciones y el catálogo de la guía. |
+| **Responsable del método** | Mantiene el catálogo de la guía (factores, subfactores y reglas) y los softwares candidatos registrados. |
 | **Usuarios finales / áreas** | Aportan información sobre formación, resistencia al cambio, soporte. |
 | **Comunidad / proveedor del software** | Fuente externa de información (documentación, soporte, casos de éxito). |
 
@@ -57,7 +57,7 @@ La decisión de adoptar un software (por ejemplo, migrar de una suite privativa 
 | P4 | Paso 5: clasificación FODA automática | Hecho |
 | P5 | Paso 6: recomendación A/B/C según matriz + factores críticos | Hecho |
 | P6 | Informe exportable (PDF por impresión, JSON) e importación | Hecho |
-| P7 | Usuarios, roles y evaluaciones guardadas en servidor (PostgreSQL) | Diseñado (`db/schema.sql`), Sprint 2-3 |
+| P7 | Catálogo de software y evaluaciones guardadas en servidor (PostgreSQL) | Diseñado (`db/schema.sql`), Sprint 2-3 |
 | P8 | Comparación de varios candidatos y panel del decisor | Sprint 4 |
 
 ### 2.5 ¿Cómo mejorará el nuevo sistema? — Propuesta (TO-BE)
@@ -89,9 +89,9 @@ Interfaz sin guía                          → UI kit consistente, responsive y
 | RF-07 | Emitir la recomendación A/B/C con el texto de la matriz e indicar los factores críticos. | Alta | 0 ✔ |
 | RF-08 | Exportar el informe (PDF) y los datos (JSON); importar una evaluación previa. | Media | 0 ✔ |
 | RF-09 | Guardar el avance automáticamente y permitir limpiar los datos de una evaluación anterior, con confirmación. | Media | 0 ✔ |
-| RF-10 | Autenticación con roles Administrador / Evaluador / Decisor. | Alta | 2 |
-| RF-11 | Persistir evaluaciones en servidor con historial por organización. | Alta | 2-3 |
-| RF-12 | Administrar el catálogo (factores, subfactores, reglas) desde la interfaz. | Media | 3 |
+| RF-10 | Persistir evaluaciones en un servidor con historial por organización. | Alta | 2-3 |
+| RF-11 | Registrar y consultar los softwares candidatos en un catálogo reutilizable. | Alta | 2 |
+| RF-12 | Administrar el catálogo de la guía (factores, subfactores, reglas) desde la interfaz. | Media | 3 |
 | RF-13 | Comparar varias evaluaciones/candidatos en un tablero. | Media | 4 |
 | RF-14 | Adjuntar observaciones/evidencias por subfactor. | Baja | 4 |
 
@@ -104,9 +104,9 @@ Interfaz sin guía                          → UI kit consistente, responsive y
 | RNF-03 Rendimiento | Recalcular FODA y recomendación en < 100 ms en el navegador (61 subfactores). |
 | RNF-04 Accesibilidad | Controles etiquetados, foco visible, contraste AA, navegación por teclado. |
 | RNF-05 Mantenibilidad | Datos maestros en archivos versionados; lógica separada de la UI; pruebas automatizadas en CI. |
-| RNF-06 Seguridad (Sprint 2+) | Contraseñas con bcrypt/argon2, HTTPS, validación de entrada, protección CSRF/XSS. |
+| RNF-06 Seguridad (Sprint 2+) | HTTPS, validación de toda la entrada y protección ante inyección SQL y XSS. La clave del servicio de IA solo existe en el servidor. |
 | RNF-07 Disponibilidad (Sprint 2+) | ≥ 99 % mensual en el despliegue institucional. |
-| RNF-08 Trazabilidad | Cada evaluación registra evaluador, fecha y versión del catálogo. |
+| RNF-08 Trazabilidad | Cada evaluación registra el evaluador indicado, la fecha y la versión del catálogo. |
 
 ### 3.3 Product Backlog inicial
 
@@ -120,8 +120,8 @@ Interfaz sin guía                          → UI kit consistente, responsive y
 | HU-06 | Como decisor quiero exportar el informe para presentarlo al comité. | Botón Exportar PDF (impresión con cabecera del informe) y JSON; importar JSON restaura la evaluación. | Media | 3 | 0 ✔ |
 | HU-07 | Como usuario quiero que mi avance no se pierda al cerrar el navegador y poder empezar de cero cuando cambie de proyecto. | Estado en localStorage; botón «Limpiar datos» en Inicio y en el menú ⋯, con pop-up de confirmación. | Media | 2 | 0 ✔ |
 | HU-13 | Como usuario quiero una interfaz simple, con modo oscuro y navegación clara. | Tres pasos con lenguaje llano; detalle de cálculo oculto tras "Ver cálculo"/secciones plegables; botón de tema; barra lateral con los pasos uno a uno y secciones futuras (Historial, Administración). | Media | 3 | 0 ✔ |
-| HU-08 | Como administrador quiero gestionar usuarios y roles. | CRUD de usuarios, roles Administrador/Evaluador/Decisor, contraseñas cifradas. | Alta | 5 | 2 |
-| HU-09 | Como evaluador quiero guardar evaluaciones en el servidor y consultarlas después. | API REST + PostgreSQL (`db/schema.sql`); listado por organización; estados En proceso/Completada. | Alta | 8 | 2-3 |
+| HU-08 | Como evaluador quiero un catálogo de softwares candidatos para no repetir sus datos en cada evaluación. | Lista con buscador, alta, edición y ficha de detalle con las evaluaciones asociadas. | Alta | 8 | 2 |
+| HU-09 | Como evaluador quiero guardar evaluaciones en el servidor y consultarlas después. | API REST + PostgreSQL (`db/schema.sql`); listado con filtros; estados En proceso/Completada. | Alta | 8 | 2-3 |
 | HU-10 | Como administrador quiero editar el catálogo de factores y reglas. | Pantalla de administración; cambios versionados; validación de escalas. | Media | 5 | 3 |
 | HU-11 | Como decisor quiero comparar candidatos. | Tablero con varias evaluaciones y sus recomendaciones. | Media | 5 | 4 |
 | HU-12 | Como evaluador quiero adjuntar evidencias por subfactor. | Campo de observación y enlace por subfactor; aparece en el informe. | Baja | 3 | 4 |
@@ -133,8 +133,8 @@ Velocidad estimada: 13-15 puntos por sprint.
 ### 4.1 Modelo conceptual
 
 - **DIMENSION** (1) — (N) **FACTOR** (1) — (N) **SUBFACTOR**: catálogo de la guía.
-- **ORGANIZACION** (1) — (N) **USUARIO**; **ORGANIZACION** (1) — (N) **SOFTWARE_CANDIDATO**.
-- **SOFTWARE_CANDIDATO** (1) — (N) **EVALUACION** (N) — (1) **USUARIO** (evaluador).
+- **ORGANIZACION** (1) — (N) **SOFTWARE_CANDIDATO**.
+- **SOFTWARE_CANDIDATO** (1) — (N) **EVALUACION**; el evaluador se registra como dato de la evaluación (el sistema no gestiona cuentas).
 - **EVALUACION** (1) — (N) **EVALUACION_FACTOR** (importancia del decisor, alcance, ponderación, FODA).
 - **EVALUACION** (1) — (N) **EVALUACION_SUBFACTOR** (valor 1..4, observación).
 - **REGLA_RECOMENDACION** (A/B/C) referenciada por **EVALUACION**.
@@ -145,9 +145,7 @@ Velocidad estimada: 13-15 puntos por sprint.
 erDiagram
     DIMENSION ||--o{ FACTOR : agrupa
     FACTOR ||--o{ SUBFACTOR : contiene
-    ORGANIZACION ||--o{ USUARIO : emplea
     ORGANIZACION ||--o{ SOFTWARE_CANDIDATO : registra
-    USUARIO ||--o{ EVALUACION : realiza
     SOFTWARE_CANDIDATO ||--o{ EVALUACION : recibe
     EVALUACION ||--o{ EVALUACION_FACTOR : pondera
     EVALUACION ||--o{ EVALUACION_SUBFACTOR : valora
@@ -159,9 +157,8 @@ erDiagram
     FACTOR { smallint id_factor PK  varchar codigo  smallint id_dimension FK  varchar nombre  smallint importancia_sugerida  varchar alcance  smallint orden }
     SUBFACTOR { int id_subfactor PK  varchar codigo  smallint id_factor FK  varchar enunciado  smallint orden }
     ORGANIZACION { int id_organizacion PK  varchar nombre  varchar sector }
-    USUARIO { int id_usuario PK  int id_organizacion FK  varchar nombre  varchar email  varchar password_hash  varchar rol  boolean activo }
-    SOFTWARE_CANDIDATO { int id_software PK  int id_organizacion FK  varchar nombre  varchar version  varchar tipo_licencia  varchar proveedor  int registrado_por FK }
-    EVALUACION { int id_evaluacion PK  int id_software FK  int id_evaluador FK  varchar estado  char recomendacion FK  smallint n_fortalezas  smallint n_oportunidades  smallint n_debilidades  smallint n_amenazas  timestamptz creado_en  timestamptz completado_en }
+    SOFTWARE_CANDIDATO { int id_software PK  int id_organizacion FK  varchar nombre  varchar version  varchar tipo_licencia  varchar proveedor  timestamptz creado_en }
+    EVALUACION { int id_evaluacion PK  int id_software FK  varchar evaluador  varchar estado  char recomendacion FK  smallint n_fortalezas  smallint n_oportunidades  smallint n_debilidades  smallint n_amenazas  timestamptz creado_en  timestamptz completado_en }
     EVALUACION_FACTOR { int id_evaluacion PK,FK  smallint id_factor PK,FK  smallint importancia_decisor  varchar alcance  numeric ponderacion  varchar foda }
     EVALUACION_SUBFACTOR { int id_evaluacion PK,FK  int id_subfactor PK,FK  smallint valor  text observacion }
     REGLA_RECOMENDACION { char codigo PK  smallint orden  varchar titulo  varchar tono  text[] foda_condicion  text[] importancia_condicion  text texto }
@@ -173,14 +170,14 @@ Para el informe: renderizar este diagrama (Mermaid Live Editor o la extensión d
 
 - Script DDL completo: [`db/schema.sql`](../db/schema.sql) (PostgreSQL 14+, claves foráneas, restricciones CHECK sobre escalas 1..4, vista `v_evaluacion_factor` con la importancia relativa).
 - Datos maestros: [`db/seed.sql`](../db/seed.sql), generado automáticamente desde `data/` con `npm run build:data`.
-- Decisiones: las escalas se modelan como tablas (`nivel_importancia`, `nivel_cumplimiento`) para garantizar integridad; los resultados agregados de `evaluacion` se recalculan al completar (la fuente de verdad es el detalle); `regla_recomendacion` guarda las condiciones como arreglos para que el motor las evalúe en orden, igual que `engine.js`.
+- Decisiones: el sistema no gestiona cuentas de usuario; el evaluador y la organización se registran como datos de la evaluación, lo que simplifica el despliegue en la institución. Las escalas se modelan como tablas (`nivel_importancia`, `nivel_cumplimiento`) para garantizar integridad; los resultados agregados de `evaluacion` se recalculan al completar (la fuente de verdad es el detalle); `regla_recomendacion` guarda las condiciones como arreglos para que el motor las evalúe en orden, igual que `engine.js`.
 
 ## 5. Arquitectura (Sprint 0 y evolución)
 
 ```
 Sprint 0-1 (actual)                Sprint 2-3                          Sprint 4+
 ┌──────────────────────┐          ┌──────────────────────┐            ┌──────────────────────┐
-│ app/ (HTML/CSS/JS)   │          │ app/ (misma UI)      │            │ Tablero comparativo   │
+│ app/ (HTML/CSS/JS)   │          │ app/ (misma UI)      │            │ Comparador de candidatos│
 │ engine.js (cálculo)  │  ─────▶  │ api/ FastAPI o Node  │  ─────▶    │ Admin de catálogo     │
 │ localStorage         │          │ PostgreSQL (db/)     │            │ Evidencias / adjuntos │
 │ GitHub Pages         │          │ Docker Compose       │            │                       │

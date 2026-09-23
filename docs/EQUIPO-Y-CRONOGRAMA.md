@@ -16,9 +16,9 @@ Cinco desarrolladores. **Los devs B, C, D y E construyen funcionalidad** (pantal
 |---|---|---|---|
 | **A** | **IA, integración y coordinación técnica** | Asistente de IA (sugerencias, resumen ejecutivo), revisión de PR, integración de módulos, despliegue y publicación de versiones, control de consumo de IA | `ai/`, `app/js/engine.js`, `.github/`, `docs/` |
 | **B** | **Backend: API y base de datos** | Esqueleto de la API, catálogo, software candidato, evaluaciones, historial, cálculo en servidor, indicadores, comparación y exportación | `api/`, `db/` |
-| **C** | **Usuarios y organización** | Configuración de la organización, registro, inicio de sesión, sesión y permisos, gestión de usuarios, perfil, invitaciones | `app/js/pantallas/usuarios.js`, `api/auth/` |
+| **C** | **Catálogo de software y de la guía** | Configuración de la organización, formularios reutilizables, catálogo de softwares candidatos y su ficha, administración de la guía, plantillas de importancia, importar/exportar, etiquetas y notas | `app/js/pantallas/catalogo.js`, `app/js/pantallas/configuracion.js` |
 | **D** | **Pantallas de evaluación** | Los 3 pasos de la guía, ayuda y validaciones, buscador de factores, «Mis evaluaciones», historial, detalle, evidencias, sincronización | `app/js/app.js`, `app/index.html` |
-| **E** | **Dashboard, reportes y comparación** | **Dashboard de indicadores**, componentes KPI, gráficos, vista de informe, administración del catálogo, comparador de candidatos | `app/js/pantallas/dashboard.js`, `app/css/` |
+| **E** | **Dashboard, reportes y comparación** | **Dashboard de indicadores**, componentes KPI, gráficos, vista de informe, línea de tiempo de evaluaciones, comparador de candidatos | `app/js/pantallas/dashboard.js`, `app/css/` |
 
 El **Product Owner** es el docente/autor de la guía GUIOS. El rol de **Scrum Master** rota cada sprint entre B, C, D y E.
 
@@ -28,15 +28,19 @@ El **Product Owner** es el docente/autor de la guía GUIOS. El rol de **Scrum Ma
 |---|---|---|
 | **Dashboard** con indicadores de la organización | E | 1 (local) → 4 (datos reales) |
 | Configuración de la organización | C | 1 |
-| Registro e inicio de sesión | C | 2 |
+| Catálogo de softwares candidatos | C | 2 |
+| Ficha de un software | C | 2 |
 | Mis evaluaciones | D | 2 |
 | Vista de informe imprimible | E | 2 |
-| Gestión de usuarios | C | 3 |
+| Administración del catálogo de la guía | C | 3 |
+| Plantillas de importancia | C | 3 |
 | Historial de evaluaciones | D | 3 |
-| Administración del catálogo | E | 3 |
+| Línea de tiempo en el dashboard | E | 3 |
 | Detalle de una evaluación guardada | D | 4 |
-| Perfil y cambio de contraseña | C | 4 |
+| Importar y exportar datos | C | 4 |
 | Comparador de candidatos | E | 4 |
+
+> El sistema **no tiene cuentas de usuario ni inicio de sesión**: la organización y el evaluador se registran como datos de la evaluación. Esto simplifica el despliegue y evita almacenar credenciales.
 
 ### Matriz de responsabilidad (RACI)
 
@@ -45,7 +49,7 @@ El **Product Owner** es el docente/autor de la guía GUIOS. El rol de **Scrum Ma
 | Integración con IA | **R/A** | C | I | C | I |
 | Revisión de PR, despliegue y publicación | **R/A** | C | C | C | C |
 | API y base de datos | C | **R/A** | C | C | C |
-| Cuentas, roles y permisos | C | C | **R/A** | I | I |
+| Catálogo de software y de la guía | C | C | **R/A** | C | I |
 | Pantallas de la evaluación | I | C | I | **R/A** | C |
 | Dashboard, informes y comparador | I | C | I | C | **R/A** |
 | Sistema de diseño | I | I | C | C | **R/A** |
@@ -71,10 +75,10 @@ Velocidad planificada: **~10 puntos por desarrollador y sprint**.
 |---|---|---|---|---|---|---|---|
 | **A** · IA e integración | 11 | 13 | 13 | 13 | 10 | 11 | **60** |
 | **B** · Backend | 10 | 13 | 10 | 10 | 8 | 11 | 51 |
-| **C** · Usuarios | 10 | 10 | 10 | 10 | 8 | 10 | 48 |
+| **C** · Catálogo | 10 | 10 | 10 | 8 | 8 | 10 | 46 |
 | **D** · Evaluación | 11 | 10 | 10 | 10 | 8 | 11 | 49 |
 | **E** · Dashboard y reportes | 11 | 10 | 8 | 11 | 10 | 10 | 50 |
-| **Total** | 53 | 56 | 51 | 54 | 44 | **53** | **258** |
+| **Total** | 53 | 56 | 51 | 52 | 44 | **53** | **256** |
 
 El Dev A lleva la mayor carga: la integración con el modelo de lenguaje (lo de mayor riesgo técnico) más el trabajo de integrar y publicar lo que produce el resto del equipo.
 
@@ -88,8 +92,8 @@ Sprints de **2 semanas**, de martes a lunes. Sprint 0 ya está completado.
 |---|---|---|---|
 | **0** ✔ | 08 – 21 sep 2026 | Cimentación: repositorio, app rediseñada, motor probado, datos maestros, esquema de BD y CI | Informe Sprint 0 · app en `app/index.html` |
 | **1** | **22 sep – 05 oct 2026** | Dashboard, configuración y mejoras de la evaluación sobre la app local; decisiones de IA y backend | **v1.1** publicada · tablero Jira operativo · entrega S4-TAREA_1 (30/09) |
-| **2** | 06 – 19 oct 2026 | Cuentas de usuario, API de evaluaciones, gráficos e informe, primer servicio de IA | **v1.2** con API desplegada y login funcionando |
-| **3** | 20 oct – 02 nov 2026 | Evaluaciones guardadas, historial, gestión de usuarios, administración y asistente de IA | **v2.0 multiusuario** |
+| **2** | 06 – 19 oct 2026 | Catálogo de software, API de evaluaciones, gráficos e informe, primer servicio de IA | **v1.2** con API desplegada y catálogo en uso |
+| **3** | 20 oct – 02 nov 2026 | Evaluaciones guardadas, historial, administración de la guía y asistente de IA | **v2.0** con evaluaciones en servidor |
 | **4** | 03 – 16 nov 2026 | Comparador, dashboard con datos reales, evidencias y resumen ejecutivo con IA | **v2.1** con informe completo |
 | **5** | 17 – 30 nov 2026 | Pulido de todas las pantallas, corrección de errores, manuales e informe final | **Release final** + entrega del curso |
 
@@ -103,7 +107,7 @@ gantt
     section Hitos
     Entrega S4-TAREA_1        :milestone, m1, 2026-09-30, 0d
     v1.1 publicada            :milestone, m2, 2026-10-05, 0d
-    v2.0 multiusuario         :milestone, m3, 2026-11-02, 0d
+    v2.0 con servidor         :milestone, m3, 2026-11-02, 0d
     Entrega final del curso   :milestone, m4, 2026-11-30, 0d
     section Dev A · IA e integracion
     ADR, capa ai/ y v1.1      :a1, 2026-09-22, 14d
@@ -117,12 +121,12 @@ gantt
     Historial y calculo       :b3, 2026-10-20, 14d
     Indicadores y comparacion :b4, 2026-11-03, 14d
     Exportacion y correcciones:b5, 2026-11-17, 14d
-    section Dev C · Usuarios
+    section Dev C · Catalogo
     Configuracion y formularios:c1, 2026-09-22, 14d
-    Registro e inicio de sesion:c2, 2026-10-06, 14d
-    Gestion de usuarios y roles:c3, 2026-10-20, 14d
-    Perfil e invitaciones     :c4, 2026-11-03, 14d
-    Pulido y manual admin     :c5, 2026-11-17, 14d
+    Catalogo de software      :c2, 2026-10-06, 14d
+    Admin de la guia y plantillas:c3, 2026-10-20, 14d
+    Importar, exportar y etiquetas:c4, 2026-11-03, 14d
+    Pulido y manual           :c5, 2026-11-17, 14d
     section Dev D · Evaluacion
     Ayuda, avisos y buscador  :d1, 2026-09-22, 14d
     Mis evaluaciones y datos  :d2, 2026-10-06, 14d
@@ -157,7 +161,7 @@ gantt
 1. **Crear proyecto** → plantilla **Scrum**. Nombre: `GUIOS PRO`, clave: `GP`.
 2. **Tipos de incidencia**: `Epic`, `Story`, `Task`, `Bug`. (Los *Spike* se importan como `Task` con la palabra «Spike» en el título.)
 3. **Campos**: activar **Story Points**, `Componente`, `Etiquetas` y `Fecha de vencimiento`.
-4. **Componentes** (Proyecto › Componentes): `IA`, `Integración`, `Backend`, `Usuarios`, `Evaluación`, `Dashboard`.
+4. **Componentes** (Proyecto › Componentes): `IA`, `Integración`, `Backend`, `Catálogo`, `Evaluación`, `Dashboard`.
 5. **Usuarios**: invitar a los 5 desarrolladores y anotar su correo para el paso 4.3.
 
 ### 4.2 Columnas del tablero y flujo
@@ -221,6 +225,7 @@ project = GP AND status = "En curso" AND updated <= -3d
 | Riesgo | Impacto | Mitigación | Dueño |
 |---|---|---|---|
 | El backend (Sprint 2) se retrasa y bloquea a C, D y E | Alto | Las pantallas se construyen contra datos simulados y la capa de datos degrada a `localStorage` | B |
+| Sin cuentas de usuario, cualquiera con acceso a la instancia ve las evaluaciones | Medio | Despliegue en la red institucional o tras un acceso restringido; si más adelante se requieren cuentas, el esquema admite añadirlas sin romper los datos | A |
 | Cuello de botella en la revisión (todo pasa por el Dev A) | Medio | PR pequeños (una tarea), revisión en el día y límite WIP de 2 por persona | A |
 | Coste o latencia de la IA por encima de lo previsto | Alto | Presupuesto fijado en el ADR, caché, límites por organización y modo sin IA siempre disponible | A |
 | Respuestas del modelo inventadas o incoherentes con el cálculo | Alto | La IA nunca decide: solo sugiere; validación estricta del JSON; evals con umbral mínimo | A |

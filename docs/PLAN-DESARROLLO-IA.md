@@ -33,8 +33,8 @@ Cómo seguir construyendo GUIOS PRO sprint a sprint usando Claude Code (u otro a
 |---|---|---|---|
 | **0** (hecho) | Cimentación: repositorio, rediseño con UI kit, motor probado, datos maestros, esquema BD, CI | HU-01 … HU-07 | `app/index.html` portable + informe Sprint 0 |
 | **1** | Pulido del prototipo y validación con el Product Owner | Ajustes de textos de la guía, ayuda contextual por paso, modo oscuro con selector, exportación PDF con gráfico FODA, pruebas de UI básicas (Playwright) | v1.1 en GitHub Pages |
-| **2** | Backend mínimo y autenticación | HU-08, HU-09 (parte 1: API + BD), Docker Compose (PostgreSQL + API) | API REST documentada (OpenAPI) + `db/schema.sql` en uso |
-| **3** | Persistencia completa y administración | HU-09 (parte 2: la app usa la API, sincroniza con localStorage), HU-10 | v2.0 multiusuario |
+| **2** | Catálogo de software y backend mínimo | HU-08 (catálogo), HU-09 (parte 1: API + BD), Docker Compose (PostgreSQL + API) | API REST documentada (OpenAPI) + `db/schema.sql` en uso |
+| **3** | Persistencia completa y administración | HU-09 (parte 2: la app usa la API, sincroniza con localStorage), HU-10 | v2.0 con evaluaciones guardadas |
 | **4** | Valor para el decisor | HU-11 tablero comparativo, HU-12 evidencias, informe PDF generado en servidor | v2.1 + manual de usuario |
 
 Backend sugerido: **FastAPI + SQLAlchemy + PostgreSQL** (Python ya está en el proyecto y en el manual técnico original). Alternativa: Node/Express reutilizando `engine.js` sin cambios. Decidir en la Planning del Sprint 2.
@@ -66,9 +66,9 @@ data/recomendaciones.json hasta que pase. No cambies otras reglas.
 
 **d) Backend (Sprint 2)**
 ```
-Crea api/ con FastAPI y SQLAlchemy usando db/schema.sql como modelo. Endpoints: auth (JWT),
-CRUD de software_candidato, crear/listar/completar evaluacion, guardar evaluacion_factor y
-evaluacion_subfactor. Añade docker-compose.yml con PostgreSQL 16 que cargue db/schema.sql y
+Crea api/ con FastAPI y SQLAlchemy usando db/schema.sql como modelo (sin cuentas de usuario).
+Endpoints: CRUD de organizacion y software_candidato, crear/listar/completar evaluacion,
+guardar evaluacion_factor y evaluacion_subfactor. Añade docker-compose.yml con PostgreSQL 16 que cargue db/schema.sql y
 db/seed.sql. Incluye tests con pytest y actualiza el workflow de CI.
 ```
 

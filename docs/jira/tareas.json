@@ -12,428 +12,925 @@
       "alias": "dev-a",
       "rol": "IA, integración y coordinación técnica",
       "responsable_de": "Integración con IA, revisión de pull requests, publicación de versiones, despliegue y evolución del repositorio",
-      "code_owner": ["ai/", "app/js/engine.js", ".github/", "docs/"]
+      "code_owner": [
+        "ai/",
+        "app/js/engine.js",
+        ".github/",
+        "docs/"
+      ]
     },
     {
       "id": "B",
       "alias": "dev-b",
       "rol": "Desarrollo backend y base de datos",
       "responsable_de": "Endpoints de la API, modelo de datos, consultas y lógica de servidor",
-      "code_owner": ["api/", "db/"]
+      "code_owner": [
+        "api/",
+        "db/"
+      ]
     },
     {
       "id": "C",
       "alias": "dev-c",
-      "rol": "Desarrollo del módulo de usuarios y organización",
-      "responsable_de": "Pantallas y lógica de cuentas, sesión, roles, perfil y configuración",
-      "code_owner": ["app/js/pantallas/usuarios.js", "api/auth/"]
+      "rol": "Desarrollo del catálogo de software y de la guía",
+      "responsable_de": "Pantallas y lógica del catálogo de softwares candidatos, configuración de la organización, administración de la guía y plantillas de importancia",
+      "code_owner": [
+        "app/js/pantallas/catalogo.js",
+        "app/js/pantallas/configuracion.js"
+      ]
     },
     {
       "id": "D",
       "alias": "dev-d",
       "rol": "Desarrollo de las pantallas de evaluación",
       "responsable_de": "Los tres pasos de la guía, historial, detalle de evaluación y sincronización de datos",
-      "code_owner": ["app/js/app.js", "app/index.html"]
+      "code_owner": [
+        "app/js/app.js",
+        "app/index.html"
+      ]
     },
     {
       "id": "E",
       "alias": "dev-e",
       "rol": "Desarrollo del dashboard, reportes y comparación",
       "responsable_de": "Panel de indicadores, gráficos, informes y comparador de candidatos",
-      "code_owner": ["app/js/pantallas/dashboard.js", "app/css/"]
+      "code_owner": [
+        "app/js/pantallas/dashboard.js",
+        "app/css/"
+      ]
     }
   ],
   "sprints": [
-    { "n": 0, "nombre": "Sprint 0 · Cimentación", "inicio": "2026-09-08", "fin": "2026-09-21", "objetivo": "Repositorio, prototipo web rediseñado, motor probado, datos maestros, esquema de BD y CI", "estado": "Completado" },
-    { "n": 1, "nombre": "Sprint 1 · Nuevas pantallas y cimientos", "inicio": "2026-09-22", "fin": "2026-10-05", "objetivo": "Dashboard, configuración y mejoras de la evaluación sobre la app local; decisión de arquitectura de IA y backend", "estado": "Activo" },
-    { "n": 2, "nombre": "Sprint 2 · Cuentas, API y primer servicio de IA", "inicio": "2026-10-06", "fin": "2026-10-19", "objetivo": "Registro e inicio de sesión, API de software y evaluaciones, gráficos del informe y sugerencias con IA", "estado": "Planificado" },
-    { "n": 3, "nombre": "Sprint 3 · Evaluaciones guardadas y asistente", "inicio": "2026-10-20", "fin": "2026-11-02", "objetivo": "Historial y detalle de evaluaciones, gestión de usuarios, vista de informe y asistente de IA en el paso 2", "estado": "Planificado" },
-    { "n": 4, "nombre": "Sprint 4 · Comparación y dashboard con datos reales", "inicio": "2026-11-03", "fin": "2026-11-16", "objetivo": "Comparador de candidatos, dashboard conectado a la API, evidencias y resumen ejecutivo con IA", "estado": "Planificado" },
-    { "n": 5, "nombre": "Sprint 5 · Cierre y entrega final", "inicio": "2026-11-17", "fin": "2026-11-30", "objetivo": "Pulido de todas las pantallas, corrección de errores, documentación y entrega del curso", "estado": "Planificado" }
+    {
+      "n": 0,
+      "nombre": "Sprint 0 · Cimentación",
+      "inicio": "2026-09-08",
+      "fin": "2026-09-21",
+      "objetivo": "Repositorio, prototipo web rediseñado, motor probado, datos maestros, esquema de BD y CI",
+      "estado": "Completado"
+    },
+    {
+      "n": 1,
+      "nombre": "Sprint 1 · Nuevas pantallas y cimientos",
+      "inicio": "2026-09-22",
+      "fin": "2026-10-05",
+      "objetivo": "Dashboard, configuración y mejoras de la evaluación sobre la app local; decisión de arquitectura de IA y backend",
+      "estado": "Activo"
+    },
+    {
+      "n": 2,
+      "nombre": "Sprint 2 · Catálogo, API y primer servicio de IA",
+      "inicio": "2026-10-06",
+      "fin": "2026-10-19",
+      "objetivo": "Catálogo de software candidatos, API de software y evaluaciones, gráficos del informe y sugerencias con IA",
+      "estado": "Planificado"
+    },
+    {
+      "n": 3,
+      "nombre": "Sprint 3 · Evaluaciones guardadas y asistente",
+      "inicio": "2026-10-20",
+      "fin": "2026-11-02",
+      "objetivo": "Historial y detalle de evaluaciones, administración del catálogo, línea de tiempo y asistente de IA en el paso 2",
+      "estado": "Planificado"
+    },
+    {
+      "n": 4,
+      "nombre": "Sprint 4 · Comparación y dashboard con datos reales",
+      "inicio": "2026-11-03",
+      "fin": "2026-11-16",
+      "objetivo": "Comparador de candidatos, dashboard conectado a la API, evidencias y resumen ejecutivo con IA",
+      "estado": "Planificado"
+    },
+    {
+      "n": 5,
+      "nombre": "Sprint 5 · Cierre y entrega final",
+      "inicio": "2026-11-17",
+      "fin": "2026-11-30",
+      "objetivo": "Pulido de todas las pantallas, corrección de errores, documentación y entrega del curso",
+      "estado": "Planificado"
+    }
   ],
   "epicas": [
-    { "id": "EP-IA", "nombre": "Asistente inteligente con IA", "dev": "A", "componente": "IA", "descripcion": "Integración con un modelo de lenguaje para sugerir valoraciones, explicar resultados y redactar el resumen ejecutivo, con guardarraíles, trazabilidad y modo sin IA." },
-    { "id": "EP-OPS", "nombre": "Integración, publicación y revisión", "dev": "A", "componente": "Integración", "descripcion": "Revisión de pull requests, integración de los módulos de cada desarrollador, publicación de versiones y despliegue. Responsabilidad exclusiva del Dev A." },
-    { "id": "EP-API", "nombre": "Backend: API y base de datos", "dev": "B", "componente": "Backend", "descripcion": "Endpoints REST sobre PostgreSQL que persisten organizaciones, software candidato, evaluaciones, su detalle y los agregados del dashboard." },
-    { "id": "EP-USR", "nombre": "Módulo de usuarios y organización", "dev": "C", "componente": "Usuarios", "descripcion": "Pantallas y lógica de cuentas: configuración de la organización, registro, inicio de sesión, perfil, gestión de usuarios y permisos por rol." },
-    { "id": "EP-EVA", "nombre": "Pantallas de la evaluación", "dev": "D", "componente": "Evaluación", "descripcion": "Los tres pasos de la guía GUIOS, la lista de evaluaciones, el detalle de una evaluación guardada y la sincronización de datos." },
-    { "id": "EP-DASH", "nombre": "Dashboard, reportes y comparación", "dev": "E", "componente": "Dashboard", "descripcion": "Panel de indicadores, gráficos por dimensión y FODA, vista de informe y comparador de varios candidatos." }
+    {
+      "id": "EP-IA",
+      "nombre": "Asistente inteligente con IA",
+      "dev": "A",
+      "componente": "IA",
+      "descripcion": "Integración con un modelo de lenguaje para sugerir valoraciones, explicar resultados y redactar el resumen ejecutivo, con guardarraíles, trazabilidad y modo sin IA."
+    },
+    {
+      "id": "EP-OPS",
+      "nombre": "Integración, publicación y revisión",
+      "dev": "A",
+      "componente": "Integración",
+      "descripcion": "Revisión de pull requests, integración de los módulos de cada desarrollador, publicación de versiones y despliegue. Responsabilidad exclusiva del Dev A."
+    },
+    {
+      "id": "EP-API",
+      "nombre": "Backend: API y base de datos",
+      "dev": "B",
+      "componente": "Backend",
+      "descripcion": "Endpoints REST sobre PostgreSQL que persisten organizaciones, software candidato, evaluaciones, su detalle y los agregados del dashboard."
+    },
+    {
+      "id": "EP-CAT",
+      "nombre": "Catálogo de software y de la guía",
+      "dev": "C",
+      "componente": "Catálogo",
+      "descripcion": "Pantallas y lógica para registrar los softwares candidatos, configurar la organización, administrar el catálogo de la guía GUIOS y reutilizar plantillas de importancia."
+    },
+    {
+      "id": "EP-EVA",
+      "nombre": "Pantallas de la evaluación",
+      "dev": "D",
+      "componente": "Evaluación",
+      "descripcion": "Los tres pasos de la guía GUIOS, la lista de evaluaciones, el detalle de una evaluación guardada y la sincronización de datos."
+    },
+    {
+      "id": "EP-DASH",
+      "nombre": "Dashboard, reportes y comparación",
+      "dev": "E",
+      "componente": "Dashboard",
+      "descripcion": "Panel de indicadores, gráficos por dimensión y FODA, vista de informe y comparador de varios candidatos."
+    }
   ],
   "tareas": [
     {
-      "id": "GP-A01", "epica": "EP-IA", "sprint": 1, "dev": "A", "tipo": "Spike", "prioridad": "Highest", "puntos": 3,
+      "id": "GP-A01",
+      "epica": "EP-IA",
+      "sprint": 1,
+      "dev": "A",
+      "tipo": "Spike",
+      "prioridad": "Highest",
+      "puntos": 3,
       "resumen": "Spike: arquitectura de integración con IA (ADR-001)",
       "descripcion": "Comparar opciones para integrar un modelo de lenguaje en GUIOS PRO y dejar la decisión escrita en docs/adr/001-integracion-ia.md.",
       "criterios": "ADR publicado con proveedor y modelo elegidos, dónde vive la clave (nunca en el navegador), coste estimado por evaluación, latencia aceptable, política de datos y modo degradado sin IA.",
       "depende_de": []
     },
     {
-      "id": "GP-A02", "epica": "EP-IA", "sprint": 1, "dev": "A", "tipo": "Tarea", "prioridad": "High", "puntos": 5,
+      "id": "GP-A02",
+      "epica": "EP-IA",
+      "sprint": 1,
+      "dev": "A",
+      "tipo": "Tarea",
+      "prioridad": "High",
+      "puntos": 5,
       "resumen": "Desarrollar la capa ai/ con cliente del modelo y proveedor simulado",
       "descripcion": "Módulo ai/ con interfaz única (sugerir, resumir) y dos implementaciones: cliente real y mock determinista para que el resto del equipo trabaje sin clave.",
       "criterios": "La interfaz no expone detalles del proveedor; el mock devuelve respuestas fijas; pruebas unitarias del parseo; sin clave configurada la aplicación funciona igual en modo manual.",
-      "depende_de": ["GP-A01"]
+      "depende_de": [
+        "GP-A01"
+      ]
     },
     {
-      "id": "GP-A03", "epica": "EP-OPS", "sprint": 1, "dev": "A", "tipo": "Tarea", "prioridad": "Highest", "puntos": 3,
+      "id": "GP-A03",
+      "epica": "EP-OPS",
+      "sprint": 1,
+      "dev": "A",
+      "tipo": "Tarea",
+      "prioridad": "Highest",
+      "puntos": 3,
       "resumen": "Integrar el trabajo del sprint y publicar la versión 1.1",
       "descripcion": "Revisar los pull requests del equipo, resolver conflictos, verificar la Definición de Hecho y publicar la aplicación.",
       "criterios": "Todas las ramas del sprint integradas en main con CI en verde; GitHub Pages activo y verificado; etiqueta v1.1 con notas de versión; tablero de Jira actualizado.",
       "depende_de": []
     },
     {
-      "id": "GP-B01", "epica": "EP-API", "sprint": 1, "dev": "B", "tipo": "Spike", "prioridad": "High", "puntos": 2,
+      "id": "GP-B01",
+      "epica": "EP-API",
+      "sprint": 1,
+      "dev": "B",
+      "tipo": "Spike",
+      "prioridad": "High",
+      "puntos": 2,
       "resumen": "Spike: elección del stack backend (ADR-002)",
       "descripcion": "Decidir entre FastAPI con SQLAlchemy y Node con Express reutilizando engine.js.",
       "criterios": "ADR con criterios, decisión y consecuencias; aprobado por el equipo antes de empezar GP-B02.",
       "depende_de": []
     },
     {
-      "id": "GP-B02", "epica": "EP-API", "sprint": 1, "dev": "B", "tipo": "Tarea", "prioridad": "High", "puntos": 5,
+      "id": "GP-B02",
+      "epica": "EP-API",
+      "sprint": 1,
+      "dev": "B",
+      "tipo": "Tarea",
+      "prioridad": "High",
+      "puntos": 5,
       "resumen": "Desarrollar el esqueleto de la API y el modelo de datos",
       "descripcion": "Crear api/ con la estructura del proyecto, la conexión a PostgreSQL y los modelos que reproducen db/schema.sql.",
       "criterios": "La API arranca en local con docker compose; migración inicial idéntica al esquema del Sprint 0; catálogo cargado con 18 factores y 61 subfactores; endpoint /health.",
-      "depende_de": ["GP-B01"]
+      "depende_de": [
+        "GP-B01"
+      ]
     },
     {
-      "id": "GP-B03", "epica": "EP-API", "sprint": 1, "dev": "B", "tipo": "Historia", "prioridad": "Medium", "puntos": 3,
+      "id": "GP-B03",
+      "epica": "EP-API",
+      "sprint": 1,
+      "dev": "B",
+      "tipo": "Historia",
+      "prioridad": "Medium",
+      "puntos": 3,
       "resumen": "HU-23 API de consulta del catálogo de la guía",
       "descripcion": "Como desarrollador del frontend quiero obtener dimensiones, factores y subfactores desde la API para no depender del archivo generado.",
       "criterios": "GET de dimensiones, factores y subfactores con sus escalas; respuesta con la misma forma que app/js/data.js; documentado en OpenAPI.",
-      "depende_de": ["GP-B02"]
+      "depende_de": [
+        "GP-B02"
+      ]
     },
     {
-      "id": "GP-C01", "epica": "EP-USR", "sprint": 1, "dev": "C", "tipo": "Historia", "prioridad": "High", "puntos": 5,
+      "id": "GP-C01",
+      "epica": "EP-CAT",
+      "sprint": 1,
+      "dev": "C",
+      "tipo": "Historia",
+      "prioridad": "High",
+      "puntos": 5,
       "resumen": "HU-24 Pantalla de Configuración de la organización",
       "descripcion": "Como usuario quiero guardar los datos de mi organización y mis preferencias una sola vez para no repetirlos en cada evaluación.",
-      "criterios": "Nueva pantalla accesible desde el menú lateral con nombre, sector y logo de la organización, evaluador por defecto, tema y confirmación antes de salir sin guardar; los datos se reutilizan al crear una evaluación.",
+      "criterios": "Nueva pantalla accesible desde el menú lateral con nombre, sector y logo de la organización, evaluador por defecto y tema; confirmación antes de salir sin guardar; los datos se reutilizan al crear una evaluación.",
       "depende_de": []
     },
     {
-      "id": "GP-C02", "epica": "EP-USR", "sprint": 1, "dev": "C", "tipo": "Tarea", "prioridad": "Medium", "puntos": 5,
+      "id": "GP-C02",
+      "epica": "EP-CAT",
+      "sprint": 1,
+      "dev": "C",
+      "tipo": "Tarea",
+      "prioridad": "Medium",
+      "puntos": 5,
       "resumen": "Desarrollar el sistema de formularios y validación reutilizable",
       "descripcion": "Módulo de formularios con validación declarativa, mensajes de error accesibles y estados de guardado, usado por Configuración y por las pantallas de cuentas.",
       "criterios": "Validación de requerido, longitud, correo y formato; el error se anuncia con aria-describedby; una sola implementación usada por todas las pantallas; pruebas unitarias de las reglas.",
       "depende_de": []
     },
     {
-      "id": "GP-D01", "epica": "EP-EVA", "sprint": 1, "dev": "D", "tipo": "Historia", "prioridad": "High", "puntos": 3,
+      "id": "GP-D01",
+      "epica": "EP-EVA",
+      "sprint": 1,
+      "dev": "D",
+      "tipo": "Historia",
+      "prioridad": "High",
+      "puntos": 3,
       "resumen": "HU-14 Ayuda contextual en cada paso",
       "descripcion": "Como evaluador quiero entender qué significa cada nivel de la escala para responder con criterio.",
       "criterios": "Cada paso muestra una ayuda breve plegable; el paso 2 explica los 4 niveles de cumplimiento; los textos provienen de data/ y no se duplican en el código.",
       "depende_de": []
     },
     {
-      "id": "GP-D02", "epica": "EP-EVA", "sprint": 1, "dev": "D", "tipo": "Historia", "prioridad": "High", "puntos": 3,
+      "id": "GP-D02",
+      "epica": "EP-EVA",
+      "sprint": 1,
+      "dev": "D",
+      "tipo": "Historia",
+      "prioridad": "High",
+      "puntos": 3,
       "resumen": "HU-15 Avisos de respuestas pendientes",
       "descripcion": "Como evaluador quiero que el sistema me avise si dejo factores sin responder antes de ver el resultado.",
       "criterios": "Al pasar al paso 3 con pendientes se muestra un aviso con la lista de factores y un enlace directo a cada uno; el resultado se marca como parcial.",
       "depende_de": []
     },
     {
-      "id": "GP-D03", "epica": "EP-EVA", "sprint": 1, "dev": "D", "tipo": "Historia", "prioridad": "Medium", "puntos": 5,
+      "id": "GP-D03",
+      "epica": "EP-EVA",
+      "sprint": 1,
+      "dev": "D",
+      "tipo": "Historia",
+      "prioridad": "Medium",
+      "puntos": 5,
       "resumen": "HU-25 Buscador y filtros de factores en el paso 2",
       "descripcion": "Como evaluador quiero buscar un factor y filtrar los que me faltan para avanzar más rápido en evaluaciones largas.",
       "criterios": "Campo de búsqueda por nombre de factor o texto del subfactor, filtro «solo pendientes» y contador de resultados; funciona con teclado y en móvil.",
       "depende_de": []
     },
     {
-      "id": "GP-E01", "epica": "EP-DASH", "sprint": 1, "dev": "E", "tipo": "Historia", "prioridad": "Highest", "puntos": 8,
+      "id": "GP-E01",
+      "epica": "EP-DASH",
+      "sprint": 1,
+      "dev": "E",
+      "tipo": "Historia",
+      "prioridad": "Highest",
+      "puntos": 8,
       "resumen": "HU-26 Pantalla Dashboard con indicadores",
       "descripcion": "Como decisor quiero una pantalla de inicio con el estado general de mis evaluaciones para saber de un vistazo en qué punto estoy.",
       "criterios": "Nueva pantalla Dashboard en el menú lateral con: evaluaciones registradas y su estado, porcentaje de avance de la evaluación en curso, distribución FODA, cumplimiento medio por dimensión y accesos directos a continuar o crear una evaluación; funciona con los datos locales; estado vacío cuando no hay ninguna evaluación.",
       "depende_de": []
     },
     {
-      "id": "GP-E02", "epica": "EP-DASH", "sprint": 1, "dev": "E", "tipo": "Tarea", "prioridad": "High", "puntos": 3,
+      "id": "GP-E02",
+      "epica": "EP-DASH",
+      "sprint": 1,
+      "dev": "E",
+      "tipo": "Tarea",
+      "prioridad": "High",
+      "puntos": 3,
       "resumen": "Desarrollar los componentes de indicadores del dashboard",
       "descripcion": "Tarjeta de indicador (KPI), medidor circular de avance, lista de estado y estado vacío, añadidos al sistema de diseño.",
       "criterios": "Componentes con variante clara y oscura, responsive a 390 px, documentados en DESIGN-SYSTEM.md y reutilizables por otras pantallas.",
       "depende_de": []
     },
-
     {
-      "id": "GP-A04", "epica": "EP-IA", "sprint": 2, "dev": "A", "tipo": "Historia", "prioridad": "Highest", "puntos": 8,
+      "id": "GP-A04",
+      "epica": "EP-IA",
+      "sprint": 2,
+      "dev": "A",
+      "tipo": "Historia",
+      "prioridad": "Highest",
+      "puntos": 8,
       "resumen": "HU-16 Servicio de sugerencia de valoración con IA",
       "descripcion": "Como evaluador quiero que el sistema me proponga una valoración para cada subfactor a partir de la información del software, para acelerar la evaluación sin perder criterio.",
       "criterios": "Endpoint que recibe software y subfactores y devuelve valor 1..4, justificación breve y nivel de confianza por subfactor; validación estricta del JSON; la sugerencia nunca se guarda sin aceptación del evaluador.",
-      "depende_de": ["GP-A02", "GP-B02"]
+      "depende_de": [
+        "GP-A02",
+        "GP-B02"
+      ]
     },
     {
-      "id": "GP-A05", "epica": "EP-OPS", "sprint": 2, "dev": "A", "tipo": "Tarea", "prioridad": "Highest", "puntos": 5,
+      "id": "GP-A05",
+      "epica": "EP-OPS",
+      "sprint": 2,
+      "dev": "A",
+      "tipo": "Tarea",
+      "prioridad": "Highest",
+      "puntos": 5,
       "resumen": "Integrar el sprint, desplegar la API y publicar la versión 1.2",
       "descripcion": "Revisar los pull requests, integrar el backend con el frontend, desplegar la API en un entorno accesible y publicar la nueva versión.",
       "criterios": "API desplegada con variables de entorno gestionadas como secretos y accesible desde la aplicación publicada; frontend apuntando al entorno correcto; etiqueta v1.2; incidencias del sprint cerradas o repriorizadas.",
-      "depende_de": ["GP-B05", "GP-C04"]
+      "depende_de": [
+        "GP-B05",
+        "GP-C03"
+      ]
     },
     {
-      "id": "GP-B04", "epica": "EP-API", "sprint": 2, "dev": "B", "tipo": "Historia", "prioridad": "High", "puntos": 5,
+      "id": "GP-B04",
+      "epica": "EP-API",
+      "sprint": 2,
+      "dev": "B",
+      "tipo": "Historia",
+      "prioridad": "High",
+      "puntos": 5,
       "resumen": "HU-17 API de software candidato",
       "descripcion": "Como evaluador quiero registrar y consultar los softwares candidatos de mi organización.",
-      "criterios": "Crear, listar, editar y eliminar con validación; solo se ven los de la propia organización; documentado en OpenAPI y con pruebas de los casos de error.",
-      "depende_de": ["GP-B02"]
+      "criterios": "Crear, listar, editar y eliminar con validación; filtrado por la organización configurada; documentado en OpenAPI y con pruebas de los casos de error.",
+      "depende_de": [
+        "GP-B02"
+      ]
     },
     {
-      "id": "GP-B05", "epica": "EP-API", "sprint": 2, "dev": "B", "tipo": "Historia", "prioridad": "Highest", "puntos": 8,
+      "id": "GP-B05",
+      "epica": "EP-API",
+      "sprint": 2,
+      "dev": "B",
+      "tipo": "Historia",
+      "prioridad": "Highest",
+      "puntos": 8,
       "resumen": "HU-09a API de evaluaciones y guardado del avance",
       "descripcion": "Como evaluador quiero que mi evaluación se guarde en el servidor para no depender del navegador.",
       "criterios": "Endpoints para crear evaluación, guardar importancia y alcance por factor, guardar valoración por subfactor y completar; escrituras idempotentes; estados En proceso, Completada y Cancelada.",
-      "depende_de": ["GP-B02"]
+      "depende_de": [
+        "GP-B02"
+      ]
     },
     {
-      "id": "GP-C03", "epica": "EP-USR", "sprint": 2, "dev": "C", "tipo": "Historia", "prioridad": "Highest", "puntos": 5,
-      "resumen": "HU-18 Pantallas de registro e inicio de sesión",
-      "descripcion": "Como usuario quiero crear una cuenta e iniciar sesión para acceder a mis evaluaciones desde cualquier equipo.",
-      "criterios": "Pantallas de registro e inicio de sesión con el sistema de diseño, validación en línea, mensajes de error claros y enlace de recuperación; la aplicación sigue usable sin cuenta en modo local.",
-      "depende_de": ["GP-C02"]
+      "id": "GP-C03",
+      "epica": "EP-CAT",
+      "sprint": 2,
+      "dev": "C",
+      "tipo": "Historia",
+      "prioridad": "Highest",
+      "puntos": 8,
+      "resumen": "HU-18 Pantalla de catálogo de software candidatos",
+      "descripcion": "Como evaluador quiero registrar en un solo lugar los softwares que evalúo para no volver a escribir sus datos en cada evaluación.",
+      "criterios": "Nueva pantalla con lista, buscador y filtro por tipo de licencia; alta, edición y eliminación con confirmación; al crear una evaluación se elige un software del catálogo; estado vacío con acción de alta.",
+      "depende_de": [
+        "GP-C02"
+      ]
     },
     {
-      "id": "GP-C04", "epica": "EP-USR", "sprint": 2, "dev": "C", "tipo": "Historia", "prioridad": "Highest", "puntos": 5,
-      "resumen": "HU-08a Autenticación, sesión y rutas protegidas",
-      "descripcion": "Como usuario quiero que mi sesión se mantenga y que nadie más acceda a mis datos.",
-      "criterios": "Registro e inicio de sesión contra la API con contraseñas cifradas (argon2 o bcrypt); token con expiración y renovación; pantallas protegidas que redirigen al login; cierre de sesión que limpia el estado.",
-      "depende_de": ["GP-C03", "GP-B02"]
+      "id": "GP-C04",
+      "epica": "EP-CAT",
+      "sprint": 2,
+      "dev": "C",
+      "tipo": "Historia",
+      "prioridad": "Medium",
+      "puntos": 2,
+      "resumen": "HU-36 Ficha de un software candidato",
+      "descripcion": "Como evaluador quiero ver la ficha de un software con sus datos y las evaluaciones que se le han hecho.",
+      "criterios": "Vista de detalle con datos del software, historial de evaluaciones asociadas y su recomendación, y accesos a evaluar o editar.",
+      "depende_de": [
+        "GP-C03"
+      ]
     },
     {
-      "id": "GP-D04", "epica": "EP-EVA", "sprint": 2, "dev": "D", "tipo": "Historia", "prioridad": "High", "puntos": 5,
+      "id": "GP-D04",
+      "epica": "EP-EVA",
+      "sprint": 2,
+      "dev": "D",
+      "tipo": "Historia",
+      "prioridad": "High",
+      "puntos": 5,
       "resumen": "HU-27 Pantalla «Mis evaluaciones»",
       "descripcion": "Como evaluador quiero ver todas mis evaluaciones en una lista para continuar la que quiera o empezar una nueva.",
       "criterios": "Lista con software, fecha, estado, avance y recomendación; acciones continuar, duplicar y eliminar con confirmación; buscador y estado vacío; funciona con datos locales.",
       "depende_de": []
     },
     {
-      "id": "GP-D05", "epica": "EP-EVA", "sprint": 2, "dev": "D", "tipo": "Tarea", "prioridad": "Highest", "puntos": 5,
+      "id": "GP-D05",
+      "epica": "EP-EVA",
+      "sprint": 2,
+      "dev": "D",
+      "tipo": "Tarea",
+      "prioridad": "Highest",
+      "puntos": 5,
       "resumen": "Desarrollar la capa de datos del frontend con modo local y remoto",
-      "descripcion": "Módulo app/js/api.js que concentra el acceso a datos y decide entre la API y localStorage según haya sesión y conexión.",
+      "descripcion": "Módulo app/js/api.js que concentra el acceso a datos y decide entre la API configurada y localStorage según haya servidor disponible.",
       "criterios": "Una sola capa usada por todas las pantallas; estados de carga y error; la aplicación abierta desde file:// sigue funcionando sin API; pruebas del modo local.",
-      "depende_de": ["GP-B05"]
+      "depende_de": [
+        "GP-B05"
+      ]
     },
     {
-      "id": "GP-E03", "epica": "EP-DASH", "sprint": 2, "dev": "E", "tipo": "Historia", "prioridad": "High", "puntos": 5,
+      "id": "GP-E03",
+      "epica": "EP-DASH",
+      "sprint": 2,
+      "dev": "E",
+      "tipo": "Historia",
+      "prioridad": "High",
+      "puntos": 5,
       "resumen": "HU-22 Gráficos de resultados",
       "descripcion": "Como decisor quiero ver gráficos que resuman el cumplimiento por dimensión y la matriz FODA.",
       "criterios": "Gráfico radar por dimensión y barras de FODA en SVG propio, legibles en tema claro, oscuro e impresión, con tabla equivalente para lectores de pantalla; integrados en el resultado y en el dashboard.",
-      "depende_de": ["GP-E02"]
+      "depende_de": [
+        "GP-E02"
+      ]
     },
     {
-      "id": "GP-E04", "epica": "EP-DASH", "sprint": 2, "dev": "E", "tipo": "Historia", "prioridad": "Medium", "puntos": 5,
+      "id": "GP-E04",
+      "epica": "EP-DASH",
+      "sprint": 2,
+      "dev": "E",
+      "tipo": "Historia",
+      "prioridad": "Medium",
+      "puntos": 5,
       "resumen": "HU-28 Vista de informe imprimible",
       "descripcion": "Como decisor quiero una vista de informe completa y ordenada para presentarla al comité.",
       "criterios": "Pantalla de informe con portada, datos del software, recomendación, FODA, gráficos y detalle por factor; se exporta a PDF sin cortes dentro de una tarjeta y en un máximo de 3 páginas.",
-      "depende_de": ["GP-E03"]
+      "depende_de": [
+        "GP-E03"
+      ]
     },
-
     {
-      "id": "GP-A06", "epica": "EP-IA", "sprint": 3, "dev": "A", "tipo": "Historia", "prioridad": "Highest", "puntos": 8,
+      "id": "GP-A06",
+      "epica": "EP-IA",
+      "sprint": 3,
+      "dev": "A",
+      "tipo": "Historia",
+      "prioridad": "Highest",
+      "puntos": 8,
       "resumen": "HU-19 Asistente de IA dentro del paso 2",
       "descripcion": "Como evaluador quiero ver las sugerencias de la IA junto a cada pregunta y aceptarlas o descartarlas una por una.",
       "criterios": "Botón Sugerir por factor; cada sugerencia muestra valor propuesto, justificación y confianza; aceptar rellena el control y marca el origen; descartar no deja rastro; indicador visible de que hubo asistencia de IA.",
-      "depende_de": ["GP-A04", "GP-D05"]
+      "depende_de": [
+        "GP-A04",
+        "GP-D05"
+      ]
     },
     {
-      "id": "GP-A07", "epica": "EP-OPS", "sprint": 3, "dev": "A", "tipo": "Tarea", "prioridad": "Highest", "puntos": 5,
+      "id": "GP-A07",
+      "epica": "EP-OPS",
+      "sprint": 3,
+      "dev": "A",
+      "tipo": "Tarea",
+      "prioridad": "Highest",
+      "puntos": 5,
       "resumen": "Integrar el sprint y publicar la versión 2.0 multiusuario",
-      "descripcion": "Revisar e integrar historial, gestión de usuarios e informe; verificar la migración de datos y publicar la versión.",
+      "descripcion": "Revisar e integrar historial, administración del catálogo e informe; verificar la migración de datos y publicar la versión.",
       "criterios": "v2.0 desplegada y verificada de extremo a extremo por otro miembro del equipo; notas de versión; copia de seguridad previa al despliegue; tablero actualizado.",
-      "depende_de": ["GP-D06", "GP-C05"]
+      "depende_de": [
+        "GP-D06",
+        "GP-C05"
+      ]
     },
     {
-      "id": "GP-B06", "epica": "EP-API", "sprint": 3, "dev": "B", "tipo": "Historia", "prioridad": "High", "puntos": 5,
+      "id": "GP-B06",
+      "epica": "EP-API",
+      "sprint": 3,
+      "dev": "B",
+      "tipo": "Historia",
+      "prioridad": "High",
+      "puntos": 5,
       "resumen": "HU-09b API de historial y detalle de evaluación",
-      "descripcion": "Como decisor quiero consultar las evaluaciones anteriores de mi organización y abrir cualquiera de ellas.",
+      "descripcion": "Como decisor quiero consultar las evaluaciones anteriores registradas y abrir cualquiera de ellas.",
       "criterios": "Listado paginado con filtros por software, estado y fecha, y endpoint de detalle con todas las respuestas; incluye recomendación y conteos FODA; consultas con índices verificados.",
-      "depende_de": ["GP-B05"]
+      "depende_de": [
+        "GP-B05"
+      ]
     },
     {
-      "id": "GP-B07", "epica": "EP-API", "sprint": 3, "dev": "B", "tipo": "Tarea", "prioridad": "Highest", "puntos": 5,
+      "id": "GP-B07",
+      "epica": "EP-API",
+      "sprint": 3,
+      "dev": "B",
+      "tipo": "Tarea",
+      "prioridad": "Highest",
+      "puntos": 5,
       "resumen": "Implementar el cálculo de resultados en el servidor",
       "descripcion": "Recalcular ponderaciones, clasificación FODA y recomendación en el servidor con el mismo algoritmo que engine.js.",
       "criterios": "Suite de casos compartida que compara servidor y navegador y exige resultados idénticos; cualquier diferencia rompe la integración continua.",
-      "depende_de": ["GP-B05"]
+      "depende_de": [
+        "GP-B05"
+      ]
     },
     {
-      "id": "GP-C05", "epica": "EP-USR", "sprint": 3, "dev": "C", "tipo": "Historia", "prioridad": "High", "puntos": 5,
-      "resumen": "HU-08b Pantalla de gestión de usuarios",
-      "descripcion": "Como administrador quiero dar de alta usuarios de mi organización y asignarles un rol.",
-      "criterios": "Listado con búsqueda, alta, edición, desactivación y cambio de rol (Administrador, Evaluador, Decisor); confirmación en acciones destructivas; solo visible para administradores.",
-      "depende_de": ["GP-C04"]
+      "id": "GP-C05",
+      "epica": "EP-CAT",
+      "sprint": 3,
+      "dev": "C",
+      "tipo": "Historia",
+      "prioridad": "High",
+      "puntos": 5,
+      "resumen": "HU-10 Pantalla de administración del catálogo de la guía",
+      "descripcion": "Como responsable del método quiero editar factores, subfactores y reglas de recomendación sin tocar archivos.",
+      "criterios": "Sección Administración con edición validada (escalas 1..4, alcance válido, importancia sugerida); los cambios quedan versionados y no alteran las evaluaciones ya completadas; se puede restaurar el catálogo original.",
+      "depende_de": [
+        "GP-B03"
+      ]
     },
     {
-      "id": "GP-C06", "epica": "EP-USR", "sprint": 3, "dev": "C", "tipo": "Historia", "prioridad": "Medium", "puntos": 5,
-      "resumen": "HU-29 Permisos por rol en la interfaz",
-      "descripcion": "Como usuario quiero ver solo las opciones que me corresponden según mi rol.",
-      "criterios": "El menú lateral, los botones y las pantallas se adaptan al rol; el servidor vuelve a validar cada permiso; matriz de permisos documentada y probada con los tres roles.",
-      "depende_de": ["GP-C05"]
+      "id": "GP-C06",
+      "epica": "EP-CAT",
+      "sprint": 3,
+      "dev": "C",
+      "tipo": "Historia",
+      "prioridad": "Medium",
+      "puntos": 5,
+      "resumen": "HU-37 Plantillas de importancia reutilizables",
+      "descripcion": "Como decisor quiero guardar la importancia que asigné a los factores y reutilizarla en las próximas evaluaciones de mi organización.",
+      "criterios": "Guardar el paso 1 como plantilla con nombre; aplicar una plantilla al empezar una evaluación; editar y eliminar plantillas; la plantilla aplicada se indica en la pantalla del paso 1.",
+      "depende_de": [
+        "GP-C03"
+      ]
     },
     {
-      "id": "GP-D06", "epica": "EP-EVA", "sprint": 3, "dev": "D", "tipo": "Historia", "prioridad": "Highest", "puntos": 5,
+      "id": "GP-D06",
+      "epica": "EP-EVA",
+      "sprint": 3,
+      "dev": "D",
+      "tipo": "Historia",
+      "prioridad": "Highest",
+      "puntos": 5,
       "resumen": "HU-09c Pantalla de historial conectada a la API",
       "descripcion": "Como decisor quiero ver y reabrir desde el servidor las evaluaciones guardadas de mi organización.",
       "criterios": "Sección Historial activa (sin etiqueta Pronto) con lista, filtros, estado y recomendación; abrir una evaluación restaura los tres pasos con sus respuestas.",
-      "depende_de": ["GP-B06", "GP-D05"]
+      "depende_de": [
+        "GP-B06",
+        "GP-D05"
+      ]
     },
     {
-      "id": "GP-D07", "epica": "EP-EVA", "sprint": 3, "dev": "D", "tipo": "Tarea", "prioridad": "High", "puntos": 5,
+      "id": "GP-D07",
+      "epica": "EP-EVA",
+      "sprint": 3,
+      "dev": "D",
+      "tipo": "Tarea",
+      "prioridad": "High",
+      "puntos": 5,
       "resumen": "Sincronización entre el navegador y el servidor",
-      "descripcion": "Subir la evaluación local al iniciar sesión y resolver los conflictos cuando existan dos versiones.",
+      "descripcion": "Subir al servidor las evaluaciones creadas sin conexión y resolver los conflictos cuando existan dos versiones.",
       "criterios": "Aviso claro con opción de conservar la versión local o la del servidor; sin pérdida silenciosa de respuestas; pruebas de los tres escenarios.",
-      "depende_de": ["GP-D05"]
+      "depende_de": [
+        "GP-D05"
+      ]
     },
     {
-      "id": "GP-E05", "epica": "EP-DASH", "sprint": 3, "dev": "E", "tipo": "Historia", "prioridad": "Medium", "puntos": 5,
-      "resumen": "HU-10 Pantalla de administración del catálogo",
-      "descripcion": "Como administrador quiero editar factores, subfactores y reglas sin tocar archivos.",
-      "criterios": "Sección Administración con edición validada (escalas 1..4, alcance válido); los cambios quedan versionados y no alteran las evaluaciones ya completadas.",
-      "depende_de": ["GP-B03", "GP-C06"]
+      "id": "GP-E05",
+      "epica": "EP-DASH",
+      "sprint": 3,
+      "dev": "E",
+      "tipo": "Historia",
+      "prioridad": "Medium",
+      "puntos": 5,
+      "resumen": "HU-40 Línea de tiempo de evaluaciones en el dashboard",
+      "descripcion": "Como decisor quiero ver la evolución de mis evaluaciones en el tiempo para seguir el avance de la organización.",
+      "criterios": "Gráfico de línea de tiempo con las evaluaciones por fecha y su recomendación, filtrable por software; al pulsar una se abre su informe; estado vacío cuando hay menos de dos evaluaciones.",
+      "depende_de": [
+        "GP-E02",
+        "GP-B06"
+      ]
     },
     {
-      "id": "GP-E06", "epica": "EP-DASH", "sprint": 3, "dev": "E", "tipo": "Tarea", "prioridad": "Medium", "puntos": 3,
+      "id": "GP-E06",
+      "epica": "EP-DASH",
+      "sprint": 3,
+      "dev": "E",
+      "tipo": "Tarea",
+      "prioridad": "Medium",
+      "puntos": 3,
       "resumen": "Conectar la vista de informe con los datos del servidor",
       "descripcion": "Adaptar la vista de informe para generarse a partir de una evaluación guardada, no solo de la que está en curso.",
       "criterios": "Se abre el informe de cualquier evaluación del historial; los gráficos y el detalle se rellenan con los datos del servidor; exportación a PDF verificada.",
-      "depende_de": ["GP-E04", "GP-B06"]
+      "depende_de": [
+        "GP-E04",
+        "GP-B06"
+      ]
     },
-
     {
-      "id": "GP-A08", "epica": "EP-IA", "sprint": 4, "dev": "A", "tipo": "Historia", "prioridad": "Highest", "puntos": 8,
+      "id": "GP-A08",
+      "epica": "EP-IA",
+      "sprint": 4,
+      "dev": "A",
+      "tipo": "Historia",
+      "prioridad": "Highest",
+      "puntos": 8,
       "resumen": "HU-20 Resumen ejecutivo del informe generado por IA",
       "descripcion": "Como decisor quiero un resumen en lenguaje natural que explique la recomendación para presentarla al comité.",
       "criterios": "Entre 150 y 250 palabras citando factores concretos y sus ponderaciones; nunca contradice la recomendación calculada; editable antes de exportar; marcado como generado con IA en el PDF.",
-      "depende_de": ["GP-A04", "GP-B07"]
+      "depende_de": [
+        "GP-A04",
+        "GP-B07"
+      ]
     },
     {
-      "id": "GP-A09", "epica": "EP-OPS", "sprint": 4, "dev": "A", "tipo": "Tarea", "prioridad": "High", "puntos": 5,
+      "id": "GP-A09",
+      "epica": "EP-OPS",
+      "sprint": 4,
+      "dev": "A",
+      "tipo": "Tarea",
+      "prioridad": "High",
+      "puntos": 5,
       "resumen": "Integrar el sprint, controlar el consumo de IA y publicar la versión 2.1",
       "descripcion": "Revisar e integrar el comparador y el dashboard conectado; limitar el consumo del servicio de IA y publicar la versión.",
       "criterios": "Límite configurable de peticiones y de coste por organización, con mensaje claro al alcanzarlo; v2.1 desplegada y verificada; notas de versión publicadas.",
-      "depende_de": ["GP-E07", "GP-A08"]
+      "depende_de": [
+        "GP-E07",
+        "GP-A08"
+      ]
     },
     {
-      "id": "GP-B08", "epica": "EP-API", "sprint": 4, "dev": "B", "tipo": "Historia", "prioridad": "High", "puntos": 5,
+      "id": "GP-B08",
+      "epica": "EP-API",
+      "sprint": 4,
+      "dev": "B",
+      "tipo": "Historia",
+      "prioridad": "High",
+      "puntos": 5,
       "resumen": "HU-30 API de indicadores del dashboard",
-      "descripcion": "Como decisor quiero que el dashboard muestre datos reales de toda mi organización.",
+      "descripcion": "Como decisor quiero que el dashboard muestre datos reales de todas las evaluaciones registradas.",
       "criterios": "Endpoint con evaluaciones por estado, recomendaciones emitidas, cumplimiento medio por dimensión y últimas evaluaciones; respuesta por debajo de 300 ms con datos de prueba.",
-      "depende_de": ["GP-B07"]
+      "depende_de": [
+        "GP-B07"
+      ]
     },
     {
-      "id": "GP-B09", "epica": "EP-API", "sprint": 4, "dev": "B", "tipo": "Historia", "prioridad": "High", "puntos": 5,
+      "id": "GP-B09",
+      "epica": "EP-API",
+      "sprint": 4,
+      "dev": "B",
+      "tipo": "Historia",
+      "prioridad": "High",
+      "puntos": 5,
       "resumen": "HU-31 API de comparación de evaluaciones",
       "descripcion": "Como decisor quiero comparar varias evaluaciones para elegir el software más adecuado.",
       "criterios": "Acepta de 2 a 5 evaluaciones y devuelve resultados por dimensión, factor y FODA en una estructura comparable; documentado en OpenAPI y con pruebas.",
-      "depende_de": ["GP-B07"]
+      "depende_de": [
+        "GP-B07"
+      ]
     },
     {
-      "id": "GP-C07", "epica": "EP-USR", "sprint": 4, "dev": "C", "tipo": "Historia", "prioridad": "Medium", "puntos": 5,
-      "resumen": "HU-32 Pantalla de perfil y cambio de contraseña",
-      "descripcion": "Como usuario quiero editar mis datos y cambiar mi contraseña desde la aplicación.",
-      "criterios": "Edición de nombre, correo y preferencias; cambio de contraseña con verificación de la actual y medidor de fortaleza; cierre de sesión en el resto de dispositivos.",
-      "depende_de": ["GP-C04"]
+      "id": "GP-C07",
+      "epica": "EP-CAT",
+      "sprint": 4,
+      "dev": "C",
+      "tipo": "Historia",
+      "prioridad": "Medium",
+      "puntos": 5,
+      "resumen": "HU-38 Importar y exportar datos del catálogo",
+      "descripcion": "Como responsable quiero mover mis softwares, plantillas y evaluaciones entre equipos o instalaciones.",
+      "criterios": "Exportación a JSON de softwares, plantillas y evaluaciones seleccionadas, e importación con vista previa y resolución de duplicados; archivo compatible con el exportador ya existente.",
+      "depende_de": [
+        "GP-C03"
+      ]
     },
     {
-      "id": "GP-C08", "epica": "EP-USR", "sprint": 4, "dev": "C", "tipo": "Historia", "prioridad": "Medium", "puntos": 5,
-      "resumen": "HU-33 Invitaciones a la organización",
-      "descripcion": "Como administrador quiero invitar a colegas a mi organización para que evalúen conmigo.",
-      "criterios": "Envío de invitación por correo con enlace de un solo uso y caducidad; el invitado se registra ya asociado a la organización y con el rol indicado; listado de invitaciones pendientes.",
-      "depende_de": ["GP-C05"]
+      "id": "GP-C08",
+      "epica": "EP-CAT",
+      "sprint": 4,
+      "dev": "C",
+      "tipo": "Historia",
+      "prioridad": "Low",
+      "puntos": 3,
+      "resumen": "HU-39 Etiquetas y notas por software",
+      "descripcion": "Como evaluador quiero clasificar los softwares con etiquetas y dejar notas internas para organizarlos.",
+      "criterios": "Etiquetas libres con color, filtro por etiqueta en el catálogo y campo de notas en la ficha; todo persistido junto al software.",
+      "depende_de": [
+        "GP-C04"
+      ]
     },
     {
-      "id": "GP-D08", "epica": "EP-EVA", "sprint": 4, "dev": "D", "tipo": "Historia", "prioridad": "High", "puntos": 5,
+      "id": "GP-D08",
+      "epica": "EP-EVA",
+      "sprint": 4,
+      "dev": "D",
+      "tipo": "Historia",
+      "prioridad": "High",
+      "puntos": 5,
       "resumen": "HU-34 Pantalla de detalle de una evaluación guardada",
       "descripcion": "Como decisor quiero abrir una evaluación anterior en modo lectura con todo su detalle y sus datos de autoría.",
-      "criterios": "Vista de solo lectura con las respuestas, la clasificación FODA, quién evaluó y cuándo; acciones duplicar, continuar (si está en proceso) y abrir informe.",
-      "depende_de": ["GP-B06"]
+      "criterios": "Vista de solo lectura con las respuestas, la clasificación FODA, el evaluador indicado y la fecha; acciones duplicar, continuar (si está en proceso) y abrir informe.",
+      "depende_de": [
+        "GP-B06"
+      ]
     },
     {
-      "id": "GP-D09", "epica": "EP-EVA", "sprint": 4, "dev": "D", "tipo": "Historia", "prioridad": "Medium", "puntos": 5,
+      "id": "GP-D09",
+      "epica": "EP-EVA",
+      "sprint": 4,
+      "dev": "D",
+      "tipo": "Historia",
+      "prioridad": "Medium",
+      "puntos": 5,
       "resumen": "HU-12 Evidencias y observaciones por subfactor",
       "descripcion": "Como evaluador quiero justificar mis respuestas con una nota o un enlace.",
       "criterios": "Campo de observación opcional por subfactor, guardado en el servidor y visible en el informe y en el detalle; no entorpece el flujo rápido de respuesta.",
-      "depende_de": ["GP-B05"]
+      "depende_de": [
+        "GP-B05"
+      ]
     },
     {
-      "id": "GP-E07", "epica": "EP-DASH", "sprint": 4, "dev": "E", "tipo": "Historia", "prioridad": "Highest", "puntos": 8,
+      "id": "GP-E07",
+      "epica": "EP-DASH",
+      "sprint": 4,
+      "dev": "E",
+      "tipo": "Historia",
+      "prioridad": "Highest",
+      "puntos": 8,
       "resumen": "HU-11 Pantalla comparador de candidatos",
       "descripcion": "Como decisor quiero comparar varios softwares evaluados en una sola pantalla para elegir el más adecuado.",
       "criterios": "Selección de 2 a 5 evaluaciones; tabla comparativa por dimensión y factor con sus recomendaciones; diferencias resaltadas; gráfico comparativo; exportable a PDF.",
-      "depende_de": ["GP-B09", "GP-E03"]
+      "depende_de": [
+        "GP-B09",
+        "GP-E03"
+      ]
     },
     {
-      "id": "GP-E08", "epica": "EP-DASH", "sprint": 4, "dev": "E", "tipo": "Tarea", "prioridad": "High", "puntos": 3,
+      "id": "GP-E08",
+      "epica": "EP-DASH",
+      "sprint": 4,
+      "dev": "E",
+      "tipo": "Tarea",
+      "prioridad": "High",
+      "puntos": 3,
       "resumen": "Conectar el dashboard con los datos de la organización",
-      "descripcion": "Sustituir los datos locales del dashboard por los indicadores reales de la API, conservando el modo sin sesión.",
-      "criterios": "Indicadores con datos del servidor, estados de carga y error, y actualización al volver a la pantalla; sin sesión sigue mostrando la evaluación local.",
-      "depende_de": ["GP-B08", "GP-E01"]
+      "descripcion": "Sustituir los datos locales del dashboard por los indicadores reales de la API, conservando el funcionamiento sin servidor.",
+      "criterios": "Indicadores con datos del servidor, estados de carga y error, y actualización al volver a la pantalla; sin servidor disponible sigue mostrando los datos locales.",
+      "depende_de": [
+        "GP-B08",
+        "GP-E01"
+      ]
     },
-
     {
-      "id": "GP-A10", "epica": "EP-IA", "sprint": 5, "dev": "A", "tipo": "Tarea", "prioridad": "Highest", "puntos": 5,
+      "id": "GP-A10",
+      "epica": "EP-IA",
+      "sprint": 5,
+      "dev": "A",
+      "tipo": "Tarea",
+      "prioridad": "Highest",
+      "puntos": 5,
       "resumen": "Medir la calidad de las salidas de IA (evals)",
       "descripcion": "Conjunto de casos de referencia con respuesta esperada para medir la calidad de las sugerencias y del resumen ejecutivo.",
       "criterios": "Al menos 30 casos; métricas de acierto y de invención de datos; ejecución reproducible por comando; umbral mínimo acordado y resultados documentados.",
-      "depende_de": ["GP-A08"]
+      "depende_de": [
+        "GP-A08"
+      ]
     },
     {
-      "id": "GP-A11", "epica": "EP-OPS", "sprint": 5, "dev": "A", "tipo": "Tarea", "prioridad": "Highest", "puntos": 5,
+      "id": "GP-A11",
+      "epica": "EP-OPS",
+      "sprint": 5,
+      "dev": "A",
+      "tipo": "Tarea",
+      "prioridad": "Highest",
+      "puntos": 5,
       "resumen": "Publicar la versión final y cerrar el proyecto en el repositorio",
       "descripcion": "Integrar las últimas correcciones, etiquetar la versión final, dejar el repositorio y la documentación listos para la entrega y cerrar el tablero.",
       "criterios": "Release final etiquetada y desplegada; README y manuales actualizados; informe de velocidad de los 5 sprints; tablero sin incidencias huérfanas.",
-      "depende_de": ["GP-B10", "GP-C09", "GP-D10", "GP-E09"]
+      "depende_de": [
+        "GP-B10",
+        "GP-C09",
+        "GP-D10",
+        "GP-E09"
+      ]
     },
     {
-      "id": "GP-B10", "epica": "EP-API", "sprint": 5, "dev": "B", "tipo": "Historia", "prioridad": "High", "puntos": 5,
+      "id": "GP-B10",
+      "epica": "EP-API",
+      "sprint": 5,
+      "dev": "B",
+      "tipo": "Historia",
+      "prioridad": "High",
+      "puntos": 5,
       "resumen": "HU-35 API de exportación del informe",
       "descripcion": "Como decisor quiero descargar el informe completo generado por el servidor, con los mismos datos en cualquier navegador.",
       "criterios": "Endpoint que devuelve el informe de una evaluación con gráficos y resumen; incluye fecha, evaluador y aviso de contenido generado con IA cuando corresponda.",
-      "depende_de": ["GP-B07"]
+      "depende_de": [
+        "GP-B07"
+      ]
     },
     {
-      "id": "GP-B11", "epica": "EP-API", "sprint": 5, "dev": "B", "tipo": "Bug", "prioridad": "High", "puntos": 3,
+      "id": "GP-B11",
+      "epica": "EP-API",
+      "sprint": 5,
+      "dev": "B",
+      "tipo": "Bug",
+      "prioridad": "High",
+      "puntos": 3,
       "resumen": "Corrección de incidencias del backend",
       "descripcion": "Bolsa de trabajo para los errores detectados en las pruebas de regresión y en las pruebas con usuarios.",
       "criterios": "Todas las incidencias de prioridad alta cerradas con una prueba que evita la regresión.",
       "depende_de": []
     },
     {
-      "id": "GP-C09", "epica": "EP-USR", "sprint": 5, "dev": "C", "tipo": "Tarea", "prioridad": "High", "puntos": 5,
-      "resumen": "Pulido y pruebas del módulo de usuarios",
-      "descripcion": "Revisar todos los flujos de cuentas de principio a fin y cerrar las incidencias encontradas.",
-      "criterios": "Recorrido completo probado (registro, invitación, roles, recuperación, cambio de contraseña) en escritorio y móvil; mensajes de error revisados; incidencias altas cerradas.",
+      "id": "GP-C09",
+      "epica": "EP-CAT",
+      "sprint": 5,
+      "dev": "C",
+      "tipo": "Tarea",
+      "prioridad": "High",
+      "puntos": 5,
+      "resumen": "Pulido y pruebas del catálogo de software y de la guía",
+      "descripcion": "Revisar de principio a fin los flujos del catálogo, las plantillas y la administración de la guía, y cerrar las incidencias encontradas.",
+      "criterios": "Recorrido completo probado (alta de software, ficha, plantillas, administración, importar y exportar) en escritorio y móvil; mensajes de error revisados; incidencias altas cerradas.",
       "depende_de": []
     },
     {
-      "id": "GP-C10", "epica": "EP-USR", "sprint": 5, "dev": "C", "tipo": "Tarea", "prioridad": "Medium", "puntos": 3,
-      "resumen": "Manual del administrador",
-      "descripcion": "Guía con capturas para administrar la organización, los usuarios y los permisos.",
+      "id": "GP-C10",
+      "epica": "EP-CAT",
+      "sprint": 5,
+      "dev": "C",
+      "tipo": "Tarea",
+      "prioridad": "Medium",
+      "puntos": 3,
+      "resumen": "Manual del catálogo y de la administración de la guía",
+      "descripcion": "Guía con capturas para gestionar softwares, plantillas y el catálogo de factores.",
       "criterios": "docs/MANUAL-ADMIN.md con capturas actualizadas, lenguaje sin tecnicismos y revisado por alguien ajeno al módulo.",
-      "depende_de": ["GP-C09"]
+      "depende_de": [
+        "GP-C09"
+      ]
     },
     {
-      "id": "GP-D10", "epica": "EP-EVA", "sprint": 5, "dev": "D", "tipo": "Bug", "prioridad": "High", "puntos": 5,
+      "id": "GP-D10",
+      "epica": "EP-EVA",
+      "sprint": 5,
+      "dev": "D",
+      "tipo": "Bug",
+      "prioridad": "High",
+      "puntos": 5,
       "resumen": "Pulido de las pantallas de evaluación y corrección de incidencias",
       "descripcion": "Cerrar los ajustes de usabilidad y los errores detectados en las pruebas con usuarios sobre los tres pasos y el historial.",
       "criterios": "Prueba con al menos 3 usuarios reales sin bloqueos; incidencias altas cerradas; consola del navegador sin errores; comportamiento verificado a 390 px.",
       "depende_de": []
     },
     {
-      "id": "GP-D11", "epica": "EP-EVA", "sprint": 5, "dev": "D", "tipo": "Tarea", "prioridad": "Medium", "puntos": 3,
+      "id": "GP-D11",
+      "epica": "EP-EVA",
+      "sprint": 5,
+      "dev": "D",
+      "tipo": "Tarea",
+      "prioridad": "Medium",
+      "puntos": 3,
       "resumen": "Rendimiento y tiempos de respuesta del frontend",
       "descripcion": "Medir y optimizar la carga de la aplicación y el recálculo de resultados.",
       "criterios": "Lighthouse de rendimiento y accesibilidad igual o mayor a 90; recálculo por debajo de 100 ms; tipografía con respaldo local.",
       "depende_de": []
     },
     {
-      "id": "GP-E09", "epica": "EP-DASH", "sprint": 5, "dev": "E", "tipo": "Tarea", "prioridad": "High", "puntos": 5,
+      "id": "GP-E09",
+      "epica": "EP-DASH",
+      "sprint": 5,
+      "dev": "E",
+      "tipo": "Tarea",
+      "prioridad": "High",
+      "puntos": 5,
       "resumen": "Pulido visual de todas las pantallas y guía de estilos final",
       "descripcion": "Revisión de consistencia entre dashboard, evaluación, usuarios e informes, y actualización del sistema de diseño.",
       "criterios": "Espaciados, tipografías y estados unificados en tema claro y oscuro; DESIGN-SYSTEM.md con todos los componentes en uso; capturas regeneradas.",
       "depende_de": []
     },
     {
-      "id": "GP-E10", "epica": "EP-DASH", "sprint": 5, "dev": "E", "tipo": "Tarea", "prioridad": "Highest", "puntos": 5,
+      "id": "GP-E10",
+      "epica": "EP-DASH",
+      "sprint": 5,
+      "dev": "E",
+      "tipo": "Tarea",
+      "prioridad": "Highest",
+      "puntos": 5,
       "resumen": "Manual de usuario e informe final del proyecto",
       "descripcion": "Manual de uso de la aplicación y documento final de la asignatura con resultados por sprint.",
       "criterios": "docs/MANUAL-USUARIO.md con capturas; informe final con portada, metodología, resultados, métricas y conclusiones; revisado en Turnitin y entregado a tiempo.",
-      "depende_de": ["GP-E09"]
+      "depende_de": [
+        "GP-E09"
+      ]
     }
   ]
 }
