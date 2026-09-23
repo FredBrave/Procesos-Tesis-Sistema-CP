@@ -27,6 +27,8 @@ Cómo seguir construyendo GUIOS PRO sprint a sprint usando Claude Code (u otro a
 
 ## 3. Hoja de ruta por sprints
 
+> El reparto por desarrollador y el cronograma detallado están en [`EQUIPO-Y-CRONOGRAMA.md`](EQUIPO-Y-CRONOGRAMA.md) y [`jira/TAREAS.md`](jira/TAREAS.md). Esta tabla resume los objetivos.
+
 | Sprint | Objetivo | Historias | Entregable |
 |---|---|---|---|
 | **0** (hecho) | Cimentación: repositorio, rediseño con UI kit, motor probado, datos maestros, esquema BD, CI | HU-01 … HU-07 | `app/index.html` portable + informe Sprint 0 |
