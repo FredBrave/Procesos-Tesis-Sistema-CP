@@ -8,6 +8,7 @@ Sistema informático que automatiza la **guía GUIOS** para evaluar si una soluc
 | **Flujo** | 3 pasos para el usuario: Importancia (GUIOS 1-2) → Cumplimiento (GUIOS 3-4) → Resultado: FODA y recomendación A/B/C (GUIOS 5-6) |
 | **Stack actual** | HTML + CSS + JavaScript sin dependencias. Se abre con doble clic. |
 | **Metodología** | SCRUM · ver [`docs/SPRINT-0.md`](docs/SPRINT-0.md) |
+| **Base teórica** | Tesis doctoral Rea Sánchez (2022) · resumen y dudas abiertas en [`docs/REUNION-DOCENTE.md`](docs/REUNION-DOCENTE.md) |
 | **Equipo y plan** | 5 desarrolladores · 5 sprints · [`docs/EQUIPO-Y-CRONOGRAMA.md`](docs/EQUIPO-Y-CRONOGRAMA.md) y [`docs/jira/TAREAS.md`](docs/jira/TAREAS.md) |
 
 ## Ejecutar

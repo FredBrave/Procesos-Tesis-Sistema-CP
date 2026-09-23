@@ -1,8 +1,10 @@
 # Sprint 0 — Planificación inicial del proyecto GUIOS PRO
 
-> Base para el informe de avance (S4-TAREA_1). Los datos de este documento están verificados contra el prototipo original (`legacy/`) y los archivos maestros (`data/`): **3 dimensiones, 18 factores, 61 subfactores**, escalas de 4 niveles y matriz de recomendación A/B/C.
+> Base para el informe de avance (S4-TAREA_1). Los datos están verificados contra la tesis doctoral de referencia (Rea Sánchez, 2022), el prototipo original (`legacy/`) y los archivos maestros (`data/`).
 >
-> Nota: el borrador previo del informe mencionaba "22 factores" y una escala Likert 1-5; ambos datos no corresponden al prototipo GUIOSAD ni a la matriz 2021 y se corrigen aquí.
+> **Precisión sobre el número de factores:** la revisión sistemática de la literatura identificó **22 factores**, pero la guía GUIOS excluyó 4 al no encontrarles ningún subfactor (*Reingeniería de procesos empresariales*, *Coste de licencia*, *Coste operacional* y *Coste de soporte*, estos tres absorbidos por *Coste total de propiedad*). Por tanto la guía y la herramienta operan con **3 dimensiones, 18 factores y 61 subfactores**, y con escalas discretas de **4 niveles** (no Likert 1-5). Ambas cifras son correctas según el contexto en que se citen.
+>
+> Las dudas abiertas sobre el modelo (nomenclatura A/B/C, dos importancias sugeridas en disputa y criterio de decisión) están recogidas en [`REUNION-DOCENTE.md`](REUNION-DOCENTE.md) para consultarlas con el Product Owner.
 
 ## 1. Metodología ágil: SCRUM
 
