@@ -197,6 +197,20 @@ Además, tres requisitos ya incluidos en la sección 3.1 quedan sujetos a confir
 - **RF-05:** el valor «No sé» cuenta hoy como 2 en la media (pregunta 5).
 - **RF-07:** la nomenclatura de las recomendaciones A/B/C y el criterio de decisión difieren entre la tesis y la matriz de 2021 (preguntas 1 y 3).
 
+### 3.5 Pendiente: numeración incompleta en el Product Backlog
+
+Al construir la tabla de la sección 3.3 se detectó que los IDs **HU-21, HU-29, HU-32 y
+HU-33** no existen ni en [`docs/jira/tareas.json`](jira/tareas.json) (la fuente de
+verdad) ni en [`docs/jira/TAREAS.md`](jira/TAREAS.md). La numeración salta de HU-20 a
+HU-22, y de HU-31 a HU-34.
+
+Se descarta que sea un desfase entre el JSON y el `.md` generado, porque el problema
+está también en el JSON.
+
+**Pendiente:** confirmar con el responsable de `tareas.json` si esas historias existieron
+y se perdieron, o si nunca se llegaron a escribir. Si aparecen, se agregarán a la tabla
+de la sección 3.3.
+
 ## 4. Análisis y diseño
 
 ### 4.1 Modelo conceptual
