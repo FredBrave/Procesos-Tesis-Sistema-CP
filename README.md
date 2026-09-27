@@ -9,7 +9,7 @@ Sistema informático que automatiza la **guía GUIOS** para evaluar si una soluc
 | **Stack actual** | HTML + CSS + JavaScript sin dependencias. Se abre con doble clic. |
 | **Metodología** | SCRUM · ver [`docs/SPRINT-0.md`](docs/SPRINT-0.md) |
 | **Base teórica** | Tesis doctoral Rea Sánchez (2022) · resumen y dudas abiertas en [`docs/REUNION-DOCENTE.md`](docs/REUNION-DOCENTE.md) |
-| **Entrega del avance** | [`docs/ENTREGA-TAREA1.md`](docs/ENTREGA-TAREA1.md) — alcance, requisitos, backlog y diseño · figuras en [`docs/graficos/`](docs/graficos/) |
+| **Entrega del avance** | [`docs/entregables/TAREA1-GUIOS-PRO.docx`](docs/entregables/TAREA1-GUIOS-PRO.docx) (informe en Word) · contenido en [`docs/ENTREGA-TAREA1.md`](docs/ENTREGA-TAREA1.md) · figuras en [`docs/graficos/`](docs/graficos/) |
 | **Equipo y plan** | 5 desarrolladores · 5 sprints · [`docs/EQUIPO-Y-CRONOGRAMA.md`](docs/EQUIPO-Y-CRONOGRAMA.md) y [`docs/jira/TAREAS.md`](docs/jira/TAREAS.md) |
 
 ## Ejecutar
@@ -50,6 +50,7 @@ npm run check:generated# falla si los archivos generados están desactualizados
 npm run serve          # servidor estático en :8080
 npm run build:jira     # regenera docs/jira/backlog-jira.csv y docs/jira/TAREAS.md
 npm run build:diagramas# regenera las figuras del informe en docs/graficos/
+npm run build:informe  # regenera docs/entregables/TAREA1-GUIOS-PRO.docx
 ```
 
 Requisitos de desarrollo: Node ≥ 20 y Python ≥ 3.10 (solo para los generadores). La app final no necesita ninguno.

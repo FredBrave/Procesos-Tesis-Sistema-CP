@@ -266,7 +266,7 @@ flowchart TB
 """),
 
 "08-flujo-calculo": ("Figura 8. Motor de cálculo: de las respuestas a la recomendación", """
-flowchart LR
+flowchart TD
     IS["Importancia sugerida (IS)<br/><i>literatura + expertos</i>"] --> IR
     ID["Importancia del decisor (ID)<br/><i>la fija la organización</i>"] --> IR
     IR["Importancia relativa (IR)<br/>⌊(IS + ID) / 2⌋"] --> REL{"¿IR > Irrelevante?"}
@@ -337,11 +337,14 @@ flowchart TD
 """),
 }
 
+# Ancho del contenedor en píxeles para los diagramas que lo necesitan
+ANCHOS = {"09-cronograma": 1500}
+
 HTML = """<!doctype html>
 <html><head><meta charset="utf-8">
 <style>
   body {{ margin:0; padding:28px; background:#fff; font-family:Inter,Segoe UI,Arial,sans-serif; }}
-  .mermaid {{ display:inline-block; }}
+  .mermaid {{ display:inline-block; {ancho} }}
 </style>
 <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
 </head>
@@ -382,7 +385,8 @@ def main():
         perfil = Path(tmp) / "perfil"
         for nombre, (titulo, codigo) in DIAGRAMAS.items():
             html = Path(tmp) / f"{nombre}.html"
-            html.write_text(HTML.format(codigo=codigo.strip(), tema=tema), encoding="utf-8")
+            ancho = f"width:{ANCHOS[nombre]}px;" if nombre in ANCHOS else ""
+            html.write_text(HTML.format(codigo=codigo.strip(), tema=tema, ancho=ancho), encoding="utf-8")
             destino = OUT / f"{nombre}.png"
             subprocess.run([
                 BROWSER, "--headless=new", "--disable-gpu", "--hide-scrollbars",

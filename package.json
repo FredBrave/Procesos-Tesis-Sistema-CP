@@ -9,7 +9,11 @@
     "serve": "python -m http.server 8080 --directory app",
     "build:jira": "python scripts/build_jira.py",
     "build:diagramas": "python scripts/build_diagramas.py",
+    "build:informe": "python scripts/docx/dimensiones.py && node scripts/docx/informe.js",
     "check:generated": "npm run build:data && git diff --exit-code -- app/js/data.js db/seed.sql"
+  },
+  "devDependencies": {
+    "docx": "^9.5.1"
   },
   "engines": {
     "node": ">=20"

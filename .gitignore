@@ -19,7 +19,6 @@ dist/
 *.zip
 legacy/original-drive-download.zip
 docs/entregables/*.pdf
-docs/entregables/*.docx
 
 # Configuracion local de Claude Code
 .claude/settings.local.json
