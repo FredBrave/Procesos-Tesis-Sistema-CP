@@ -232,7 +232,7 @@
       "tipo": "Historia",
       "prioridad": "Medium",
       "puntos": 3,
-      "resumen": "HU-23 API de consulta del catálogo de la guía",
+      "resumen": "HU-14 API de consulta del catálogo de la guía",
       "descripcion": "Como desarrollador del frontend quiero obtener dimensiones, factores y subfactores desde la API para no depender del archivo generado.",
       "criterios": "GET de dimensiones, factores y subfactores con sus escalas; respuesta con la misma forma que app/js/data.js; documentado en OpenAPI.",
       "depende_de": [
@@ -247,7 +247,7 @@
       "tipo": "Historia",
       "prioridad": "High",
       "puntos": 5,
-      "resumen": "HU-24 Pantalla de Configuración de la organización",
+      "resumen": "HU-15 Pantalla de Configuración de la organización",
       "descripcion": "Como usuario quiero guardar los datos de mi organización y mis preferencias una sola vez para no repetirlos en cada evaluación.",
       "criterios": "Nueva pantalla accesible desde el menú lateral con nombre, sector y logo de la organización, evaluador por defecto y tema; confirmación antes de salir sin guardar; los datos se reutilizan al crear una evaluación.",
       "depende_de": []
@@ -273,7 +273,7 @@
       "tipo": "Historia",
       "prioridad": "High",
       "puntos": 3,
-      "resumen": "HU-14 Ayuda contextual en cada paso",
+      "resumen": "HU-16 Ayuda contextual en cada paso",
       "descripcion": "Como evaluador quiero entender qué significa cada nivel de la escala para responder con criterio.",
       "criterios": "Cada paso muestra una ayuda breve plegable; el paso 2 explica los 4 niveles de cumplimiento; los textos provienen de data/ y no se duplican en el código.",
       "depende_de": []
@@ -286,7 +286,7 @@
       "tipo": "Historia",
       "prioridad": "High",
       "puntos": 3,
-      "resumen": "HU-15 Avisos de respuestas pendientes",
+      "resumen": "HU-17 Avisos de respuestas pendientes",
       "descripcion": "Como evaluador quiero que el sistema me avise si dejo factores sin responder antes de ver el resultado.",
       "criterios": "Al pasar al paso 3 con pendientes se muestra un aviso con la lista de factores y un enlace directo a cada uno; el resultado se marca como parcial.",
       "depende_de": []
@@ -299,7 +299,7 @@
       "tipo": "Historia",
       "prioridad": "Medium",
       "puntos": 5,
-      "resumen": "HU-25 Buscador y filtros de factores en el paso 2",
+      "resumen": "HU-18 Buscador y filtros de factores en el paso 2",
       "descripcion": "Como evaluador quiero buscar un factor y filtrar los que me faltan para avanzar más rápido en evaluaciones largas.",
       "criterios": "Campo de búsqueda por nombre de factor o texto del subfactor, filtro «solo pendientes» y contador de resultados; funciona con teclado y en móvil.",
       "depende_de": []
@@ -312,7 +312,7 @@
       "tipo": "Historia",
       "prioridad": "Highest",
       "puntos": 8,
-      "resumen": "HU-26 Pantalla Dashboard con indicadores",
+      "resumen": "HU-19 Pantalla Dashboard con indicadores",
       "descripcion": "Como decisor quiero una pantalla de inicio con el estado general de mis evaluaciones para saber de un vistazo en qué punto estoy.",
       "criterios": "Nueva pantalla Dashboard en el menú lateral con: evaluaciones registradas y su estado, porcentaje de avance de la evaluación en curso, distribución FODA, cumplimiento medio por dimensión y accesos directos a continuar o crear una evaluación; funciona con los datos locales; estado vacío cuando no hay ninguna evaluación.",
       "depende_de": []
@@ -338,7 +338,7 @@
       "tipo": "Historia",
       "prioridad": "Highest",
       "puntos": 8,
-      "resumen": "HU-16 Servicio de sugerencia de valoración con IA",
+      "resumen": "HU-20 Servicio de sugerencia de valoración con IA",
       "descripcion": "Como evaluador quiero que el sistema me proponga una valoración para cada subfactor a partir de la información del software, para acelerar la evaluación sin perder criterio.",
       "criterios": "Endpoint que recibe software y subfactores y devuelve valor 1..4, justificación breve y nivel de confianza por subfactor; validación estricta del JSON; la sugerencia nunca se guarda sin aceptación del evaluador.",
       "depende_de": [
@@ -370,7 +370,7 @@
       "tipo": "Historia",
       "prioridad": "High",
       "puntos": 5,
-      "resumen": "HU-17 API de software candidato",
+      "resumen": "HU-21 API de software candidato",
       "descripcion": "Como evaluador quiero registrar y consultar los softwares candidatos de mi organización.",
       "criterios": "Crear, listar, editar y eliminar con validación; filtrado por la organización configurada; documentado en OpenAPI y con pruebas de los casos de error.",
       "depende_de": [
@@ -400,7 +400,7 @@
       "tipo": "Historia",
       "prioridad": "Highest",
       "puntos": 8,
-      "resumen": "HU-18 Pantalla de catálogo de software candidatos",
+      "resumen": "HU-22 Pantalla de catálogo de software candidatos",
       "descripcion": "Como evaluador quiero registrar en un solo lugar los softwares que evalúo para no volver a escribir sus datos en cada evaluación.",
       "criterios": "Nueva pantalla con lista, buscador y filtro por tipo de licencia; alta, edición y eliminación con confirmación; al crear una evaluación se elige un software del catálogo; estado vacío con acción de alta.",
       "depende_de": [
@@ -415,7 +415,7 @@
       "tipo": "Historia",
       "prioridad": "Medium",
       "puntos": 2,
-      "resumen": "HU-36 Ficha de un software candidato",
+      "resumen": "HU-23 Ficha de un software candidato",
       "descripcion": "Como evaluador quiero ver la ficha de un software con sus datos y las evaluaciones que se le han hecho.",
       "criterios": "Vista de detalle con datos del software, historial de evaluaciones asociadas y su recomendación, y accesos a evaluar o editar.",
       "depende_de": [
@@ -430,7 +430,7 @@
       "tipo": "Historia",
       "prioridad": "High",
       "puntos": 5,
-      "resumen": "HU-27 Pantalla «Mis evaluaciones»",
+      "resumen": "HU-24 Pantalla «Mis evaluaciones»",
       "descripcion": "Como evaluador quiero ver todas mis evaluaciones en una lista para continuar la que quiera o empezar una nueva.",
       "criterios": "Lista con software, fecha, estado, avance y recomendación; acciones continuar, duplicar y eliminar con confirmación; buscador y estado vacío; funciona con datos locales.",
       "depende_de": []
@@ -458,7 +458,7 @@
       "tipo": "Historia",
       "prioridad": "High",
       "puntos": 5,
-      "resumen": "HU-22 Gráficos de resultados",
+      "resumen": "HU-25 Gráficos de resultados",
       "descripcion": "Como decisor quiero ver gráficos que resuman el cumplimiento por dimensión y la matriz FODA.",
       "criterios": "Gráfico radar por dimensión y barras de FODA en SVG propio, legibles en tema claro, oscuro e impresión, con tabla equivalente para lectores de pantalla; integrados en el resultado y en el dashboard.",
       "depende_de": [
@@ -473,7 +473,7 @@
       "tipo": "Historia",
       "prioridad": "Medium",
       "puntos": 5,
-      "resumen": "HU-28 Vista de informe imprimible",
+      "resumen": "HU-26 Vista de informe imprimible",
       "descripcion": "Como decisor quiero una vista de informe completa y ordenada para presentarla al comité.",
       "criterios": "Pantalla de informe con portada, datos del software, recomendación, FODA, gráficos y detalle por factor; se exporta a PDF sin cortes dentro de una tarjeta y en un máximo de 3 páginas.",
       "depende_de": [
@@ -488,7 +488,7 @@
       "tipo": "Historia",
       "prioridad": "Highest",
       "puntos": 8,
-      "resumen": "HU-19 Asistente de IA dentro del paso 2",
+      "resumen": "HU-27 Asistente de IA dentro del paso 2",
       "descripcion": "Como evaluador quiero ver las sugerencias de la IA junto a cada pregunta y aceptarlas o descartarlas una por una.",
       "criterios": "Botón Sugerir por factor; cada sugerencia muestra valor propuesto, justificación y confianza; aceptar rellena el control y marca el origen; descartar no deja rastro; indicador visible de que hubo asistencia de IA.",
       "depende_de": [
@@ -565,7 +565,7 @@
       "tipo": "Historia",
       "prioridad": "Medium",
       "puntos": 5,
-      "resumen": "HU-37 Plantillas de importancia reutilizables",
+      "resumen": "HU-28 Plantillas de importancia reutilizables",
       "descripcion": "Como decisor quiero guardar la importancia que asigné a los factores y reutilizarla en las próximas evaluaciones de mi organización.",
       "criterios": "Guardar el paso 1 como plantilla con nombre; aplicar una plantilla al empezar una evaluación; editar y eliminar plantillas; la plantilla aplicada se indica en la pantalla del paso 1.",
       "depende_de": [
@@ -611,7 +611,7 @@
       "tipo": "Historia",
       "prioridad": "Medium",
       "puntos": 5,
-      "resumen": "HU-40 Línea de tiempo de evaluaciones en el dashboard",
+      "resumen": "HU-29 Línea de tiempo de evaluaciones en el dashboard",
       "descripcion": "Como decisor quiero ver la evolución de mis evaluaciones en el tiempo para seguir el avance de la organización.",
       "criterios": "Gráfico de línea de tiempo con las evaluaciones por fecha y su recomendación, filtrable por software; al pulsar una se abre su informe; estado vacío cuando hay menos de dos evaluaciones.",
       "depende_de": [
@@ -643,7 +643,7 @@
       "tipo": "Historia",
       "prioridad": "Highest",
       "puntos": 8,
-      "resumen": "HU-20 Resumen ejecutivo del informe generado por IA",
+      "resumen": "HU-30 Resumen ejecutivo del informe generado por IA",
       "descripcion": "Como decisor quiero un resumen en lenguaje natural que explique la recomendación para presentarla al comité.",
       "criterios": "Entre 150 y 250 palabras citando factores concretos y sus ponderaciones; nunca contradice la recomendación calculada; editable antes de exportar; marcado como generado con IA en el PDF.",
       "depende_de": [
@@ -675,7 +675,7 @@
       "tipo": "Historia",
       "prioridad": "High",
       "puntos": 5,
-      "resumen": "HU-30 API de indicadores del dashboard",
+      "resumen": "HU-31 API de indicadores del dashboard",
       "descripcion": "Como decisor quiero que el dashboard muestre datos reales de todas las evaluaciones registradas.",
       "criterios": "Endpoint con evaluaciones por estado, recomendaciones emitidas, cumplimiento medio por dimensión y últimas evaluaciones; respuesta por debajo de 300 ms con datos de prueba.",
       "depende_de": [
@@ -690,7 +690,7 @@
       "tipo": "Historia",
       "prioridad": "High",
       "puntos": 5,
-      "resumen": "HU-31 API de comparación de evaluaciones",
+      "resumen": "HU-32 API de comparación de evaluaciones",
       "descripcion": "Como decisor quiero comparar varias evaluaciones para elegir el software más adecuado.",
       "criterios": "Acepta de 2 a 5 evaluaciones y devuelve resultados por dimensión, factor y FODA en una estructura comparable; documentado en OpenAPI y con pruebas.",
       "depende_de": [
@@ -705,7 +705,7 @@
       "tipo": "Historia",
       "prioridad": "Medium",
       "puntos": 5,
-      "resumen": "HU-38 Importar y exportar datos del catálogo",
+      "resumen": "HU-33 Importar y exportar datos del catálogo",
       "descripcion": "Como responsable quiero mover mis softwares, plantillas y evaluaciones entre equipos o instalaciones.",
       "criterios": "Exportación a JSON de softwares, plantillas y evaluaciones seleccionadas, e importación con vista previa y resolución de duplicados; archivo compatible con el exportador ya existente.",
       "depende_de": [
@@ -720,7 +720,7 @@
       "tipo": "Historia",
       "prioridad": "Low",
       "puntos": 3,
-      "resumen": "HU-39 Etiquetas y notas por software",
+      "resumen": "HU-34 Etiquetas y notas por software",
       "descripcion": "Como evaluador quiero clasificar los softwares con etiquetas y dejar notas internas para organizarlos.",
       "criterios": "Etiquetas libres con color, filtro por etiqueta en el catálogo y campo de notas en la ficha; todo persistido junto al software.",
       "depende_de": [
@@ -735,7 +735,7 @@
       "tipo": "Historia",
       "prioridad": "High",
       "puntos": 5,
-      "resumen": "HU-34 Pantalla de detalle de una evaluación guardada",
+      "resumen": "HU-35 Pantalla de detalle de una evaluación guardada",
       "descripcion": "Como decisor quiero abrir una evaluación anterior en modo lectura con todo su detalle y sus datos de autoría.",
       "criterios": "Vista de solo lectura con las respuestas, la clasificación FODA, el evaluador indicado y la fecha; acciones duplicar, continuar (si está en proceso) y abrir informe.",
       "depende_de": [
@@ -830,7 +830,7 @@
       "tipo": "Historia",
       "prioridad": "High",
       "puntos": 5,
-      "resumen": "HU-35 API de exportación del informe",
+      "resumen": "HU-36 API de exportación del informe",
       "descripcion": "Como decisor quiero descargar el informe completo generado por el servidor, con los mismos datos en cualquier navegador.",
       "criterios": "Endpoint que devuelve el informe de una evaluación con gráficos y resumen; incluye fecha, evaluador y aviso de contenido generado con IA cuando corresponda.",
       "depende_de": [

@@ -112,6 +112,8 @@ Interfaz sin guía                          → UI kit consistente, responsive y
 
 ### 3.3 Product Backlog inicial
 
+> **Versión vigente y ampliada:** la lista completa de requisitos (RF-01 a RF-26), el backlog con las 36 historias y su trazabilidad están en [`ENTREGA-TAREA1.md`](ENTREGA-TAREA1.md), que es el documento que se entrega. La tabla siguiente conserva el backlog inicial del Sprint 0.
+
 | ID | Historia de usuario | Criterios de aceptación | Prioridad | Puntos | Sprint |
 |---|---|---|---|---|---|
 | HU-01 | Como evaluador quiero registrar el software candidato para identificar la evaluación. | Formulario con nombre, versión, licencia, proveedor, organización, evaluador; se guarda automáticamente. | Alta | 2 | 0 ✔ |
@@ -129,6 +131,18 @@ Interfaz sin guía                          → UI kit consistente, responsive y
 | HU-12 | Como evaluador quiero adjuntar evidencias por subfactor. | Campo de observación y enlace por subfactor; aparece en el informe. | Baja | 3 | 4 |
 
 Velocidad estimada: 13-15 puntos por sprint.
+
+### 3.5 Numeración y trazabilidad de las historias
+
+Se revisó la numeración tras detectar huecos (HU-21, HU-29, HU-32 y HU-33 no existían). El origen fue la eliminación del módulo de cuentas de usuario del alcance: las historias de registro, inicio de sesión, permisos, perfil e invitaciones se retiraron y dejaron su número libre.
+
+**Resuelto el 27/09/2026:** las historias se renumeraron de forma continua y hoy el backlog cubre **HU-01 a HU-36 sin huecos**.
+
+- **HU-01 a HU-13** — backlog inicial definido en este documento (§3.3).
+- **HU-14 a HU-36** — historias derivadas del refinamiento, detalladas en [`ENTREGA-TAREA1.md`](ENTREGA-TAREA1.md) §3.2 y en [`jira/TAREAS.md`](jira/TAREAS.md).
+- **HU-09** se implementa en tres tareas (HU-09a API de evaluaciones, HU-09b API de historial, HU-09c pantalla de historial), por lo que conserva el sufijo.
+
+La fuente de verdad es [`jira/tareas.json`](jira/tareas.json); `npm run build:jira` regenera la tabla y el CSV del tablero, de modo que no pueden volver a desincronizarse.
 
 ## 4. Análisis y diseño
 

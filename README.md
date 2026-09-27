@@ -9,6 +9,7 @@ Sistema informático que automatiza la **guía GUIOS** para evaluar si una soluc
 | **Stack actual** | HTML + CSS + JavaScript sin dependencias. Se abre con doble clic. |
 | **Metodología** | SCRUM · ver [`docs/SPRINT-0.md`](docs/SPRINT-0.md) |
 | **Base teórica** | Tesis doctoral Rea Sánchez (2022) · resumen y dudas abiertas en [`docs/REUNION-DOCENTE.md`](docs/REUNION-DOCENTE.md) |
+| **Entrega del avance** | [`docs/ENTREGA-TAREA1.md`](docs/ENTREGA-TAREA1.md) — alcance, requisitos, backlog y diseño · figuras en [`docs/graficos/`](docs/graficos/) |
 | **Equipo y plan** | 5 desarrolladores · 5 sprints · [`docs/EQUIPO-Y-CRONOGRAMA.md`](docs/EQUIPO-Y-CRONOGRAMA.md) y [`docs/jira/TAREAS.md`](docs/jira/TAREAS.md) |
 
 ## Ejecutar
@@ -48,6 +49,7 @@ npm run build:data     # regenerar app/js/data.js y db/seed.sql desde data/
 npm run check:generated# falla si los archivos generados están desactualizados
 npm run serve          # servidor estático en :8080
 npm run build:jira     # regenera docs/jira/backlog-jira.csv y docs/jira/TAREAS.md
+npm run build:diagramas# regenera las figuras del informe en docs/graficos/
 ```
 
 Requisitos de desarrollo: Node ≥ 20 y Python ≥ 3.10 (solo para los generadores). La app final no necesita ninguno.

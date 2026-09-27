@@ -8,6 +8,7 @@
     "test": "node --test \"tests/**/*.test.js\"",
     "serve": "python -m http.server 8080 --directory app",
     "build:jira": "python scripts/build_jira.py",
+    "build:diagramas": "python scripts/build_diagramas.py",
     "check:generated": "npm run build:data && git diff --exit-code -- app/js/data.js db/seed.sql"
   },
   "engines": {
