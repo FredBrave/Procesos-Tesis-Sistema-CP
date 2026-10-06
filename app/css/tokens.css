@@ -51,6 +51,13 @@
   --foda-oportunidad: #4f5bf5;
   --foda-debilidad: #d98a0b;
   --foda-amenaza: #ef4444;
+  /* Rellenos sólidos de los cuadrantes (texto blanco encima con contraste ≥ 4.8:1) */
+  --foda-fortaleza-solid: #15803d;
+  --foda-oportunidad-solid: #4f5bf5;
+  --foda-debilidad-solid: #b45309;
+  --foda-amenaza-solid: #dc2626;
+  --on-solid: #ffffff;
+  --on-solid-veil: rgba(255, 255, 255, 0.2);
 
   /* Tipografía */
   --font-sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;

@@ -18,7 +18,7 @@ Sistema informático que automatiza la **guía GUIOS** para evaluar si una soluc
 2. Abrir [`app/index.html`](app/index.html) en Chrome, Edge o Firefox (no requiere servidor ni instalación).
 3. Opcional, con servidor local: `npm run serve` → http://localhost:8080
 
-Para ver el flujo completo con datos de prueba: menú **⋯ → Cargar ejemplo** o abrir `app/index.html?demo=1`. El botón sol/luna del sidebar cambia entre modo claro y oscuro.
+Para ver el flujo completo con datos de prueba: menú **Más → Cargar ejemplo** o abrir `app/index.html?demo=1`; el estado general está en **Panel** (`#panel`). El botón **Oscuro/Claro** del pie del sidebar cambia el tema. En el paso 2 las teclas `1`–`4` responden la pregunta resaltada.
 
 ## Estructura
 

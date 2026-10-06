@@ -36,6 +36,12 @@ SHOTS = [
     ("03-paso-5-6", "paso-5-6", "?demo=1&theme=light", 1280, 1300),
     ("04-movil-paso-5-6", "paso-5-6", "?demo=1&theme=light", 500, 1400),  # Chrome no baja de ~500 px de ventana
     ("05-modo-oscuro", "paso-5-6", "?demo=1&theme=dark", 1280, 1100),
+    ("06-panel", "panel", "?demo=1&theme=light", 1280, 1000),
+    ("07-panel-oscuro", "panel", "?demo=1&theme=dark", 1280, 1000),
+    ("08-movil-panel", "panel", "?demo=1&theme=light", 500, 1500),
+    ("09-panel-vacio", "panel", "?theme=light", 1280, 800),
+    ("10-paso-3-4-vacio", "paso-3-4", "?theme=light", 1280, 900),
+    ("11-movil-paso-1-2", "paso-1-2", "?theme=light", 500, 1400),
 ]
 
 
@@ -43,8 +49,9 @@ def main():
     if not BROWSER:
         sys.exit("No se encontró Chrome/Edge. Instale uno o añada su ruta a CANDIDATES.")
     OUT.mkdir(parents=True, exist_ok=True)
-    with tempfile.TemporaryDirectory() as profile:
-        for name, frag, query, w, h in SHOTS:
+    for name, frag, query, w, h in SHOTS:
+        # Perfil nuevo por captura: el localStorage del demo no se filtra a las demás.
+        with tempfile.TemporaryDirectory() as profile:
             target = OUT / f"{name}.png"
             url = f"{APP}{query}#{frag}"
             subprocess.run(
