@@ -477,5 +477,24 @@ window.GUIOS_DATA = {
       "condicion": null,
       "texto": "Es posible adoptar. Todos los factores han sido identificados como Oportunidades y/o Fortalezas. Esto quiere decir que la organización cumple satisfactoriamente con la mayoría de requisitos para adoptar la solución FLOSS."
     }
-  ]
+  ],
+  "ayuda": {
+    "niveles_importancia": [
+      "El factor no influye en la decisión. Si su importancia relativa queda en Irrelevante, no se evalúa.",
+      "Conviene tenerlo en cuenta, pero por sí solo no condiciona la decisión.",
+      "Influye de forma clara en la decisión de adoptar el software.",
+      "Es imprescindible para la organización: sin él no se adoptaría el software."
+    ],
+    "niveles_subfactor": [
+      "El software no satisface el requisito.",
+      "No hay información suficiente para saberlo. En el cálculo cuenta como 2.",
+      "El software lo satisface solo en parte o con limitaciones.",
+      "El software satisface el requisito por completo."
+    ],
+    "pasos": {
+      "1": "La guía propone una importancia para cada factor. Indique la que tiene para su organización: la importancia relativa es la media entera de ambas. Los factores que quedan como Irrelevantes no se evalúan. El alcance de Soporte (interno o externo) lo decide usted.",
+      "2": "Valore si el software cumple cada requisito de los factores que se evaluarán. La ponderación del factor es la media de sus respuestas, de 1 a 4. Puede añadir una observación o un enlace como evidencia en cada pregunta.",
+      "3": "Un factor con ponderación de 3 o más es favorable: Fortaleza si su origen es interno, Oportunidad si es externo. Por debajo de 3 es Debilidad o Amenaza. La recomendación aplica la matriz de la guía: A si hay debilidades o amenazas en factores importantes o fundamentales, B si solo las hay en factores opcionales y C si todo es favorable."
+    }
+  }
 };

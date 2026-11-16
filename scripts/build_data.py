@@ -63,6 +63,7 @@ def build():
         "nivelesSubfactor": recom["niveles_subfactor"],
         "umbralFoda": recom["umbral_foda"],
         "reglas": recom["reglas"],
+        "ayuda": {k: v for k, v in recom.get("ayuda", {}).items() if not k.startswith("_")},
     }
     total_sub = sum(len(f["subfactores"]) for f in factors)
     js = (
