@@ -1751,17 +1751,100 @@ code {
   .tabs {
     display: none !important;
   }
+  /* Informe en un máximo de 3 páginas A4 (HU-28): secciones compactas */
+  .report {
+    gap: var(--sp-3);
+  }
   .report .card {
     margin-bottom: 0;
+  }
+  .report .card-header {
+    padding: var(--sp-2) var(--sp-4);
+  }
+  .report .card-body {
+    padding: var(--sp-3) var(--sp-4);
   }
   .report-cover {
     border: 0;
   }
-  .charts-grid {
+  .report-cover .card-body {
+    gap: var(--sp-2);
+  }
+  .report .verdict-main {
+    padding: var(--sp-4);
+  }
+  .report .verdict-code {
+    width: 56px;
+    height: 56px;
+    font-size: 28px;
+  }
+  .report .foda-axis,
+  .report .foda-core {
+    display: none;
+  }
+  .report .foda-board {
+    gap: var(--sp-2);
+  }
+  .report .foda-q,
+  .report .foda-q-bl,
+  .report .foda-q-br {
+    min-height: 0;
+    gap: var(--sp-2);
+    padding: var(--sp-3) var(--sp-4);
+    flex-direction: column;
+    border-radius: var(--radius-md);
+  }
+  .report .foda-q-bl .foda-q-head,
+  .report .foda-q-br .foda-q-head {
+    margin-top: 0;
+  }
+  .report .foda-q-icon {
+    width: 28px;
+    height: 28px;
+  }
+  .report .foda-q-count {
+    font-size: var(--text-xl);
+  }
+  .report .foda-q .foda-chips,
+  .report .foda-q .foda-q-empty {
+    align-items: flex-start;
+    text-align: left;
+    padding: 0;
+    margin: 0;
+  }
+  .report .report-summary.is-empty {
+    display: none !important;
+  }
+  .report .charts-grid {
     grid-template-columns: 1fr 1fr;
   }
+  .report .foda-chips li {
+    font-size: var(--text-xs);
+    line-height: 1.35;
+  }
+  .charts-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: var(--sp-4);
+  }
   .chart {
-    max-width: 300px;
+    max-width: 280px;
+  }
+  .report .report-detail {
+    break-inside: auto;
+  }
+  .report-detail .table th,
+  .report-detail .table td {
+    padding: 3px var(--sp-3);
+    font-size: var(--text-xs);
+  }
+  .report-detail .factor-dim {
+    display: none;
+  }
+  .report-detail .badge {
+    height: 18px;
+  }
+  .report-detail tr {
+    break-inside: avoid;
   }
   .row-actions {
     display: none;

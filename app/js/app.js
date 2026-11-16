@@ -1088,7 +1088,7 @@
             ${result.factores
               .map(
                 (f) => `<tr class="${f.relevante ? "" : "is-muted"}">
-                  <td>${esc(f.nombre)}<br /><span class="xs muted">${esc(dimName(f.dimension, data))}</span></td>
+                  <td>${esc(f.nombre)}<span class="factor-dim xs muted"><br />${esc(dimName(f.dimension, data))}</span></td>
                   <td>${levelBadge(f.importanciaRelativaIdx, f.relevante, data)}</td>
                   <td class="num">${fmt(f.ponderacion)}</td>
                   <td class="muted">${f.relevante ? esc(f.alcance) : "—"}</td>
@@ -1394,8 +1394,9 @@
     const st = statusOf(ev);
     const sw = ev.software;
     const actions = `
+      ${st === "En proceso" ? `<button class="btn btn-ghost is-danger" data-cancel-eval="${esc(ev.id)}">${icon("x")} Cancelar evaluación</button>` : ""}
       <button class="btn btn-ghost" data-duplicate="${esc(ev.id)}">${icon("copy")} Duplicar</button>
-      ${st !== "Completada" ? `<button class="btn btn-secondary" data-continue="${esc(ev.id)}">${icon("edit")} Continuar</button>` : `<button class="btn btn-ghost" data-continue="${esc(ev.id)}">${icon("edit")} Editar</button>`}
+      ${st === "Cancelada" ? `<button class="btn btn-secondary" data-continue="${esc(ev.id)}">${icon("refresh")} Reactivar</button>` : st !== "Completada" ? `<button class="btn btn-secondary" data-continue="${esc(ev.id)}">${icon("edit")} Continuar</button>` : `<button class="btn btn-ghost" data-continue="${esc(ev.id)}">${icon("edit")} Editar</button>`}
       <a class="btn btn-primary" ${navAttrs("informe", ev.id)}>${icon("file")} Abrir informe</a>`;
     const meta = `<section class="card">
         <div class="card-body meta-grid">
@@ -1502,7 +1503,7 @@
         </div>
       </section>`;
 
-    const summary = `<section class="card report-summary">
+    const summary = `<section class="card report-summary ${resumen && resumen.texto.trim() ? "" : "is-empty"}">
         <div class="card-header">
           <h2 class="h3">Resumen ejecutivo</h2>
           <div class="actions no-print">
@@ -1537,7 +1538,7 @@
         ${summary}
         ${fodaBoard(r)}
         ${chartsCard(r, data)}
-        <section class="card"><div class="card-header"><h2 class="h3">Detalle por factor</h2></div>${factorTable(r, data)}</section>
+        <section class="card report-detail"><div class="card-header"><h2 class="h3">Detalle por factor</h2></div>${factorTable(r, data)}</section>
         ${obsCard}
         <p class="xs muted">Generado con GUIOS PRO el ${esc(fmtDate(Store.now(), true))}. La recomendación se calcula con la matriz de la guía GUIOS; ${
           iaCount ? `${plural(iaCount, "respuesta se tomó", "respuestas se tomaron")} de sugerencias de IA aceptadas por el evaluador.` : "ninguna respuesta procede de sugerencias de IA."
@@ -2907,7 +2908,7 @@
   document.addEventListener("click", (ev) => {
     if (ev.detail > 0) keyboardMode = false;
     const t = ev.target.closest(
-      "[data-nav],[data-action],[data-factor],[data-scope],[data-fill],[data-sub-row],[data-note],[data-ia-accept],[data-ia-discard],[data-goto-factor],[data-continue],[data-duplicate],[data-delete-eval],[data-export-eval],[data-ia-summary],[data-sw-edit],[data-sw-delete],[data-sw-evaluate],[data-tag-remove],[data-admin-tab],[data-draft-add],[data-draft-remove],[data-catalog-activate],[data-catalog-export],[data-tpl-update],[data-tpl-delete],[data-cfg-theme],[data-import-mode],[data-conflict]"
+      "[data-nav],[data-action],[data-factor],[data-scope],[data-fill],[data-sub-row],[data-note],[data-ia-accept],[data-ia-discard],[data-goto-factor],[data-continue],[data-duplicate],[data-delete-eval],[data-cancel-eval],[data-export-eval],[data-ia-summary],[data-sw-edit],[data-sw-delete],[data-sw-evaluate],[data-tag-remove],[data-admin-tab],[data-draft-add],[data-draft-remove],[data-catalog-activate],[data-catalog-export],[data-tpl-update],[data-tpl-delete],[data-cfg-theme],[data-import-mode],[data-conflict]"
     );
     if (!t) {
       if (ui.menu) {
@@ -3018,6 +3019,27 @@
           toast("Evaluación eliminada");
           if (SCREENS[ui.screen].id === "evaluacion") go("evaluaciones", null, { force: true });
           else render();
+        },
+      });
+      return;
+    }
+    if (t.hasAttribute("data-cancel-eval")) {
+      const e = evalById(attr("data-cancel-eval"));
+      if (!e) return;
+      popup({
+        title: "¿Cancelar esta evaluación?",
+        html: "<p>Quedará en el historial como <strong>Cancelada</strong>, con sus respuestas, y no contará en el panel. Puede reactivarla cuando quiera.</p>",
+        confirmLabel: "Cancelar evaluación",
+        danger: true,
+        onConfirm: () => {
+          e.estado = "Cancelada";
+          if (!db.evaluaciones.includes(e)) db.evaluaciones.push(e);
+          e.actualizadoEn = Store.now();
+          e.cambiosLocales = true;
+          if (state.id === e.id) startDraft();
+          persistDb();
+          render();
+          toast("Evaluación cancelada");
         },
       });
       return;
