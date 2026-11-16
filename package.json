@@ -5,7 +5,9 @@
   "description": "GUIOS PRO - Sistema de evaluacion para la adopcion de software (guia GUIOS, tesis doctoral Rea Sanchez 2022)",
   "scripts": {
     "build:data": "python scripts/build_data.py && python scripts/build_seed_sql.py",
-    "test": "node --test \"tests/**/*.test.js\"",
+    "test": "node --test \"tests/**/*.test.js\" \"api/tests/**/*.test.js\"",
+    "test:api": "node --test \"api/tests/**/*.test.js\"",
+    "api": "node api/server.js",
     "serve": "python -m http.server 8080 --directory app",
     "build:jira": "python scripts/build_jira.py",
     "build:diagramas": "python scripts/build_diagramas.py",
@@ -16,7 +18,7 @@
     "docx": "^9.5.1"
   },
   "engines": {
-    "node": ">=20"
+    "node": ">=22.13"
   },
   "license": "MIT"
 }

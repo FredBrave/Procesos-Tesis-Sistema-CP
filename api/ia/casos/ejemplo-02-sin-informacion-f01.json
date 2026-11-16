@@ -1,0 +1,23 @@
+{
+  "_nota": "EJEMPLO ilustrativo del formato: un software ficticio sin información pública, donde se espera «Desconozco si cumple» (2) en todos los subfactores. No es un caso de referencia validado; el equipo debe completar los 30 casos de RNF-15.",
+  "software": {
+    "nombre": "Sistema interno ficticio XYZ",
+    "version": "0.1",
+    "licencia": "",
+    "proveedor": "",
+    "url": "",
+    "notas": ""
+  },
+  "factorId": "F01",
+  "contexto": "",
+  "esperado": {
+    "F01-S01": 2,
+    "F01-S02": 2,
+    "F01-S03": 2,
+    "F01-S04": 2,
+    "F01-S05": 2,
+    "F01-S06": 2,
+    "F01-S07": 2,
+    "F01-S08": 2
+  }
+}

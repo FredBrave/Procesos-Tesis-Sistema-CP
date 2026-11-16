@@ -1,0 +1,21 @@
+{
+  "_nota": "EJEMPLO ilustrativo del formato. Los valores esperados NO son una referencia validada: el equipo debe sustituir este archivo por los 30 casos de referencia de RNF-15, valorados por evaluadores humanos con evidencia.",
+  "software": {
+    "nombre": "Moodle",
+    "version": "4.3",
+    "licencia": "FLOSS copyleft (GPL, AGPL)",
+    "proveedor": "Moodle HQ",
+    "url": "https://moodle.org",
+    "notas": ""
+  },
+  "factorId": "F02",
+  "contexto": "",
+  "esperado": {
+    "F02-S01": 3,
+    "F02-S02": 3,
+    "F02-S03": 3,
+    "F02-S04": 3,
+    "F02-S05": 4,
+    "F02-S06": 4
+  }
+}

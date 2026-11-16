@@ -1,0 +1,1079 @@
+openapi: 3.1.0
+info:
+  title: GUIOS PRO API
+  version: 1.0.0
+  summary: Servidor REST de GUIOS PRO (evaluación de adopción de software con la guía GUIOS).
+  description: |
+    API sin cuentas de usuario: cada petición indica su organización con la cabecera
+    `X-Organizacion` (texto libre ≤ 150; codificado con `encodeURIComponent` si tiene
+    caracteres no ASCII). Sin cabecera se usa la organización «Predeterminada».
+    Softwares, evaluaciones, plantillas, dashboard y límite de IA se filtran por ella.
+
+    El cálculo (importancia relativa, ponderación, FODA, recomendación, avance, panel y
+    comparación) lo hace `app/js/engine.js`, el mismo archivo que usa el navegador (RNF-11).
+
+    Todos los errores tienen la forma `Error` (`{ error: { codigo, mensaje, detalles? } }`).
+    Los cuerpos están limitados a 1 MB (413).
+  license:
+    name: MIT
+servers:
+  - url: http://localhost:8787
+    description: Servidor local (npm run api)
+tags:
+  - name: Salud
+  - name: Catálogo
+  - name: Softwares
+  - name: Evaluaciones
+  - name: Sincronización
+  - name: Plantillas
+  - name: Indicadores
+  - name: IA
+security: []
+paths:
+  /api/salud:
+    get:
+      tags: [Salud]
+      summary: Estado del servidor y del asistente de IA
+      operationId: getSalud
+      responses:
+        "200":
+          description: Servidor operativo
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [ok, version, ia]
+                properties:
+                  ok: { type: boolean, const: true }
+                  version: { type: string, examples: ["1.0.0"] }
+                  catalogoVersion: { type: string }
+                  ia:
+                    type: object
+                    required: [disponible, proveedor]
+                    properties:
+                      disponible: { type: boolean }
+                      proveedor: { type: [string, "null"], enum: [anthropic, simulado, null] }
+
+  /api/catalogo:
+    get:
+      tags: [Catálogo]
+      summary: Catálogo completo de la guía (misma forma que window.GUIOS_DATA) — HU-23
+      operationId: getCatalogo
+      responses:
+        "200":
+          description: Catálogo
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Catalogo" }
+  /api/catalogo/dimensiones:
+    get:
+      tags: [Catálogo]
+      summary: Dimensiones de la guía
+      operationId: listDimensiones
+      responses:
+        "200":
+          description: Lista de dimensiones
+          content:
+            application/json:
+              schema: { type: array, items: { $ref: "#/components/schemas/Dimension" } }
+  /api/catalogo/factores:
+    get:
+      tags: [Catálogo]
+      summary: Factores (sin subfactores; incluye su número)
+      operationId: listFactores
+      parameters:
+        - name: dimension
+          in: query
+          schema: { type: string, examples: ["D1"] }
+      responses:
+        "200":
+          description: Lista de factores
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  allOf:
+                    - $ref: "#/components/schemas/FactorBase"
+                    - type: object
+                      properties:
+                        subfactoresTotal: { type: integer }
+  /api/catalogo/factores/{id}:
+    get:
+      tags: [Catálogo]
+      summary: Un factor con sus subfactores
+      operationId: getFactor
+      parameters: [{ $ref: "#/components/parameters/FactorId" }]
+      responses:
+        "200":
+          description: Factor
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Factor" }
+        "404": { $ref: "#/components/responses/NoEncontrado" }
+  /api/catalogo/factores/{id}/subfactores:
+    get:
+      tags: [Catálogo]
+      summary: Subfactores de un factor
+      operationId: listSubfactores
+      parameters: [{ $ref: "#/components/parameters/FactorId" }]
+      responses:
+        "200":
+          description: Subfactores
+          content:
+            application/json:
+              schema: { type: array, items: { $ref: "#/components/schemas/Subfactor" } }
+        "404": { $ref: "#/components/responses/NoEncontrado" }
+
+  /api/softwares:
+    get:
+      tags: [Softwares]
+      summary: Lista los softwares candidatos de la organización (HU-17)
+      operationId: listSoftwares
+      parameters:
+        - $ref: "#/components/parameters/Organizacion"
+        - { name: q, in: query, description: Busca en nombre, proveedor y notas, schema: { type: string, maxLength: 120 } }
+        - { name: licencia, in: query, description: Tipo de licencia exacto, schema: { type: string, maxLength: 60 } }
+        - { name: etiqueta, in: query, description: Nombre de etiqueta (sin distinguir mayúsculas), schema: { type: string, maxLength: 40 } }
+      responses:
+        "200":
+          description: Softwares ordenados por nombre
+          content:
+            application/json:
+              schema: { type: array, items: { $ref: "#/components/schemas/Software" } }
+        "400": { $ref: "#/components/responses/EntradaInvalida" }
+    post:
+      tags: [Softwares]
+      summary: Alta de un software (el id es opcional; si se omite lo genera el servidor)
+      operationId: createSoftware
+      parameters: [{ $ref: "#/components/parameters/Organizacion" }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/SoftwareInput" }
+      responses:
+        "201":
+          description: Creado
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Software" }
+        "400": { $ref: "#/components/responses/EntradaInvalida" }
+        "409": { $ref: "#/components/responses/Conflicto" }
+        "413": { $ref: "#/components/responses/DemasiadoGrande" }
+  /api/softwares/{id}:
+    parameters:
+      - $ref: "#/components/parameters/Id"
+      - $ref: "#/components/parameters/Organizacion"
+    get:
+      tags: [Softwares]
+      summary: Ficha de un software
+      operationId: getSoftware
+      responses:
+        "200":
+          description: Software
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Software" }
+        "404": { $ref: "#/components/responses/NoEncontrado" }
+    put:
+      tags: [Softwares]
+      summary: Upsert idempotente con el id del cliente (mismo contenido = sin cambios)
+      operationId: putSoftware
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/SoftwareInput" }
+      responses:
+        "200":
+          description: Actualizado (o sin cambios)
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Software" }
+        "201":
+          description: Creado
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Software" }
+        "400": { $ref: "#/components/responses/EntradaInvalida" }
+        "413": { $ref: "#/components/responses/DemasiadoGrande" }
+    delete:
+      tags: [Softwares]
+      summary: Elimina un software; 409 si tiene evaluaciones salvo `?cascada=1`
+      operationId: deleteSoftware
+      parameters:
+        - { name: cascada, in: query, description: "1 para eliminar también sus evaluaciones", schema: { type: string, enum: ["1", "true"] } }
+      responses:
+        "200":
+          description: Eliminado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  eliminado: { type: string }
+                  evaluacionesEliminadas: { type: integer }
+        "404": { $ref: "#/components/responses/NoEncontrado" }
+        "409": { $ref: "#/components/responses/Conflicto" }
+
+  /api/evaluaciones:
+    get:
+      tags: [Evaluaciones]
+      summary: Lista resumida de evaluaciones (RF-10, HU-09a)
+      operationId: listEvaluaciones
+      parameters:
+        - $ref: "#/components/parameters/Organizacion"
+        - { name: softwareId, in: query, schema: { $ref: "#/components/schemas/Id" } }
+        - { name: estado, in: query, schema: { $ref: "#/components/schemas/Estado" } }
+        - { name: desde, in: query, description: "Solo las actualizadas desde esta fecha ISO 8601", schema: { type: string, format: date-time } }
+      responses:
+        "200":
+          description: Evaluaciones ordenadas por actualización descendente
+          content:
+            application/json:
+              schema: { type: array, items: { $ref: "#/components/schemas/EvaluacionResumen" } }
+        "400": { $ref: "#/components/responses/EntradaInvalida" }
+  /api/evaluaciones/{id}:
+    parameters:
+      - $ref: "#/components/parameters/Id"
+      - $ref: "#/components/parameters/Organizacion"
+    get:
+      tags: [Evaluaciones]
+      summary: Evaluación completa con su resultado calculado
+      operationId: getEvaluacion
+      responses:
+        "200":
+          description: Evaluación
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Evaluacion" }
+        "404": { $ref: "#/components/responses/NoEncontrado" }
+    put:
+      tags: [Evaluaciones]
+      summary: Upsert con control de concurrencia optimista (RF-30, RNF-12)
+      description: |
+        * Si la evaluación no existe se crea con `revision = 1` (201).
+        * Si el contenido es idéntico al guardado se devuelve 200 sin incrementar la revisión
+          (idempotencia; también con una `revisionBase` antigua, p. ej. un reintento tras perder la respuesta).
+        * Si existe y `revision ≠ revisionBase` → 409 con la versión del servidor en `servidor`.
+          El cliente fusiona y reintenta con `revisionBase = servidor.revision`, o envía `?forzar=1`.
+        * Si coincide → se guarda con `revision = revisionBase + 1`.
+        El servidor recalcula el resultado con engine.evaluate y lo guarda por factor.
+      operationId: putEvaluacion
+      parameters:
+        - { name: forzar, in: query, description: "1 para sobrescribir aunque haya conflicto", schema: { type: string, enum: ["1", "true"] } }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/EvaluacionInput" }
+      responses:
+        "200":
+          description: Guardada (o sin cambios)
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Evaluacion" }
+        "201":
+          description: Creada
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Evaluacion" }
+        "400": { $ref: "#/components/responses/EntradaInvalida" }
+        "409":
+          description: Conflicto de versiones
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/ConflictoEvaluacion" }
+        "413": { $ref: "#/components/responses/DemasiadoGrande" }
+        "422": { $ref: "#/components/responses/NoProcesable" }
+    delete:
+      tags: [Evaluaciones]
+      summary: Elimina una evaluación
+      operationId: deleteEvaluacion
+      responses:
+        "200":
+          description: Eliminada
+          content:
+            application/json:
+              schema: { type: object, properties: { eliminado: { type: string } } }
+        "404": { $ref: "#/components/responses/NoEncontrado" }
+  /api/evaluaciones/{id}/informe:
+    get:
+      tags: [Evaluaciones]
+      summary: Informe HTML autocontenido e imprimible (HU-35)
+      description: |
+        Portada, datos del software, fecha, evaluador indicado, recomendación con factores
+        críticos, matriz FODA, barras SVG por dimensión, detalle por factor, observaciones y
+        resumen ejecutivo (con el aviso «Contenido generado con IA, revisado por el evaluador»
+        si `resumen.generadoIA`). Todo el contenido variable está escapado y la respuesta lleva
+        una Content-Security-Policy que impide ejecutar scripts.
+      operationId: getInforme
+      parameters:
+        - $ref: "#/components/parameters/Id"
+        - $ref: "#/components/parameters/Organizacion"
+      responses:
+        "200":
+          description: Documento HTML
+          content:
+            text/html:
+              schema: { type: string }
+        "404": { $ref: "#/components/responses/NoEncontrado" }
+
+  /api/sync:
+    post:
+      tags: [Sincronización]
+      summary: Sincronización en lote (RF-30)
+      description: |
+        Procesa primero softwares y plantillas (upsert) y luego evaluaciones (con `revisionBase`).
+        Cada elemento se acepta, entra en conflicto o falla de forma independiente; nunca se pierde
+        en silencio. La respuesta incluye el estado del servidor para que el cliente descargue lo nuevo.
+        `?forzar=1` aplica la sobrescritura a todas las evaluaciones del lote. Máximo 1000 elementos por lista.
+      operationId: sync
+      parameters:
+        - $ref: "#/components/parameters/Organizacion"
+        - { name: forzar, in: query, schema: { type: string, enum: ["1", "true"] } }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                softwares: { type: array, maxItems: 1000, items: { $ref: "#/components/schemas/SoftwareInput" } }
+                evaluaciones: { type: array, maxItems: 1000, items: { $ref: "#/components/schemas/EvaluacionInput" } }
+                plantillas: { type: array, maxItems: 1000, items: { $ref: "#/components/schemas/PlantillaInput" } }
+      responses:
+        "200":
+          description: Resultado del lote
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/SyncRespuesta" }
+        "400": { $ref: "#/components/responses/EntradaInvalida" }
+        "413": { $ref: "#/components/responses/DemasiadoGrande" }
+
+  /api/plantillas:
+    get:
+      tags: [Plantillas]
+      summary: Plantillas de importancia de la organización (HU-37)
+      operationId: listPlantillas
+      parameters: [{ $ref: "#/components/parameters/Organizacion" }]
+      responses:
+        "200":
+          description: Plantillas
+          content:
+            application/json:
+              schema: { type: array, items: { $ref: "#/components/schemas/Plantilla" } }
+    post:
+      tags: [Plantillas]
+      summary: Crea una plantilla (id opcional)
+      operationId: createPlantilla
+      parameters: [{ $ref: "#/components/parameters/Organizacion" }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/PlantillaInput" }
+      responses:
+        "201":
+          description: Creada
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Plantilla" }
+        "400": { $ref: "#/components/responses/EntradaInvalida" }
+        "409": { $ref: "#/components/responses/Conflicto" }
+  /api/plantillas/{id}:
+    parameters:
+      - $ref: "#/components/parameters/Id"
+      - $ref: "#/components/parameters/Organizacion"
+    get:
+      tags: [Plantillas]
+      summary: Una plantilla
+      operationId: getPlantilla
+      responses:
+        "200":
+          description: Plantilla
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Plantilla" }
+        "404": { $ref: "#/components/responses/NoEncontrado" }
+    put:
+      tags: [Plantillas]
+      summary: Upsert idempotente
+      operationId: putPlantilla
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/PlantillaInput" }
+      responses:
+        "200":
+          description: Actualizada
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Plantilla" }
+        "201":
+          description: Creada
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Plantilla" }
+        "400": { $ref: "#/components/responses/EntradaInvalida" }
+    delete:
+      tags: [Plantillas]
+      summary: Elimina una plantilla
+      operationId: deletePlantilla
+      responses:
+        "200":
+          description: Eliminada
+          content:
+            application/json:
+              schema: { type: object, properties: { eliminado: { type: string } } }
+        "404": { $ref: "#/components/responses/NoEncontrado" }
+
+  /api/dashboard:
+    get:
+      tags: [Indicadores]
+      summary: Indicadores del panel (HU-30, RNF-10 < 300 ms)
+      description: |
+        Calculados con `engine.summarize`, igual que el panel del navegador: `porEstado` cuenta
+        todas las evaluaciones; recomendaciones, FODA, dimensiones y línea de tiempo solo las
+        completadas. `softwareId` filtra solo la línea de tiempo.
+      operationId: getDashboard
+      parameters:
+        - $ref: "#/components/parameters/Organizacion"
+        - { name: softwareId, in: query, schema: { $ref: "#/components/schemas/Id" } }
+      responses:
+        "200":
+          description: Indicadores
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Dashboard" }
+        "400": { $ref: "#/components/responses/EntradaInvalida" }
+
+  /api/comparar:
+    get:
+      tags: [Indicadores]
+      summary: Compara de 2 a 5 evaluaciones (HU-31)
+      operationId: comparar
+      parameters:
+        - $ref: "#/components/parameters/Organizacion"
+        - name: ids
+          in: query
+          required: true
+          description: Ids separados por comas (2..5 distintos)
+          schema: { type: string, examples: ["ev_a,ev_b,ev_c"] }
+      responses:
+        "200":
+          description: Estructura comparable
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Comparacion" }
+        "400": { $ref: "#/components/responses/EntradaInvalida" }
+        "404": { $ref: "#/components/responses/NoEncontrado" }
+        "422": { $ref: "#/components/responses/NoProcesable" }
+
+  /api/ia/sugerencias:
+    post:
+      tags: [IA]
+      summary: Sugerencias de valoración para todos los subfactores de un factor (HU-16)
+      description: |
+        Las sugerencias no se guardan: el evaluador las acepta o descarta en la app (RNF-13).
+        La respuesta del modelo se valida estrictamente (ids exactos, valor entero 1..4,
+        confianza 0..1, justificación ≤ 400); si falla se reintenta una vez y, si no, 502.
+        Cada solicitud válida consume una llamada del límite diario de la organización.
+      operationId: sugerencias
+      parameters: [{ $ref: "#/components/parameters/Organizacion" }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [factorId, software]
+              properties:
+                factorId: { type: string, examples: ["F01"] }
+                software:
+                  type: object
+                  required: [nombre]
+                  properties:
+                    nombre: { type: string, minLength: 1, maxLength: 120 }
+                    version: { type: string, maxLength: 40 }
+                    licencia: { type: string, maxLength: 60 }
+                    proveedor: { type: string, maxLength: 120 }
+                    url: { type: string, format: uri, maxLength: 255 }
+                    notas: { type: string, maxLength: 5000 }
+                contexto: { type: string, maxLength: 4000 }
+      responses:
+        "200":
+          description: Sugerencias
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [factorId, sugerencias]
+                properties:
+                  factorId: { type: string }
+                  sugerencias:
+                    type: array
+                    items: { $ref: "#/components/schemas/SugerenciaIA" }
+                  generadoIA: { type: boolean, const: true }
+                  modelo: { type: string }
+        "400": { $ref: "#/components/responses/EntradaInvalida" }
+        "429": { $ref: "#/components/responses/LimiteIA" }
+        "502": { $ref: "#/components/responses/IAInvalida" }
+        "503": { $ref: "#/components/responses/IANoDisponible" }
+  /api/ia/resumen:
+    post:
+      tags: [IA]
+      summary: Resumen ejecutivo (150–250 palabras) que no contradice la recomendación (HU-20)
+      description: |
+        La recomendación se calcula con engine.evaluate; el modelo solo redacta. Se valida el
+        número de palabras, que cite «Recomendación X» con el código calculado y ninguna otra,
+        que nombre algún factor evaluado y alguna ponderación. Un reintento; si no, 502.
+        No se envían al proveedor ni el evaluador, ni la organización, ni las observaciones.
+      operationId: resumen
+      parameters: [{ $ref: "#/components/parameters/Organizacion" }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              oneOf:
+                - type: object
+                  required: [evaluacionId]
+                  properties: { evaluacionId: { $ref: "#/components/schemas/Id" } }
+                - type: object
+                  required: [evaluacion]
+                  properties: { evaluacion: { $ref: "#/components/schemas/EvaluacionInput" } }
+      responses:
+        "200":
+          description: Resumen
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [texto, palabras, recomendacion, generadoIA, modelo]
+                properties:
+                  texto: { type: string }
+                  palabras: { type: integer, minimum: 150, maximum: 250 }
+                  recomendacion: { type: string, enum: [A, B, C] }
+                  generadoIA: { type: boolean, const: true }
+                  modelo: { type: string, examples: ["claude-opus-5-5", "simulado"] }
+                  fecha: { type: string, format: date-time }
+        "400": { $ref: "#/components/responses/EntradaInvalida" }
+        "404": { $ref: "#/components/responses/NoEncontrado" }
+        "422": { $ref: "#/components/responses/NoProcesable" }
+        "429": { $ref: "#/components/responses/LimiteIA" }
+        "502": { $ref: "#/components/responses/IAInvalida" }
+        "503": { $ref: "#/components/responses/IANoDisponible" }
+
+components:
+  parameters:
+    Organizacion:
+      name: X-Organizacion
+      in: header
+      required: false
+      description: Nombre de la organización (≤ 150). URI-encoded si tiene caracteres no ASCII. Por defecto «Predeterminada».
+      schema: { type: string, maxLength: 150 }
+    Id:
+      name: id
+      in: path
+      required: true
+      schema: { $ref: "#/components/schemas/Id" }
+    FactorId:
+      name: id
+      in: path
+      required: true
+      schema: { type: string, examples: ["F01"] }
+
+  responses:
+    EntradaInvalida:
+      description: Entrada inválida (400) o JSON mal formado (`json_invalido`)
+      content:
+        application/json:
+          schema: { $ref: "#/components/schemas/Error" }
+    NoEncontrado:
+      description: No encontrado (404)
+      content:
+        application/json:
+          schema: { $ref: "#/components/schemas/Error" }
+    Conflicto:
+      description: Conflicto (409) — `ya_existe` o `tiene_evaluaciones`
+      content:
+        application/json:
+          schema: { $ref: "#/components/schemas/Error" }
+    DemasiadoGrande:
+      description: Cuerpo mayor de 1 MB (413, `cuerpo_demasiado_grande`)
+      content:
+        application/json:
+          schema: { $ref: "#/components/schemas/Error" }
+    NoProcesable:
+      description: Semánticamente inválido (422) — `software_no_encontrado`, `cantidad_invalida`, `sin_resultado`
+      content:
+        application/json:
+          schema: { $ref: "#/components/schemas/Error" }
+    LimiteIA:
+      description: Límite diario de IA de la organización agotado (429, `limite_ia`); incluye `Retry-After`
+      headers:
+        Retry-After:
+          schema: { type: integer }
+          description: Segundos hasta la medianoche UTC
+      content:
+        application/json:
+          schema: { $ref: "#/components/schemas/Error" }
+    IAInvalida:
+      description: La respuesta del modelo no superó la validación tras un reintento (502, `ia_respuesta_invalida`) o el proveedor falló (`ia_error_proveedor`)
+      content:
+        application/json:
+          schema: { $ref: "#/components/schemas/Error" }
+    IANoDisponible:
+      description: IA no configurada o no disponible (503, `ia_no_disponible`); la app sigue en modo manual
+      content:
+        application/json:
+          schema: { $ref: "#/components/schemas/Error" }
+
+  schemas:
+    Id:
+      type: string
+      pattern: "^[A-Za-z0-9_-]{1,64}$"
+      examples: ["sw_ab12cd34", "ev_9f8e7d"]
+    Fecha:
+      type: string
+      format: date-time
+    Estado:
+      type: string
+      enum: ["En proceso", "Completada", "Cancelada"]
+    Nivel:
+      type: integer
+      minimum: 1
+      maximum: 4
+    Foda:
+      type: string
+      enum: [Fortaleza, Oportunidad, Debilidad, Amenaza]
+    ConteoFoda:
+      type: object
+      required: [Fortaleza, Oportunidad, Debilidad, Amenaza]
+      properties:
+        Fortaleza: { type: integer }
+        Oportunidad: { type: integer }
+        Debilidad: { type: integer }
+        Amenaza: { type: integer }
+
+    Error:
+      type: object
+      required: [error]
+      properties:
+        error:
+          type: object
+          required: [codigo, mensaje]
+          properties:
+            codigo:
+              type: string
+              examples: [entrada_invalida, json_invalido, no_encontrado, ya_existe, tiene_evaluaciones, conflicto, cuerpo_demasiado_grande, software_no_encontrado, cantidad_invalida, sin_resultado, limite_ia, ia_respuesta_invalida, ia_error_proveedor, ia_no_disponible, metodo_no_permitido, error_interno]
+            mensaje: { type: string }
+            detalles:
+              type: array
+              items:
+                type: object
+                properties:
+                  campo: { type: string }
+                  mensaje: { type: string }
+
+    Dimension:
+      type: object
+      required: [id, nombre]
+      properties:
+        id: { type: string, examples: ["D1"] }
+        nombre: { type: string }
+    Subfactor:
+      type: object
+      required: [id, nombre]
+      properties:
+        id: { type: string, examples: ["F01-S01"] }
+        nombre: { type: string }
+    FactorBase:
+      type: object
+      required: [id, nombre, dimension, importanciaSugerida, alcance]
+      properties:
+        id: { type: string, examples: ["F01"] }
+        nombre: { type: string }
+        dimension: { type: string }
+        importanciaSugerida: { $ref: "#/components/schemas/Nivel" }
+        alcance: { type: string, enum: [Interno, Externo, Ambos] }
+    Factor:
+      allOf:
+        - $ref: "#/components/schemas/FactorBase"
+        - type: object
+          required: [subfactores]
+          properties:
+            subfactores: { type: array, items: { $ref: "#/components/schemas/Subfactor" } }
+    Catalogo:
+      type: object
+      description: Misma forma que window.GUIOS_DATA (app/js/data.js)
+      required: [version, dimensiones, factores, nivelesImportancia, nivelesSubfactor, umbralFoda, reglas]
+      properties:
+        version: { type: string }
+        dimensiones: { type: array, items: { $ref: "#/components/schemas/Dimension" } }
+        factores: { type: array, items: { $ref: "#/components/schemas/Factor" } }
+        nivelesImportancia: { type: array, items: { type: string }, minItems: 4, maxItems: 4 }
+        nivelesSubfactor: { type: array, items: { type: string }, minItems: 4, maxItems: 4 }
+        umbralFoda: { type: number }
+        reglas:
+          type: array
+          items:
+            type: object
+            properties:
+              codigo: { type: string, enum: [A, B, C] }
+              titulo: { type: string }
+              tono: { type: string }
+              condicion:
+                type: [object, "null"]
+                properties:
+                  foda: { type: array, items: { type: string } }
+                  importancia_relativa: { type: array, items: { type: string } }
+              texto: { type: string }
+        ayuda: { type: object, description: Textos de ayuda contextual (si el catálogo los incluye) }
+
+    Etiqueta:
+      type: object
+      required: [nombre]
+      properties:
+        nombre: { type: string, minLength: 1, maxLength: 40 }
+        color: { type: string, enum: [primary, success, warning, danger, info, neutral], default: neutral }
+    SoftwareInput:
+      type: object
+      required: [nombre]
+      properties:
+        id: { $ref: "#/components/schemas/Id" }
+        nombre: { type: string, minLength: 1, maxLength: 120 }
+        version: { type: string, maxLength: 40 }
+        licencia: { type: string, maxLength: 60, examples: ["FLOSS copyleft (GPL, AGPL)"] }
+        proveedor: { type: string, maxLength: 120 }
+        url: { type: string, maxLength: 255, description: "http(s) o vacío" }
+        notas: { type: string, maxLength: 5000 }
+        etiquetas: { type: array, maxItems: 20, items: { $ref: "#/components/schemas/Etiqueta" } }
+        creadoEn: { $ref: "#/components/schemas/Fecha" }
+        actualizadoEn: { $ref: "#/components/schemas/Fecha" }
+    Software:
+      allOf:
+        - $ref: "#/components/schemas/SoftwareInput"
+        - type: object
+          required: [id, nombre, version, licencia, proveedor, url, notas, etiquetas, creadoEn, actualizadoEn]
+
+    DatosSoftwareEvaluacion:
+      type: object
+      properties:
+        nombre: { type: string, maxLength: 120 }
+        version: { type: string, maxLength: 40 }
+        licencia: { type: string, maxLength: 60 }
+        proveedor: { type: string, maxLength: 120 }
+        organizacion: { type: string, maxLength: 150 }
+        evaluador: { type: string, maxLength: 120 }
+    EvaluacionInput:
+      type: object
+      required: [id]
+      description: "El cliente genera el id. Ids de factor/subfactor deben existir en el catálogo."
+      properties:
+        id: { $ref: "#/components/schemas/Id" }
+        softwareId: { oneOf: [{ $ref: "#/components/schemas/Id" }, { type: "null" }] }
+        software: { $ref: "#/components/schemas/DatosSoftwareEvaluacion" }
+        decisor:
+          type: object
+          description: "Importancia del decisor por factor (1..4). Los ausentes valen 1, como en engine.evaluate."
+          additionalProperties: { $ref: "#/components/schemas/Nivel" }
+          examples: [{ F01: 3 }]
+        alcance:
+          type: object
+          description: "Solo factores con alcance «Ambos». Ausente = Interno."
+          additionalProperties: { type: string, enum: [Interno, Externo] }
+        subfactores:
+          type: object
+          additionalProperties: { $ref: "#/components/schemas/Nivel" }
+          examples: [{ "F01-S01": 4 }]
+        observaciones:
+          type: object
+          additionalProperties:
+            type: object
+            properties:
+              texto: { type: string, maxLength: 2000 }
+              enlace: { type: string, maxLength: 500, description: "http(s) o vacío" }
+        origenIA:
+          type: object
+          additionalProperties:
+            type: object
+            required: [valor, confianza]
+            properties:
+              valor: { $ref: "#/components/schemas/Nivel" }
+              confianza: { type: number, minimum: 0, maximum: 1 }
+              justificacion: { type: string, maxLength: 400 }
+        resumen:
+          type: [object, "null"]
+          properties:
+            texto: { type: string, maxLength: 6000 }
+            generadoIA: { type: boolean }
+            fecha: { $ref: "#/components/schemas/Fecha" }
+        plantilla:
+          type: [object, "null"]
+          properties:
+            id: { $ref: "#/components/schemas/Id" }
+            nombre: { type: string, maxLength: 120 }
+        paso1Confirmado: { type: boolean }
+        estado: { $ref: "#/components/schemas/Estado" }
+        catalogoVersion: { type: string, maxLength: 20 }
+        creadoEn: { $ref: "#/components/schemas/Fecha" }
+        actualizadoEn: { $ref: "#/components/schemas/Fecha" }
+        revisionBase: { type: integer, minimum: 0, description: "Última revisión del servidor conocida por el cliente (0 si nunca se sincronizó)" }
+    Evaluacion:
+      allOf:
+        - $ref: "#/components/schemas/EvaluacionInput"
+        - type: object
+          required: [id, decisor, alcance, subfactores, estado, catalogoVersion, creadoEn, actualizadoEn, revision, resultado]
+          properties:
+            revision: { type: integer, minimum: 1 }
+            completadoEn: { type: [string, "null"], format: date-time }
+            resultado: { $ref: "#/components/schemas/Resultado" }
+    Resultado:
+      type: object
+      description: Salida de engine.evaluate(GUIOS_DATA, estado)
+      properties:
+        factores:
+          type: array
+          items:
+            type: object
+            properties:
+              id: { type: string }
+              nombre: { type: string }
+              dimension: { type: string }
+              importanciaSugerida: { type: integer }
+              importanciaDecisor: { type: integer }
+              importanciaRelativa: { type: string }
+              importanciaRelativaIdx: { type: integer }
+              relevante: { type: boolean }
+              alcance: { type: string }
+              subfactoresTotal: { type: integer }
+              subfactoresRespondidos: { type: integer }
+              completo: { type: boolean }
+              ponderacion: { type: [number, "null"] }
+              foda: { oneOf: [{ $ref: "#/components/schemas/Foda" }, { type: "null" }] }
+        relevantes: { type: integer }
+        pendientes: { type: array, items: { type: string } }
+        foda: { $ref: "#/components/schemas/ConteoFoda" }
+        positivos: { type: integer }
+        negativos: { type: integer }
+        dimensiones:
+          type: array
+          items:
+            type: object
+            properties:
+              id: { type: string }
+              nombre: { type: string }
+              factoresEvaluados: { type: integer }
+              ponderacion: { type: [number, "null"] }
+        recomendacion:
+          type: [object, "null"]
+          properties:
+            codigo: { type: string, enum: [A, B, C] }
+            titulo: { type: string }
+            tono: { type: string }
+            texto: { type: string }
+            factoresCriticos:
+              type: array
+              items:
+                type: object
+                properties:
+                  id: { type: string }
+                  nombre: { type: string }
+                  foda: { type: string }
+                  importanciaRelativa: { type: string }
+    EvaluacionResumen:
+      type: object
+      required: [id, software, estado, recomendacion, foda, avance, actualizadoEn, revision]
+      properties:
+        id: { $ref: "#/components/schemas/Id" }
+        softwareId: { type: [string, "null"] }
+        software:
+          type: object
+          properties:
+            nombre: { type: string }
+            version: { type: string }
+        evaluador: { type: string }
+        estado: { $ref: "#/components/schemas/Estado" }
+        recomendacion: { type: [string, "null"], enum: [A, B, C, null] }
+        foda: { $ref: "#/components/schemas/ConteoFoda" }
+        avance: { type: integer, minimum: 0, maximum: 100, description: "% respondido de los factores relevantes (engine.progress)" }
+        catalogoVersion: { type: string }
+        creadoEn: { $ref: "#/components/schemas/Fecha" }
+        actualizadoEn: { $ref: "#/components/schemas/Fecha" }
+        completadoEn: { type: [string, "null"], format: date-time }
+        revision: { type: integer }
+    ConflictoEvaluacion:
+      allOf:
+        - $ref: "#/components/schemas/Error"
+        - type: object
+          required: [servidor]
+          properties:
+            servidor: { $ref: "#/components/schemas/Evaluacion" }
+
+    PlantillaInput:
+      type: object
+      required: [nombre]
+      properties:
+        id: { $ref: "#/components/schemas/Id" }
+        nombre: { type: string, minLength: 1, maxLength: 120 }
+        decisor: { type: object, additionalProperties: { $ref: "#/components/schemas/Nivel" } }
+        alcance: { type: object, additionalProperties: { type: string, enum: [Interno, Externo] } }
+        creadoEn: { $ref: "#/components/schemas/Fecha" }
+        actualizadoEn: { $ref: "#/components/schemas/Fecha" }
+    Plantilla:
+      allOf:
+        - $ref: "#/components/schemas/PlantillaInput"
+        - type: object
+          required: [id, nombre, decisor, alcance, creadoEn, actualizadoEn]
+
+    SyncRespuesta:
+      type: object
+      required: [aceptados, conflictos, errores, servidor]
+      properties:
+        aceptados:
+          type: array
+          items:
+            type: object
+            properties:
+              tipo: { type: string, enum: [software, evaluacion, plantilla] }
+              id: { type: string }
+              revision: { type: [integer, "null"], description: "null en softwares y plantillas" }
+        conflictos:
+          type: array
+          items:
+            type: object
+            properties:
+              tipo: { type: string, const: evaluacion }
+              id: { type: string }
+              servidor: { $ref: "#/components/schemas/Evaluacion" }
+        errores:
+          type: array
+          items:
+            type: object
+            properties:
+              tipo: { type: string }
+              id: { type: [string, "null"] }
+              error: { $ref: "#/components/schemas/Error/properties/error" }
+        servidor:
+          type: object
+          properties:
+            softwares: { type: array, items: { $ref: "#/components/schemas/Software" } }
+            evaluaciones: { type: array, items: { $ref: "#/components/schemas/EvaluacionResumen" } }
+            plantillas: { type: array, items: { $ref: "#/components/schemas/Plantilla" } }
+
+    Dashboard:
+      type: object
+      required: [porEstado, recomendaciones, foda, dimensiones, ultimas, lineaTiempo]
+      properties:
+        total: { type: integer }
+        completadas: { type: integer }
+        porEstado:
+          type: object
+          properties:
+            En proceso: { type: integer }
+            Completada: { type: integer }
+            Cancelada: { type: integer }
+        recomendaciones:
+          type: object
+          properties:
+            A: { type: integer }
+            B: { type: integer }
+            C: { type: integer }
+        foda: { $ref: "#/components/schemas/ConteoFoda" }
+        dimensiones:
+          type: array
+          items:
+            type: object
+            properties:
+              id: { type: string }
+              nombre: { type: string }
+              ponderacion: { type: [number, "null"] }
+              evaluaciones: { type: integer }
+        ultimas: { type: array, maxItems: 5, items: { $ref: "#/components/schemas/EvaluacionResumen" } }
+        lineaTiempo:
+          type: array
+          items:
+            type: object
+            properties:
+              id: { type: string }
+              fecha: { $ref: "#/components/schemas/Fecha" }
+              softwareId: { type: [string, "null"] }
+              software: { type: string }
+              recomendacion: { type: string, enum: [A, B, C] }
+              tono: { type: string }
+
+    Comparacion:
+      type: object
+      required: [evaluaciones]
+      properties:
+        evaluaciones:
+          type: array
+          minItems: 2
+          maxItems: 5
+          items:
+            type: object
+            properties:
+              id: { type: string }
+              softwareId: { type: [string, "null"] }
+              software: { type: object, properties: { nombre: { type: string }, version: { type: string } } }
+              estado: { $ref: "#/components/schemas/Estado" }
+              actualizadoEn: { $ref: "#/components/schemas/Fecha" }
+              recomendacion: { type: [string, "null"] }
+              foda: { $ref: "#/components/schemas/ConteoFoda" }
+              pendientes: { type: array, items: { type: string } }
+              dimensiones:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id: { type: string }
+                    nombre: { type: string }
+                    ponderacion: { type: [number, "null"] }
+                    factoresEvaluados: { type: integer }
+              factores:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id: { type: string }
+                    nombre: { type: string }
+                    dimension: { type: string }
+                    ponderacion: { type: [number, "null"] }
+                    foda: { type: [string, "null"] }
+                    importanciaRelativa: { type: string }
+                    relevante: { type: boolean }
+        dimensiones:
+          description: Filas comparables de engine.compare
+          type: array
+          items: { $ref: "#/components/schemas/FilaComparada" }
+        factores:
+          type: array
+          items: { $ref: "#/components/schemas/FilaComparada" }
+    FilaComparada:
+      type: object
+      properties:
+        id: { type: string }
+        nombre: { type: string }
+        valores:
+          type: array
+          items:
+            type: [object, "null"]
+            properties:
+              ponderacion: { type: [number, "null"] }
+              foda: { type: [string, "null"] }
+              importanciaRelativa: { type: string }
+              relevante: { type: boolean }
+        mejor: { type: integer, description: "Índice con la mayor ponderación; -1 si hay empate o no hay datos" }
+
+    SugerenciaIA:
+      type: object
+      required: [subfactorId, valor, confianza, justificacion]
+      properties:
+        subfactorId: { type: string }
+        valor: { $ref: "#/components/schemas/Nivel" }
+        confianza: { type: number, minimum: 0, maximum: 1 }
+        justificacion: { type: string, maxLength: 400 }

@@ -22,3 +22,6 @@ docs/entregables/*.pdf
 
 # Configuracion local de Claude Code
 .claude/settings.local.json
+
+# Base de datos local del servidor REST (api/)
+api/data/
