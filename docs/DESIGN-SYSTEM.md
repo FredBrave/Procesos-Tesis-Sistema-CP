@@ -6,7 +6,7 @@ Implementación en CSS del UI kit de referencia (capturas: Pop-Up, List, Action 
 |---|---|
 | `tokens.css` | Variables CSS (`:root`) para color, tipografía, espaciado, radios, sombras; variante oscura bajo `[data-theme="dark"]` |
 | `components.css` | Componentes reutilizables, sin conocimiento de la app |
-| `app.css` | Layout de las cinco pantallas (Inicio, pasos 1-3 y Panel), sidebar, impresión y breakpoints |
+| `app.css` | Layout de las pantallas (Inicio, pasos 1-3, Panel, Evaluaciones, Detalle, Informe, Comparar, Softwares, Ficha, Guía y plantillas, Configuración, Datos), sidebar, impresión y breakpoints |
 
 ## Tokens
 
@@ -33,6 +33,8 @@ Implementación en CSS del UI kit de referencia (capturas: Pop-Up, List, Action 
 | `--sidebar-fg / -fg-2 / -fg-3` | `#ffffff` / `#aeb4e8` / `#7f88c9` | Texto del sidebar: principal, secundario y atenuado |
 | `--sidebar-hover / -active / -line` | blancos translúcidos | Estados y conectores sobre la superficie de marca |
 | `--sidebar-accent` | `#8b95ff` | Indicador de la sección actual, paso actual y barra de progreso del sidebar |
+| `--series-1 … -5` | azul `#2a78d6`, naranja `#eb6834`, aguamarina `#1baf7a`, ámbar `#eda100`, magenta `#e87ba4` (variantes para oscuro) | Series categóricas de los gráficos, en orden fijo. Validadas para daltonismo; como dos tonos quedan por debajo de 3:1 sobre blanco, **siempre** van con leyenda numerada y tabla equivalente |
+| `--chart-grid` | `#e5e6eb` | Anillos y ejes de los gráficos |
 
 ## Componentes (clase → equivalente del UI kit)
 
@@ -65,7 +67,7 @@ Implementación en CSS del UI kit de referencia (capturas: Pop-Up, List, Action 
 | `.foda-board` (`.foda-q`, `.foda-core`) | — | **Matriz FODA**: cuatro cuadrantes sólidos (`--q` = `--foda-*-solid`) con icono, título, conteo y lista de factores en blanco con su cumplimiento medio; la fila inferior va en espejo (título en el borde exterior). En el centro, un núcleo circular F·O·D·A con anillo de cuatro colores (`conic-gradient`). Encima, `.foda-axis` (origen interno / externo). En móvil: una columna, sin núcleo y con la letra junto al título |
 | `.foda-balance` | — | Balance a favor / en contra en la cabecera de la tarjeta FODA: dos cifras y barra proporcional |
 | `.toast` | — | Notificación efímera |
-| `.sidebar` (`.side-top`, `.side-nav`, `.side-link`, `.side-title`, `.side-bottom`) | List + Card | Barra lateral fija de 300 px sobre superficie sólida de marca: logo; Inicio y Panel (`app.js → NAV_MAIN`); línea de tiempo de los pasos; «Próximamente» (`NAV_EXTRA`, `soon: true` = enlace atenuado con `.soon`). La sección actual lleva un indicador vertical de 3 px en `--sidebar-accent`. Por debajo de 960 px se convierte en cajón (`.is-open`) con `.sidebar-backdrop` |
+| `.sidebar` (`.side-top`, `.side-nav`, `.side-link`, `.side-title`, `.side-bottom`) | List + Card | Barra lateral fija de 300 px sobre superficie sólida de marca: logo; Inicio y Panel (`app.js → NAV_MAIN`); línea de tiempo de los pasos; grupos Gestión y Sistema (`NAV_GROUPS`); `.soon.is-alert` muestra un contador rojo (p. ej. conflictos de sincronización). La sección actual lleva un indicador vertical de 3 px en `--sidebar-accent`. Por debajo de 960 px se convierte en cajón (`.is-open`) con `.sidebar-backdrop` |
 | `.side-eval` | Card: Horizontal | Tarjeta de la evaluación en curso en el pie: avatar con la inicial del software, nombre, estado (o recomendación), % y barra; enlaza al Panel |
 | `.side-actions > .side-tool` | — | Barra de herramientas del pie con icono + etiqueta: tema (Oscuro/Claro), Ayuda y Más (menú `.menu-up`) |
 | `.side-steps > .side-step` | Page Control (vertical) | **Línea de tiempo**: nodo de 32 px (`--node`) con el número del paso o un check al completarse, riel vertical continuo entre nodos que se colorea al avanzar, y texto en dos niveles (`.step-title`, `.step-state`). El enlace lleva `aria-label` completo («Paso 1 de 3: …»); `.is-current`, `.is-done` |
@@ -78,6 +80,23 @@ Implementación en CSS del UI kit de referencia (capturas: Pop-Up, List, Action 
 | `.subfactor-row` | List | Pregunta del paso 2 con su `.choice`. `.is-active` (fondo suave y barra izquierda) marca la pregunta que responden las teclas 1-4; `.is-answered` atenúa el texto y pone un check en el índice |
 | `.quick-fill` | — | Franja del paso 2: «Responder las n pendientes como: Cumple / Parcial / No cumple» (no pisa las ya respondidas) |
 | `kbd` | — | Tecla de atajo |
+| `.tabs > .tab` | — | Pestañas (`role="tab"`, `aria-selected`) de *Guía y plantillas* |
+| `.tag`, `.tag-{primary,success,warning,danger,info,neutral}`, `.tag-row` | List → chip | Etiqueta de color de un software, con icono; dentro de formularios lleva botón de quitar |
+| `.toolbar` + `.search` | — | Barra de filtros encima de una lista: búsqueda con icono, `select-sm` y contador. El campo conserva el foco al re-renderizar |
+| `.rows > .row-item` | List | Fila con varias acciones (historial, versiones): casilla, avatar, `.row-main` (título enlazado, metadatos, `.row-meta` con badges) y `.row-actions`. En móvil las acciones bajan a una segunda línea |
+| `.help-box` + `.level-list` | — | Ayuda plegable de cada paso (HU-14) con un recuadro por nivel de la escala, coloreado con `--c` |
+| `.template-bar` | — | Franja del paso 1: plantilla aplicada, aplicar otra y guardar como plantilla |
+| `.note-btn`, `.note-editor` | — | Observación y enlace de evidencia por pregunta del paso 2 |
+| `.ia-suggestion` | — | Sugerencia de IA bajo la pregunta: valor, confianza, justificación y botones Aceptar / Descartar. La respuesta aceptada lleva un `.badge-xs` «IA» |
+| `.hbars > .hbar` | — | Barras horizontales de una serie (FODA) con etiqueta y valor en texto |
+| `.chart` (SVG de `charts.js`) | — | Radar por dimensión: anillos 1-4, anillo discontinuo del umbral FODA, áreas con `--s` al 12 % y puntos con `<title>` como tooltip. Siempre con tabla equivalente en `.chart-table` |
+| `.timeline` | Page Control (vertical) | Línea de tiempo del panel: círculo con la letra de la recomendación (relleno `--foda-*-solid`), software y fecha; cada elemento abre el informe |
+| `.meta-grid`, `.report-meta` | — | Rejilla de datos (3 → 2 → 1 columnas) del detalle y de la portada del informe |
+| `.pick` + `.series-key` | — | Selección de evaluaciones en el comparador: el número y el borde llevan el color de su serie |
+| `.compare-table` | — | Tabla del comparador: grupos (`.group-row`), mejor valor de la fila con estrella y negrita (`.is-best`), primera columna fija en móvil |
+| `.link-btn` | — | Botón con aspecto de enlace dentro de un texto |
+| `.popup.popup-wide` | Pop-Up | Pop-up para formularios (alta de software). `onConfirm` puede devolver `false` para mantenerlo abierto con un error |
+| `.admin-savebar` | — | Barra fija inferior del editor de la guía con errores de validación y «Guardar como versión nueva» |
 
 Iconos: SVG inline estilo *feather* (24 px, trazo 2) definidos en `app.js → ICONS`. Añadir uno nuevo = añadir la ruta al diccionario.
 

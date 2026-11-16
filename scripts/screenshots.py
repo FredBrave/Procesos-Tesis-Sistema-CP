@@ -42,6 +42,19 @@ SHOTS = [
     ("09-panel-vacio", "panel", "?theme=light", 1280, 800),
     ("10-paso-3-4-vacio", "paso-3-4", "?theme=light", 1280, 900),
     ("11-movil-paso-1-2", "paso-1-2", "?theme=light", 500, 1400),
+    # Pantallas de gestión (Sprints 1-4). El demo carga Moodle, Chamilo y Open edX.
+    ("12-evaluaciones", "evaluaciones", "?demo=1&theme=light", 1280, 900),
+    ("13-detalle", "evaluacion/ev_demo_moodle", "?demo=1&theme=light", 1280, 1400),
+    ("14-informe", "informe/ev_demo_moodle", "?demo=1&theme=light", 1280, 2400),
+    ("15-comparar", "comparar/ev_demo_moodle,ev_demo_chamilo", "?demo=1&theme=light", 1280, 2000),
+    ("16-softwares", "softwares", "?demo=1&theme=light", 1280, 800),
+    ("17-ficha-software", "software/sw_demo_moodle", "?demo=1&theme=light", 1280, 900),
+    ("18-administracion", "administracion", "?demo=1&theme=light", 1280, 1100),
+    ("19-configuracion", "configuracion", "?theme=light", 1280, 1100),
+    ("20-datos", "datos", "?demo=1&theme=light", 1280, 1300),
+    ("21-comparar-oscuro", "comparar/ev_demo_moodle,ev_demo_chamilo", "?demo=1&theme=dark", 1280, 1200),
+    ("22-movil-evaluaciones", "evaluaciones", "?demo=1&theme=light", 500, 1200),
+    ("23-movil-informe", "informe/ev_demo_moodle", "?demo=1&theme=light", 500, 2400),
 ]
 
 

@@ -4,11 +4,12 @@ Este archivo lo lee Claude Code (y otros asistentes) al abrir el repositorio. Re
 
 ## Qué es
 
-Sistema de evaluación de adopción de software basado en la guía GUIOS (tesis doctoral Rea Sánchez, 2022). Proyecto académico (Ingeniería de Software, asignatura Metodologías Ágiles) gestionado con SCRUM. El entregable ejecutable es `app/index.html`: **debe seguir funcionando al abrirse con doble clic** (protocolo `file://`, sin servidor, sin build, sin `fetch()`, sin ES modules).
+Sistema de evaluación de adopción de software basado en la guía GUIOS (tesis doctoral Rea Sánchez, 2022). Proyecto académico (Ingeniería de Software, asignatura Metodologías Ágiles) gestionado con SCRUM. El entregable ejecutable es `app/index.html`: **debe seguir funcionando al abrirse con doble clic** (protocolo `file://`, sin servidor, sin build, sin `fetch()` de archivos locales, sin ES modules). El único `fetch()` permitido es el de `app/js/api.js` hacia el servidor opcional (`api/`), y la app debe funcionar igual si el servidor no está.
 
 ## Comandos
 
-- `npm test` — pruebas del motor (obligatorio antes de cada commit que toque `engine.js` o `data/`).
+- `npm test` — pruebas del motor, del almacén local y de la API (obligatorio antes de cada commit que toque `engine.js`, `store.js`, `api/` o `data/`). Requiere Node ≥ 22.13 (`node:sqlite`).
+- `npm run api` — servidor REST opcional en :8787 (`IA_PROVEEDOR=simulado` para probar la IA sin clave).
 - `npm run build:data` — regenera `app/js/data.js` y `db/seed.sql`. **Nunca editar esos dos archivos a mano.**
 - `npm run serve` — servidor local en :8080 (opcional).
 - Verificación visual: abrir `app/index.html?demo=1#paso-5-6` (carga una evaluación de ejemplo).
@@ -19,10 +20,11 @@ Sistema de evaluación de adopción de software basado en la guía GUIOS (tesis 
 2. **Lógica de cálculo solo en `app/js/engine.js`** (pura, sin DOM). La UI (`app.js`) solo llama a `GuiosEngine.evaluate()`. Cada cambio al algoritmo requiere un test en `tests/`.
 3. **Algoritmo fiel al prototipo original** (`legacy/main.py`) y a la matriz `legacy/MATRIZ RECOMENDACION GUIOSAD 2021.xlsx`. Escalas 1..4 (no Likert 1..5). No "mejorar" el algoritmo sin una historia de usuario que lo pida.
 4. **Diseño**: usar únicamente tokens de `app/css/tokens.css` y componentes de `app/css/components.css` (ver `docs/DESIGN-SYSTEM.md`). No introducir colores/tamaños literales en `app.css` ni estilos inline salvo variables CSS (`style="--q-color:..."`).
-5. **Sin dependencias de runtime.** Nada de npm packages en la app. Node/Python solo para tests y generadores.
+5. **Sin dependencias de runtime.** Nada de npm packages en la app ni en `api/` (solo módulos de Node: `node:http`, `node:sqlite`, `fetch`). Python solo para generadores.
 6. **Idioma**: UI, comentarios, commits y documentación en español. Identificadores de código en inglés (`evaluate`, `relativeIndex`), claves de datos en español (`importanciaSugerida`, `alcance`) porque reflejan el vocabulario de la guía.
 7. **Accesibilidad**: todo control con etiqueta (`aria-label` o `<label>`), foco visible, contraste AA, funcionar a 390 px de ancho.
 8. **Commits**: Conventional Commits en español (`feat:`, `fix:`, `docs:`, `data:`, `design:`, `chore:`). Un commit por historia de usuario o cambio atómico.
+9. **IA**: la clave de Anthropic solo vive en el servidor (`ANTHROPIC_API_KEY`). Ninguna sugerencia se guarda sin que el evaluador la acepte, todo lo generado con IA se marca, y la recomendación siempre sale de `engine.js`, nunca del modelo.
 
 ## Mapa rápido
 
@@ -32,8 +34,13 @@ Sistema de evaluación de adopción de software basado en la guía GUIOS (tesis 
 | Cambiar la importancia sugerida o alcance de un factor | `data/factors.csv` |
 | Cambiar el texto o la condición de una recomendación | `data/recomendaciones.json` |
 | Cambiar una fórmula / umbral | `engine.js` + test en `tests/engine.test.js` (`umbralFoda` vive en `recomendaciones.json`) |
-| Añadir una pantalla | `SCREENS[]` y una función `renderX()` en `app.js`; estilos en `app.css` |
-| Añadir una sección al sidebar | `NAV_EXTRA[]` en `app.js` (`soon: true` mientras no exista la pantalla); los pasos salen de `SCREENS[]` |
+| Añadir una pantalla | `SCREENS[]` y `RENDER{}` con una función `renderX()` en `app.js`; estilos en `app.css`. Las pantallas con parámetro usan el hash `#id/param` |
+| Añadir una sección al sidebar | `NAV_MAIN` o `NAV_GROUPS` en `app.js`; los pasos salen de `SCREENS[]` |
+| Cambiar qué se guarda en el navegador, migraciones o importar/exportar | `app/js/store.js` + test en `tests/store.test.js` |
+| Indicadores del panel o del comparador | `summarize()` / `compare()` en `engine.js` (los usan la app y el servidor) |
+| Gráficos | `app/js/charts.js` (SVG); colores de series `--series-1..5` en `tokens.css` |
+| Endpoints, base de datos del servidor o IA | `api/` (ver `api/README.md`, `api/openapi.yaml`) + test en `api/tests/` |
+| Sincronización cliente-servidor | `syncDb()` en `app/js/api.js` + `api/tests/cliente-sync.test.js` |
 | Mostrar más información en un paso | Preferir un `<details class="details">` o el interruptor "Ver cálculo"; las pantallas deben quedar simples por defecto |
 | Cambiar colores / tipografía | `tokens.css` (light y dark) |
 | Cambiar el esquema de BD | `db/schema.sql`; el seed se regenera |
