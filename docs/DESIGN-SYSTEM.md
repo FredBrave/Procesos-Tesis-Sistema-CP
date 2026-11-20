@@ -19,8 +19,10 @@ Implementación en CSS del UI kit de referencia (capturas: Pop-Up, List, Action 
 | `--color-surface` | `#ffffff` | Tarjetas, header, footer, pop-ups |
 | `--color-surface-2 / -3` | `#f7f7f9` / `#efeff3` | Filas de listas, tablas, segmented |
 | `--color-border` | `#e5e6eb` | Bordes de tarjetas y separadores |
-| `--color-text / -2 / -3` | `#17171f` / `#6b6f80` / `#a0a3b1` | Texto principal, secundario, deshabilitado |
-| `--color-danger / success / warning` | `#ef4444` / `#1f9d61` / `#d98a0b` | Semánticos (+ variantes `-subtle`) |
+| `--color-text / -2 / -3` | `#17171f` / `#5f6374` / `#a0a3b1` | Texto principal, secundario y deshabilitado. `-3` solo para estados deshabilitados o decorativos: no cumple AA como texto informativo |
+| `--color-danger / success / warning` | `#ef4444` / `#1f9d61` / `#d98a0b` | Semánticos para rellenos, bordes e iconos (+ variantes `-subtle`). **No usarlos como color de texto**: no llegan a 4.5:1 |
+| `--color-{primary,success,warning,danger}-text` | `#3f4be0` / `#157a45` / `#8a5300` / `#c42020` (oscuro: `#a3aaff` / `#4cc98a` / `#f0b14a` / `#ff8080`) | Color de texto de cada tono: insignias, etiquetas, botones secundarios y fantasma, enlaces. Cumplen AA sobre la superficie y sobre su `-subtle` en ambos temas |
+| `--color-primary-solid` / `-solid-hover` | `#4f5bf5` / `#3f4be0` en ambos temas | Relleno de marca bajo texto blanco (botón primario, avatares, nodos). En oscuro `--color-primary` es más claro y no alcanza 4.5:1 con blanco |
 | `--foda-*` | fortaleza `#1f9d61`, oportunidad `#4f5bf5`, debilidad `#d98a0b`, amenaza `#ef4444` | Colores de la matriz FODA |
 | `--foda-*-solid` | fortaleza `#15803d`, oportunidad `#4f5bf5`, debilidad `#b45309`, amenaza `#dc2626` | Relleno de los cuadrantes FODA y del veredicto; texto blanco encima con contraste ≥ 4.8:1 (AA) |
 | `--on-solid` / `--on-solid-veil` | `#fff` / blanco al 20 % | Texto e iconos sobre rellenos sólidos; fondo del icono del cuadrante |

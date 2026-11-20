@@ -22,7 +22,7 @@
 
   /* Texto */
   --color-text: #17171f;
-  --color-text-2: #6b6f80;
+  --color-text-2: #5f6374;
   --color-text-3: #a0a3b1;
 
   /* Semánticos */
@@ -34,6 +34,16 @@
   --color-warning-subtle: #fff4df;
   --color-info: var(--color-primary);
   --color-info-subtle: var(--color-primary-subtle);
+
+  /* Texto de cada tono: cumple AA (≥ 4.5:1) sobre la superficie y sobre su fondo -subtle.
+     Usar estos, no los tonos de arriba, cuando el color va en el texto. */
+  --color-primary-text: #3f4be0;
+  --color-success-text: #157a45;
+  --color-warning-text: #8a5300;
+  --color-danger-text: #c42020;
+  /* Relleno de marca bajo texto blanco (botón primario, avatares): ≥ 5:1 con blanco */
+  --color-primary-solid: #4f5bf5;
+  --color-primary-solid-hover: #3f4be0;
 
   /* Sidebar (superficie sólida de marca) */
   --sidebar-bg: #232a6b;
@@ -128,6 +138,12 @@
     --color-danger-subtle: #3a1f21;
     --color-success-subtle: #16301f;
     --color-warning-subtle: #35290f;
+    --color-primary-text: #a3aaff;
+    --color-success-text: #4cc98a;
+    --color-warning-text: #f0b14a;
+    --color-danger-text: #ff8080;
+    --color-primary-solid: #4f5bf5;
+    --color-primary-solid-hover: #3f4be0;
     --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.4);
     --shadow-lg: 0 12px 32px rgba(0, 0, 0, 0.5);
     --sidebar-bg: #16171f;
@@ -165,6 +181,12 @@
   --color-danger-subtle: #3a1f21;
   --color-success-subtle: #16301f;
   --color-warning-subtle: #35290f;
+  --color-primary-text: #a3aaff;
+  --color-success-text: #4cc98a;
+  --color-warning-text: #f0b14a;
+  --color-danger-text: #ff8080;
+  --color-primary-solid: #4f5bf5;
+  --color-primary-solid-hover: #3f4be0;
   --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.4);
   --shadow-lg: 0 12px 32px rgba(0, 0, 0, 0.5);
   --sidebar-bg: #16171f;

@@ -101,18 +101,18 @@ textarea {
   cursor: not-allowed;
 }
 .btn-primary {
-  background: var(--color-primary);
+  background: var(--color-primary-solid);
   color: var(--color-on-primary);
 }
 .btn-primary:hover:not(:disabled) {
-  background: var(--color-primary-hover);
+  background: var(--color-primary-solid-hover);
 }
 .btn-primary:active:not(:disabled) {
   background: var(--color-primary-active);
 }
 .btn-secondary {
   background: var(--color-surface);
-  color: var(--color-primary);
+  color: var(--color-primary-text);
   border-color: var(--color-primary);
 }
 .btn-secondary:hover:not(:disabled) {
@@ -120,20 +120,20 @@ textarea {
 }
 .btn-ghost {
   background: transparent;
-  color: var(--color-primary);
+  color: var(--color-primary-text);
 }
 .btn-ghost:hover:not(:disabled) {
   background: var(--color-primary-subtle);
 }
 .btn-ghost.is-danger {
-  color: var(--color-danger);
+  color: var(--color-danger-text);
 }
 .btn-ghost.is-danger:hover:not(:disabled) {
   background: var(--color-danger-subtle);
 }
 .btn-danger {
   background: var(--color-surface);
-  color: var(--color-danger);
+  color: var(--color-danger-text);
   border-color: var(--color-danger);
 }
 .btn-danger:hover:not(:disabled) {
@@ -227,17 +227,17 @@ textarea.input {
 }
 .select.is-level-4 {
   border-color: var(--color-success);
-  color: var(--color-success);
+  color: var(--color-success-text);
   font-weight: 500;
 }
 .select.is-level-3 {
   border-color: var(--color-primary);
-  color: var(--color-primary);
+  color: var(--color-primary-text);
   font-weight: 500;
 }
 .select.is-level-2 {
   border-color: var(--color-warning);
-  color: var(--color-warning);
+  color: var(--color-warning-text);
   font-weight: 500;
 }
 
@@ -261,7 +261,7 @@ textarea.input {
 }
 .segmented button[aria-pressed="true"] {
   background: var(--color-surface);
-  color: var(--color-primary);
+  color: var(--color-primary-text);
   box-shadow: var(--shadow-sm);
 }
 
@@ -414,7 +414,7 @@ kbd {
   transition: transform var(--transition);
 }
 .toggle[aria-checked="true"] {
-  background: var(--color-primary);
+  background: var(--color-primary-solid);
 }
 .toggle[aria-checked="true"]::after {
   transform: translateX(18px);
@@ -446,35 +446,35 @@ kbd {
 }
 .badge-primary {
   background: var(--color-primary-subtle);
-  color: var(--color-primary);
+  color: var(--color-primary-text);
 }
 .badge-success {
   background: var(--color-success-subtle);
-  color: var(--color-success);
+  color: var(--color-success-text);
 }
 .badge-warning {
   background: var(--color-warning-subtle);
-  color: var(--color-warning);
+  color: var(--color-warning-text);
 }
 .badge-danger {
   background: var(--color-danger-subtle);
-  color: var(--color-danger);
+  color: var(--color-danger-text);
 }
 .badge-Fortaleza {
   background: var(--color-success-subtle);
-  color: var(--foda-fortaleza);
+  color: var(--color-success-text);
 }
 .badge-Oportunidad {
   background: var(--color-primary-subtle);
-  color: var(--foda-oportunidad);
+  color: var(--color-primary-text);
 }
 .badge-Debilidad {
   background: var(--color-warning-subtle);
-  color: var(--foda-debilidad);
+  color: var(--color-warning-text);
 }
 .badge-Amenaza {
   background: var(--color-danger-subtle);
-  color: var(--foda-amenaza);
+  color: var(--color-danger-text);
 }
 .count {
   display: inline-flex;
@@ -490,7 +490,7 @@ kbd {
   font-weight: 700;
 }
 .count-primary {
-  background: var(--color-primary);
+  background: var(--color-primary-solid);
 }
 .count-success {
   background: var(--color-success);
@@ -544,7 +544,7 @@ kbd {
   display: grid;
   place-items: center;
   background: var(--color-primary-subtle);
-  color: var(--color-primary);
+  color: var(--color-primary-text);
 }
 .card-horizontal .thumb svg {
   width: 26px;
@@ -591,7 +591,7 @@ button.list-item:hover {
   display: grid;
   place-items: center;
   border-radius: 50%;
-  background: var(--color-primary);
+  background: var(--color-primary-solid);
   color: #fff;
   font-size: 11px;
   font-weight: 700;
@@ -748,7 +748,7 @@ button.list-item:hover {
   border: 0;
   border-bottom: 1px solid var(--color-border);
   background: transparent;
-  color: var(--color-primary);
+  color: var(--color-primary-text);
   font-weight: 600;
   cursor: pointer;
 }
@@ -759,7 +759,7 @@ button.list-item:hover {
   background: var(--color-primary-subtle);
 }
 .sheet .action.is-danger {
-  color: var(--color-danger);
+  color: var(--color-danger-text);
 }
 .sheet .cancel {
   height: 48px;
@@ -800,11 +800,11 @@ button.list-item:hover {
 }
 .menu button:hover {
   background: var(--color-primary-subtle);
-  color: var(--color-primary);
+  color: var(--color-primary-text);
 }
 .menu button.is-danger,
 .menu button.is-danger:hover {
-  color: var(--color-danger);
+  color: var(--color-danger-text);
 }
 .menu button svg {
   width: 16px;
@@ -842,17 +842,17 @@ button.list-item:hover {
 }
 .page-btn:hover:not(:disabled) {
   background: var(--color-primary-subtle);
-  color: var(--color-primary);
+  color: var(--color-primary-text);
 }
 .page-btn:focus-visible {
   border-color: var(--color-primary);
 }
 .page-btn[aria-current="page"] {
-  background: var(--color-primary);
+  background: var(--color-primary-solid);
   color: #fff;
 }
 .page-btn.is-done {
-  color: var(--color-primary);
+  color: var(--color-primary-text);
   border-color: var(--color-primary-border);
 }
 .page-btn:disabled {
@@ -870,7 +870,7 @@ button.list-item:hover {
   border-radius: var(--radius-pill);
 }
 a {
-  color: var(--color-primary);
+  color: var(--color-primary-text);
 }
 
 /* ---------- Page Control (dots) ---------- */
@@ -888,7 +888,7 @@ a {
   background: var(--color-primary-border);
 }
 .page-control span[aria-current="true"] {
-  background: var(--color-primary);
+  background: var(--color-primary-solid);
 }
 
 /* ---------- Progress ---------- */
@@ -901,7 +901,7 @@ a {
 .progress > span {
   display: block;
   height: 100%;
-  background: var(--color-primary);
+  background: var(--color-primary-solid);
   border-radius: inherit;
   transition: width 240ms ease;
 }
@@ -1086,7 +1086,7 @@ a {
   place-items: center;
   border-radius: 50%;
   background: var(--color-primary-subtle);
-  color: var(--color-primary);
+  color: var(--color-primary-text);
 }
 .empty-state p {
   max-width: 46ch;
@@ -1115,13 +1115,13 @@ a {
   width: 18px;
   height: 18px;
   flex: none;
-  color: var(--color-primary);
+  color: var(--color-primary-text);
 }
 .alert-warning {
   background: var(--color-warning-subtle);
 }
 .alert-warning svg {
-  color: var(--color-warning);
+  color: var(--color-warning-text);
 }
 
 /* ---------- Toast ---------- */
@@ -1183,7 +1183,7 @@ a {
   color: var(--color-text);
 }
 .tab[aria-selected="true"] {
-  color: var(--color-primary);
+  color: var(--color-primary-text);
   border-bottom-color: var(--color-primary);
 }
 .tab:focus-visible {
@@ -1230,19 +1230,19 @@ a {
 .tag-primary,
 .tag-info {
   background: var(--color-primary-subtle);
-  color: var(--color-primary);
+  color: var(--color-primary-text);
 }
 .tag-success {
   background: var(--color-success-subtle);
-  color: var(--color-success);
+  color: var(--color-success-text);
 }
 .tag-warning {
   background: var(--color-warning-subtle);
-  color: var(--color-warning);
+  color: var(--color-warning-text);
 }
 .tag-danger {
   background: var(--color-danger-subtle);
-  color: var(--color-danger);
+  color: var(--color-danger-text);
 }
 .tag-row {
   display: flex;
@@ -1282,7 +1282,7 @@ a {
   padding: 0;
   border: 0;
   background: none;
-  color: var(--color-primary);
+  color: var(--color-primary-text);
   font: inherit;
   font-weight: 600;
   text-decoration: underline;
@@ -1361,7 +1361,7 @@ a {
   text-decoration: none;
 }
 .row-title:hover {
-  color: var(--color-primary);
+  color: var(--color-primary-text);
   text-decoration: underline;
 }
 .row-meta {
