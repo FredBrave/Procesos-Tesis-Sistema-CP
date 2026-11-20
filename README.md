@@ -73,6 +73,15 @@ npm run build:informe  # regenera docs/entregables/TAREA1-GUIOS-PRO.docx
 
 Requisitos de desarrollo: Node ≥ 22 (pruebas y servidor; usa `node:sqlite`) y Python ≥ 3.10 (solo para los generadores). La app final no necesita ninguno.
 
+### Regresión de extremo a extremo
+
+[`scripts/e2e/regresion.py`](scripts/e2e/regresion.py) ejecuta en un navegador real los 15 casos de prueba de la lista *Casos de Prueba* de ClickUp, CP-01 a CP-15, y guarda el resultado de cada uno. CP-13 usa [`scripts/e2e/contraste.js`](scripts/e2e/contraste.js), que calcula el contraste WCAG AA de todos los textos visibles. Necesita Playwright (`pip install playwright`) y Chrome o Edge, y el servidor levantado en el puerto 8799 para CP-12 y CP-14:
+
+```bash
+PORT=8799 IA_PROVEEDOR=simulado npm run api
+python scripts/e2e/regresion.py . resultados.json scripts/e2e/contraste.js
+```
+
 ## Modificar el modelo (factores / subfactores / recomendaciones)
 
 1. Editar `data/guiosad_data.csv`, `data/factors.csv` o `data/recomendaciones.json`.
