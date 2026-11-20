@@ -13,7 +13,8 @@
   "use strict";
 
   const TIMEOUT = 8000;
-  const IA_TIMEOUT = 90000;
+  // Los modelos gratuitos de OpenRouter tardan 15-35 s y el servidor puede reintentar una vez.
+  const IA_TIMEOUT = 180000;
 
   class ApiError extends Error {
     constructor(status, body) {

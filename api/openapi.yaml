@@ -52,7 +52,7 @@ paths:
                     required: [disponible, proveedor]
                     properties:
                       disponible: { type: boolean }
-                      proveedor: { type: [string, "null"], enum: [anthropic, simulado, null] }
+                      proveedor: { type: [string, "null"], enum: [openrouter, anthropic, simulado, null] }
 
   /api/catalogo:
     get:

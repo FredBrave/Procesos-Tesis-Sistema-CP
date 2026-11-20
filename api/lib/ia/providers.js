@@ -2,6 +2,7 @@
  * Proveedores del asistente de IA.
  *  - anthropic: Messages API de Claude por HTTP con fetch (sin SDK: el proyecto no
  *    admite dependencias). Salida estructurada con output_config.format (json_schema).
+ *  - openrouter: API de OpenRouter (formato OpenAI) con response_format json_schema estricto.
  *  - simulado: determinista, sin red, para demos y pruebas.
  * Cada proveedor devuelve { data, modelo } o { invalido: "motivo" }; la validación
  * estricta y el reintento viven en ia/index.js.
@@ -83,6 +84,107 @@ function anthropicProvider({ apiKey, model = DEFAULT_MODEL, effort = "medium", t
 }
 
 // ---------------------------------------------------------------------------
+// Proveedor OpenRouter (API compatible con OpenAI; da acceso a Claude y otros modelos)
+// ---------------------------------------------------------------------------
+const OPENROUTER_URL = "https://openrouter.ai/api/v1/chat/completions";
+// Cadena por defecto: Claude Haiku 5.5 (de pago, rápido y barato) y, si la cuenta no tiene saldo
+// o el modelo está saturado, un modelo gratuito con salida JSON estructurada. IA_MODELO admite una
+// lista separada por comas con el mismo significado.
+const OPENROUTER_DEFAULT_MODEL = "anthropic/claude-haiku-5.5,nvidia/nemotron-3.5-super-vl:free";
+// Errores con los que se pasa al siguiente modelo de la cadena.
+const FALLBACK_STATUS = new Set([402, 408, 429, 502, 503, 529]);
+
+function openrouterProvider({ apiKey, model = OPENROUTER_DEFAULT_MODEL, timeoutMs = 90000, fetchImpl = globalThis.fetch, baseUrl = OPENROUTER_URL, onUsage }) {
+  const models = String(model)
+    .split(",")
+    .map((m) => m.trim())
+    .filter(Boolean);
+
+  /** Prueba los modelos en orden; un fallo de saldo, saturación o tiempo pasa al siguiente. */
+  async function call(system, user, schema, name) {
+    let lastError = null;
+    for (const m of models) {
+      try {
+        return await callModel(m, system, user, schema, name);
+      } catch (e) {
+        lastError = e;
+        if (!(e instanceof ApiError) || !e.fallback) throw e;
+      }
+    }
+    throw lastError;
+  }
+
+  function fail(status, codigo, mensaje, fallback) {
+    const e = new ApiError(status, codigo, mensaje);
+    e.fallback = fallback;
+    return e;
+  }
+
+  async function callModel(modelId, system, user, schema, name) {
+    const body = {
+      model: modelId,
+      max_tokens: 4000,
+      messages: [
+        { role: "system", content: system },
+        { role: "user", content: user },
+      ],
+      response_format: { type: "json_schema", json_schema: { name, strict: true, schema } },
+      usage: { include: true }, // OpenRouter devuelve el coste de cada llamada
+    };
+    const headers = {
+      "content-type": "application/json",
+      authorization: `Bearer ${apiKey}`,
+      "x-title": "GUIOS PRO",
+    };
+    let res;
+    try {
+      res = await fetchImpl(baseUrl, { method: "POST", headers, body: JSON.stringify(body), signal: AbortSignal.timeout(timeoutMs) });
+    } catch (e) {
+      const timeout = e && (e.name === "TimeoutError" || e.name === "AbortError");
+      throw fail(502, "ia_error_proveedor", timeout ? "El proveedor de IA no respondió a tiempo" : "No se pudo contactar con el proveedor de IA", timeout);
+    }
+    let json = null;
+    try {
+      json = await res.json();
+    } catch {
+      /* cuerpo no JSON */
+    }
+    if (!res.ok) {
+      // Nunca se reenvía el cuerpo del proveedor ni la clave: solo el estado.
+      const next = FALLBACK_STATUS.has(res.status);
+      if ([401, 403].includes(res.status)) throw fail(503, "ia_no_disponible", "El proveedor de IA rechazó la credencial configurada en el servidor", false);
+      if (res.status === 402) throw fail(503, "ia_no_disponible", "La cuenta del proveedor de IA no tiene saldo suficiente", next);
+      if (next) throw fail(503, "ia_no_disponible", "El proveedor de IA está saturado; inténtalo más tarde", next);
+      throw fail(502, "ia_error_proveedor", `El proveedor de IA devolvió el estado ${res.status}`, false);
+    }
+    const choice = json && Array.isArray(json.choices) ? json.choices[0] : null;
+    if (!choice || !choice.message) return { invalido: "respuesta sin contenido" };
+    if (onUsage && json.usage) onUsage({ modelo: json.model || modelId, ...json.usage });
+    if (choice.message.refusal) return { invalido: "el modelo rechazó la solicitud" };
+    if (choice.finish_reason === "length") return { invalido: "respuesta truncada (max_tokens)" };
+    const text = String(choice.message.content || "")
+      .trim()
+      .replace(/^```(?:json)?\s*|\s*```$/g, ""); // algunos modelos envuelven el JSON en un bloque de código
+    try {
+      return { data: JSON.parse(text), modelo: json.model || modelId };
+    } catch {
+      return { invalido: "la respuesta no es JSON válido" };
+    }
+  }
+
+  return {
+    nombre: "openrouter",
+    modelo: models.join(","),
+    sugerir(input, feedback) {
+      return call(P.SUGERENCIAS_SYSTEM(), P.sugerenciasUser(input, feedback), P.sugerenciasSchema(input.factor), "sugerencias");
+    },
+    resumir(datos, feedback) {
+      return call(P.RESUMEN_SYSTEM(), P.resumenUser(datos, feedback), P.RESUMEN_SCHEMA, "resumen");
+    },
+  };
+}
+
+// ---------------------------------------------------------------------------
 // Proveedor simulado (determinista)
 // ---------------------------------------------------------------------------
 const hashBytes = (s) => crypto.createHash("sha256").update(s).digest();
@@ -156,4 +258,4 @@ function resumenPlantilla(d) {
   return parts.join(" ");
 }
 
-module.exports = { anthropicProvider, simulatedProvider, DEFAULT_MODEL, resumenPlantilla };
+module.exports = { anthropicProvider, openrouterProvider, simulatedProvider, DEFAULT_MODEL, OPENROUTER_DEFAULT_MODEL, resumenPlantilla };

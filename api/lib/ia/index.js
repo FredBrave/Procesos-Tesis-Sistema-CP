@@ -10,14 +10,19 @@ const { factorById, evaluate } = require("../catalog");
 const { ApiError, badRequest, notFound } = require("../http");
 const V = require("../validate");
 const P = require("./prompts");
-const { anthropicProvider, simulatedProvider, DEFAULT_MODEL } = require("./providers");
+const { anthropicProvider, openrouterProvider, simulatedProvider, DEFAULT_MODEL, OPENROUTER_DEFAULT_MODEL } = require("./providers");
 
 /** Construye el proveedor a partir de la configuración (variables de entorno o pruebas). */
 function createProvider(cfg = {}) {
   const key = cfg.apiKey || "";
   let nombre = (cfg.proveedor || "").toLowerCase();
-  if (!nombre) nombre = key ? "anthropic" : "ninguno";
+  if (!nombre) nombre = cfg.openrouterKey ? "openrouter" : key ? "anthropic" : "ninguno";
   if (nombre === "simulado") return simulatedProvider();
+  if (nombre === "openrouter") {
+    const orKey = cfg.openrouterKey || key;
+    if (!orKey) return null;
+    return openrouterProvider({ apiKey: orKey, model: cfg.modelo || OPENROUTER_DEFAULT_MODEL, timeoutMs: cfg.timeoutMs, fetchImpl: cfg.fetch, onUsage: cfg.onUsage });
+  }
   if (nombre === "anthropic" && key) {
     return anthropicProvider({
       apiKey: key,

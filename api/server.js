@@ -234,6 +234,7 @@ function createServer(opciones = {}) {
     {
       proveedor: env.IA_PROVEEDOR,
       apiKey: env.ANTHROPIC_API_KEY,
+      openrouterKey: env.OPENROUTER_API_KEY,
       modelo: env.IA_MODELO,
       esfuerzo: env.IA_ESFUERZO,
       limiteDiario: env.IA_LIMITE_DIARIO ? Number(env.IA_LIMITE_DIARIO) : 100,
