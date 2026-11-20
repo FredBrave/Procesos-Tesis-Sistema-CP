@@ -1,5 +1,12 @@
 # Notas de la versión
 
+## v2.3.0 · 20/11/2026
+
+- **Proveedor de IA OpenRouter** (`OPENROUTER_API_KEY`), con una cadena de modelos: Claude Haiku 5.5 y, si no hay saldo o el modelo está saturado, un modelo gratuito. Probado con la clave real del equipo: 6 de 6 respuestas válidas.
+- **Manual de usuario** en `docs/entregables/MANUAL-USUARIO-GUIOS-PRO.docx`, con 24 capturas del software.
+- **Guía de publicación** en GitHub Pages, Vercel, Netlify y Render: `docs/DESPLIEGUE.md`.
+- **Datos de prueba importables** en `docs/datos-prueba/guiospro-datos-prueba.json`.
+
 ## v2.2.0 · Versión final del curso · 20/11/2026
 
 Cierra el alcance de GUIOS PRO definido en `docs/SPRINT-0.md` y `docs/ENTREGA-TAREA1.md`: los módulos M1 a M8 están implementados y verificados.

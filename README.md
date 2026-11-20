@@ -19,6 +19,10 @@ Sistema informático que automatiza la **guía GUIOS** para evaluar si una soluc
 2. Abrir [`app/index.html`](app/index.html) en Chrome, Edge o Firefox (no requiere servidor ni instalación).
 3. Opcional, con servidor local: `npm run serve` → http://localhost:8080
 
+- **Manual de usuario:** [`docs/entregables/MANUAL-USUARIO-GUIOS-PRO.docx`](docs/entregables/MANUAL-USUARIO-GUIOS-PRO.docx).
+- **Publicarlo en un servidor** (GitHub Pages, Vercel, Netlify y Render): [`docs/DESPLIEGUE.md`](docs/DESPLIEGUE.md).
+- **Datos de prueba importables:** [`docs/datos-prueba/guiospro-datos-prueba.json`](docs/datos-prueba/guiospro-datos-prueba.json).
+
 Para ver el flujo completo con datos de prueba: menú **Más → Cargar ejemplo** o abrir `app/index.html?demo=1` (carga Moodle, Chamilo y Open edX). El estado general está en **Panel** (`#panel`), el historial en **Evaluaciones** y la comparación en **Comparar**. En el paso 2 las teclas `1`–`4` responden la pregunta resaltada.
 
 ### Servidor opcional (sincronización e IA)
