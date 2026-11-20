@@ -2250,7 +2250,8 @@
       }
       if (n === LAST_STEP && ui.screen !== LAST_STEP) {
         const result = E.evaluate(DATA, state);
-        if (result.pendientes.length && E.progress(result).answered > 0) {
+        // Solo hay resultado parcial que avisar si al menos un factor está completo.
+        if (result.pendientes.length && result.positivos + result.negativos > 0) {
           if (ui.screen === 1) confirmStep1();
           return pendingWarning(result);
         }
