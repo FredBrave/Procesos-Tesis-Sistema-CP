@@ -52,14 +52,26 @@
   /* ------------------------------------------------------------------ */
   /* Estructura                                                          */
   /* ------------------------------------------------------------------ */
+  /**
+   * Datos por defecto de la organización: el piloto de validación de la tesis (Rea Sánchez, 2022),
+   * hecho en la Universidad Estatal de Milagro con la Dirección de TICs como evaluadora.
+   */
+  const ORGANIZACION_TESIS = {
+    nombre: "Universidad Estatal de Milagro",
+    sector: "Educación superior",
+    logo: "img/logo-unemi.png",
+  };
+  const EVALUADOR_TESIS = "Dirección de TICs";
+
   function emptyDb(base) {
     return {
       version: 2,
       config: {
-        organizacion: { nombre: "", sector: "", logo: "" },
-        evaluadorPorDefecto: "",
+        organizacion: Object.assign({}, ORGANIZACION_TESIS),
+        evaluadorPorDefecto: EVALUADOR_TESIS,
         tema: "sistema",
         servidor: { url: "http://localhost:8787", activo: false },
+        guardada: false, // pasa a true al guardar la configuración: desde entonces no se rellenan valores por defecto
       },
       softwares: [],
       evaluaciones: [],
@@ -254,6 +266,11 @@
     db.config = Object.assign(fresh.config, db.config || {});
     db.config.organizacion = Object.assign(emptyDb(base).config.organizacion, db.config.organizacion || {});
     db.config.servidor = Object.assign(emptyDb(base).config.servidor, db.config.servidor || {});
+    // Mientras la configuración no se haya guardado nunca, los campos vacíos toman los datos de la tesis.
+    if (!db.config.guardada) {
+      Object.keys(ORGANIZACION_TESIS).forEach((k) => db.config.organizacion[k] || (db.config.organizacion[k] = ORGANIZACION_TESIS[k]));
+      if (!db.config.evaluadorPorDefecto) db.config.evaluadorPorDefecto = EVALUADOR_TESIS;
+    }
     ["softwares", "evaluaciones", "plantillas", "catalogos"].forEach((k) => Array.isArray(db[k]) || (db[k] = []));
     db.sync = Object.assign(fresh.sync, db.sync || {});
     if (!db.catalogoActivo) db.catalogoActivo = base.version;

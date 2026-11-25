@@ -2044,6 +2044,7 @@
     }
     const serverChanged = c.servidor.activo !== db.config.servidor.activo || c.servidor.url !== db.config.servidor.url;
     db.config = Store.clone(c);
+    db.config.guardada = true; // a partir de aquí manda lo que guarde el usuario, aunque deje campos vacíos
     ui.cfgDirty = false;
     applyTheme(db.config.tema);
     // El borrador vacío adopta los datos por defecto nuevos

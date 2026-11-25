@@ -29,6 +29,28 @@ test("almacén vacío: estructura inicial con el catálogo oficial activo", () =
   assert.equal(db.config.servidor.activo, false);
 });
 
+test("configuración por defecto: datos del piloto de la tesis en la UNEMI", () => {
+  const db = S.emptyDb(DATA);
+  assert.equal(db.config.organizacion.nombre, "Universidad Estatal de Milagro");
+  assert.equal(db.config.organizacion.sector, "Educación superior");
+  assert.equal(db.config.organizacion.logo, "img/logo-unemi.png");
+  assert.equal(db.config.evaluadorPorDefecto, "Dirección de TICs");
+  assert.equal(db.config.guardada, false);
+  // Un almacén antiguo con la configuración vacía y nunca guardada se rellena al cargar
+  const old = S.emptyDb(DATA);
+  old.config.organizacion = { nombre: "", sector: "", logo: "" };
+  old.config.evaluadorPorDefecto = "";
+  delete old.config.guardada;
+  const loaded = S.load(memoryStorage({ [S.DB_KEY]: JSON.stringify(old) }), E, DATA);
+  assert.equal(loaded.config.organizacion.nombre, "Universidad Estatal de Milagro");
+  assert.equal(loaded.config.evaluadorPorDefecto, "Dirección de TICs");
+  // Una vez guardada, lo que dejó el usuario se respeta aunque esté vacío
+  old.config.guardada = true;
+  const saved = S.load(memoryStorage({ [S.DB_KEY]: JSON.stringify(old) }), E, DATA);
+  assert.equal(saved.config.organizacion.logo, "");
+  assert.equal(saved.config.evaluadorPorDefecto, "");
+});
+
 test("migración desde la versión 1: la evaluación pasa al historial y su software al catálogo", () => {
   const old = E.initialState(DATA);
   old.software.nombre = "Odoo";
