@@ -12,6 +12,7 @@ const Api = require(path.join(__dirname, "..", "..", "app", "js", "api.js"));
 
 function localDb(nombre) {
   const db = Store.emptyDb(DATA);
+  db.softwares = []; // sin el catálogo inicial: la prueba cuenta exactamente lo que se envía
   db.config.organizacion.nombre = "Universidad de Prueba Ñandú"; // nombre no ASCII en la cabecera
   const sw = Store.normalizeSoftware({ nombre, licencia: "FLOSS copyleft (GPL, AGPL)", etiquetas: [{ nombre: "LMS", color: "primary" }] });
   db.softwares.push(sw);
@@ -41,6 +42,7 @@ test("sincronización: envía, recibe en otro equipo, detecta y resuelve conflic
 
     // Equipo B (vacío, misma organización) recibe todo
     const B = Store.emptyDb(DATA);
+    B.softwares = [];
     const repB = await Api.syncDb(api, B, Store, E, DATA);
     assert.equal(repB.recibidos, 3);
     assert.equal(B.evaluaciones[0].id, A.ev.id);
@@ -52,6 +54,7 @@ test("sincronización: envía, recibe en otro equipo, detecta y resuelve conflic
 
     // Otra organización no ve nada
     const C = Store.emptyDb(DATA);
+    C.softwares = [];
     await Api.syncDb(Api.client({ url: srv.base, organizacion: "Otra" }), C, Store, E, DATA);
     assert.equal(C.evaluaciones.length, 0);
 

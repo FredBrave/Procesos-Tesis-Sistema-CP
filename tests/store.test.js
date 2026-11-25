@@ -51,6 +51,37 @@ test("configuración por defecto: datos del piloto de la tesis en la UNEMI", () 
   assert.equal(saved.config.evaluadorPorDefecto, "");
 });
 
+test("catálogo inicial: LibreOffice, el software del piloto de la tesis, se añade una sola vez", () => {
+  const db = S.emptyDb(DATA);
+  assert.deepEqual(db.softwares.map((s) => s.nombre), ["LibreOffice"]);
+  assert.equal(db.softwares[0].proveedor, "The Document Foundation");
+  assert.equal(db.softwares[0].licencia, "FLOSS copyleft débil (LGPL, MPL)");
+  // Un almacén anterior al catálogo inicial lo recibe al cargar
+  const old = S.emptyDb(DATA);
+  old.softwares = [S.normalizeSoftware({ nombre: "Moodle" })];
+  delete old.catalogoInicial;
+  const loaded = S.load(memoryStorage({ [S.DB_KEY]: JSON.stringify(old) }), E, DATA);
+  assert.deepEqual(loaded.softwares.map((s) => s.nombre), ["LibreOffice", "Moodle"]);
+  // Si el usuario lo borra, no vuelve a aparecer
+  S.removeSoftware(loaded, "sw_tesis_libreoffice", false);
+  const again = S.load(memoryStorage({ [S.DB_KEY]: JSON.stringify(loaded) }), E, DATA);
+  assert.deepEqual(again.softwares.map((s) => s.nombre), ["Moodle"]);
+  // Una evaluación antigua de LibreOffice reutiliza ese software en lugar de duplicarlo
+  const legacy = E.initialState(DATA);
+  legacy.software.nombre = "LibreOffice";
+  legacy.paso1Confirmado = true;
+  const migrated = S.load(memoryStorage({ [S.LEGACY_KEY]: JSON.stringify(legacy) }), E, DATA);
+  assert.equal(migrated.softwares.filter((s) => s.nombre === "LibreOffice").length, 1);
+  assert.equal(migrated.evaluaciones[0].softwareId, "sw_tesis_libreoffice");
+});
+
+test("una evaluación con solo la organización y el evaluador por defecto no cuenta como iniciada", () => {
+  const ev = S.newEvaluation(E, DATA, { software: { organizacion: "Universidad Estatal de Milagro", evaluador: "Dirección de TICs" } });
+  assert.equal(S.hasData(ev), false);
+  ev.software.nombre = "LibreOffice";
+  assert.equal(S.hasData(ev), true);
+});
+
 test("migración desde la versión 1: la evaluación pasa al historial y su software al catálogo", () => {
   const old = E.initialState(DATA);
   old.software.nombre = "Odoo";
@@ -61,8 +92,9 @@ test("migración desde la versión 1: la evaluación pasa al historial y su soft
   const db = S.load(memoryStorage({ [S.LEGACY_KEY]: JSON.stringify(old) }), E, DATA);
   assert.equal(db.evaluaciones.length, 1);
   assert.equal(db.activa, db.evaluaciones[0].id);
-  assert.equal(db.softwares[0].nombre, "Odoo");
-  assert.equal(db.evaluaciones[0].softwareId, db.softwares[0].id);
+  const odoo = db.softwares.find((s) => s.nombre === "Odoo");
+  assert.ok(odoo);
+  assert.equal(db.evaluaciones[0].softwareId, odoo.id);
   assert.equal(db.evaluaciones[0].subfactores["F01-S01"], 4);
   assert.equal(db.config.organizacion.nombre, "UNEMI");
   assert.equal(db.config.evaluadorPorDefecto, "Comité TI");
@@ -148,6 +180,7 @@ test("etiquetas: sin duplicados, con color válido", () => {
 
 test("exportar e importar: ida y vuelta con vista previa y resolución de duplicados", () => {
   const db = S.emptyDb(DATA);
+  db.softwares = []; // sin el catálogo inicial, para contar solo lo exportado
   const sw = S.normalizeSoftware({ nombre: "Moodle", etiquetas: [{ nombre: "LMS", color: "primary" }] });
   db.softwares.push(sw);
   const ev = completeEval(4);
@@ -161,6 +194,7 @@ test("exportar e importar: ida y vuelta con vista previa y resolución de duplic
   const parsed = S.parsePackage(E, DATA, JSON.parse(JSON.stringify(pkg)));
   // En un almacén vacío todo es nuevo
   const fresh = S.emptyDb(DATA);
+  fresh.softwares = [];
   assert.ok(S.previewImport(fresh, parsed).every((i) => !i.duplicado));
   assert.deepEqual(S.applyImport(fresh, parsed, "omitir"), { nuevos: 3, reemplazados: 0, copias: 0, omitidos: 0 });
   assert.equal(fresh.evaluaciones[0].softwareId, fresh.softwares[0].id);

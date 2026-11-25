@@ -228,8 +228,9 @@ def cp09(page):
     page.click("[data-action='wipe']")
     page.click("[data-action='popup-confirm']")
     db = stored(page)
-    assert not db["evaluaciones"] and not db["softwares"]
-    return f"Al cancelar se mantienen las {n0} evaluaciones; al confirmar «Borrar todo» se vacían evaluaciones, softwares y plantillas."
+    # Tras borrar todo queda el estado inicial: solo LibreOffice, el software del caso de la tesis
+    assert not db["evaluaciones"] and not db["plantillas"] and [s["nombre"] for s in db["softwares"]] == ["LibreOffice"]
+    return f"Al cancelar se mantienen las {n0} evaluaciones; al confirmar «Borrar todo» se vacían evaluaciones, plantillas y softwares, y queda solo el catálogo inicial con LibreOffice."
 
 
 @case("CP-10")
@@ -245,7 +246,7 @@ def cp10(page):
 @case("CP-11")
 def cp11(page):
     page.goto(APP + "#softwares")
-    expect(page.locator(".empty-state")).to_be_visible()
+    expect(page.locator(".list-item")).to_have_count(1)  # catálogo inicial: LibreOffice
     page.click(".screen-header [data-action='sw-new']")
     page.fill("#swf-nombre", "SAP B1")
     page.select_option("#swf-lic", label="Otra")
@@ -257,7 +258,8 @@ def cp11(page):
     expect(page.locator(".meta-grid")).to_contain_text("Privativa")
     page.click("[data-sw-delete]")
     page.click("[data-action='popup-confirm']")
-    expect(page.locator(".empty-state")).to_be_visible()
+    expect(page.locator(".list-item")).to_have_count(1)
+    expect(page.locator(".list-item")).not_to_contain_text("SAP B1")
     return "Alta de SAP B1, edición de su licencia a Privativa y baja con confirmación funcionan; la lista se actualiza en cada paso."
 
 

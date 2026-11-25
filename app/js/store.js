@@ -62,10 +62,25 @@
     logo: "img/logo-unemi.png",
   };
   const EVALUADOR_TESIS = "Dirección de TICs";
+  /** Software evaluado en ese piloto: primer elemento del catálogo de softwares. */
+  const SOFTWARE_TESIS = {
+    id: "sw_tesis_libreoffice",
+    nombre: "LibreOffice",
+    version: "",
+    licencia: "FLOSS copyleft débil (LGPL, MPL)",
+    proveedor: "The Document Foundation",
+    url: "https://www.libreoffice.org",
+    notas: "Suite ofimática evaluada en el piloto de validación de la guía GUIOS en la Universidad Estatal de Milagro, con la Dirección de TICs, según la tesis de Rea Sánchez de 2022.",
+    etiquetas: [
+      { nombre: "Ofimática", color: "primary" },
+      { nombre: "Caso de la tesis", color: "success" },
+    ],
+  };
 
   function emptyDb(base) {
     return {
       version: 2,
+      catalogoInicial: true, // el software de la tesis ya está en el catálogo; no se vuelve a añadir si se borra
       config: {
         organizacion: Object.assign({}, ORGANIZACION_TESIS),
         evaluadorPorDefecto: EVALUADOR_TESIS,
@@ -73,7 +88,7 @@
         servidor: { url: "http://localhost:8787", activo: false },
         guardada: false, // pasa a true al guardar la configuración: desde entonces no se rellenan valores por defecto
       },
-      softwares: [],
+      softwares: [normalizeSoftware(SOFTWARE_TESIS)],
       evaluaciones: [],
       activa: null,
       plantillas: [],
@@ -249,8 +264,11 @@
     const ev = normalizeEvaluation(engine, base, old);
     if (!hasData(ev)) return db;
     if (ev.software.nombre) {
-      const sw = normalizeSoftware(ev.software);
-      db.softwares.push(sw);
+      let sw = softwareByName(db, ev.software.nombre);
+      if (!sw) {
+        sw = normalizeSoftware(ev.software);
+        db.softwares.push(sw);
+      }
       ev.softwareId = sw.id;
     }
     if (ev.software.organizacion) db.config.organizacion.nombre = ev.software.organizacion;
@@ -274,6 +292,11 @@
     ["softwares", "evaluaciones", "plantillas", "catalogos"].forEach((k) => Array.isArray(db[k]) || (db[k] = []));
     db.sync = Object.assign(fresh.sync, db.sync || {});
     if (!db.catalogoActivo) db.catalogoActivo = base.version;
+    // Almacenes creados antes de que existiera el catálogo inicial: se añade una sola vez.
+    if (!db.catalogoInicial) {
+      if (!softwareByName(db, SOFTWARE_TESIS.nombre)) db.softwares.unshift(normalizeSoftware(SOFTWARE_TESIS));
+      db.catalogoInicial = true;
+    }
     if (db.activa && !db.evaluaciones.some((e) => e.id === db.activa)) db.activa = null;
     return db;
   }
@@ -291,8 +314,13 @@
   /* ------------------------------------------------------------------ */
   /* Consultas                                                           */
   /* ------------------------------------------------------------------ */
+  /**
+   * ¿La evaluación tiene datos propios? La organización y el evaluador no cuentan: se rellenan solos
+   * con la configuración, y una evaluación vacía no debe aparecer como «en proceso».
+   */
+  const OWN_FIELDS = ["nombre", "version", "licencia", "proveedor"];
   function hasData(ev) {
-    return !!ev && (Object.keys(ev.subfactores || {}).length > 0 || !!ev.paso1Confirmado || SOFTWARE_FIELDS.some((k) => ev.software && ev.software[k]));
+    return !!ev && (Object.keys(ev.subfactores || {}).length > 0 || !!ev.paso1Confirmado || OWN_FIELDS.some((k) => ev.software && ev.software[k]));
   }
 
   /** Catálogo con el que se hizo una evaluación (RN-08): la base o una versión local. */
