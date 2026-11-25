@@ -77,7 +77,7 @@ fetch("http://localhost:8787/api/evaluaciones/" + ev.id, {
 | `IA_PROVEEDOR` | `openrouter` si hay `OPENROUTER_API_KEY`; `anthropic` si hay `ANTHROPIC_API_KEY`; si no, `ninguno` | `openrouter` \| `anthropic` \| `simulado` (determinista, para demos y pruebas) \| `ninguno`. |
 | `ANTHROPIC_API_KEY` | — | Clave de la API de Claude. Solo en el servidor. |
 | `OPENROUTER_API_KEY` | — | Clave de OpenRouter. Solo en el servidor. |
-| `IA_MODELO` | Anthropic: `claude-opus-5-5`. OpenRouter: `anthropic/claude-haiku-5.5,nvidia/nemotron-3.5-super-vl:free` | Modelo. Con OpenRouter admite una lista separada por comas: si un modelo responde sin saldo (402), saturado (429/503) o no responde a tiempo, se prueba el siguiente. |
+| `IA_MODELO` | Anthropic: `claude-opus-5-5`. OpenRouter: `anthropic/claude-haiku-5.5,nvidia/nemotron-3.5-super-vl:free,baidu/ernie-5.5-flash-preview:free` | Modelo. Con OpenRouter admite una lista separada por comas: si un modelo responde sin saldo (402), saturado (429/503) o no responde a tiempo, se prueba el siguiente. |
 | `IA_ESFUERZO` | `medium` | `output_config.effort` (`low`…`max`); vacío para no enviarlo. |
 | `IA_LIMITE_DIARIO` | `100` | Llamadas de IA por organización y día (UTC). Al superarlo: 429 con `Retry-After`. |
 | `IA_UMBRAL` | `0.7` | Umbral de acierto de `ia/evaluar-calidad.js`. |
@@ -185,6 +185,6 @@ api/
 
 ## OpenRouter
 
-Con `OPENROUTER_API_KEY` el servidor usa la API de OpenRouter (`https://openrouter.ai/api/v1/chat/completions`) con salida JSON estructurada estricta. La cadena por defecto prueba primero Claude Haiku 5.5, que es de pago, rápido y cuesta alrededor de una décima de centavo por llamada. Si la cuenta no tiene saldo, pasa a `nvidia/nemotron-3.5-super-vl:free`, que es gratuito pero tarda de 15 a 35 segundos.
+Con `OPENROUTER_API_KEY` el servidor usa la API de OpenRouter (`https://openrouter.ai/api/v1/chat/completions`) con salida JSON estructurada estricta. La cadena por defecto prueba primero Claude Haiku 5.5, que es de pago, rápido y cuesta alrededor de una décima de centavo por llamada. Si la cuenta no tiene saldo, pasa a los modelos gratuitos `nvidia/nemotron-3.5-super-vl:free` y, si su proveedor falla, `baidu/ernie-5.5-flash-preview:free`. Son gratuitos pero tardan de 6 a 35 segundos.
 
 Límites de los modelos gratuitos de OpenRouter: 20 peticiones por minuto y 50 al día por cuenta, o 1000 al día si la cuenta ha comprado al menos 10 USD de créditos. Las peticiones fallidas también cuentan. Cada clic en «Sugerir con IA» o «Redactar con IA» es una petición, o dos si el servidor tiene que reintentar por una respuesta inválida.

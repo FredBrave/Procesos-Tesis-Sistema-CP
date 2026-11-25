@@ -88,9 +88,9 @@ function anthropicProvider({ apiKey, model = DEFAULT_MODEL, effort = "medium", t
 // ---------------------------------------------------------------------------
 const OPENROUTER_URL = "https://openrouter.ai/api/v1/chat/completions";
 // Cadena por defecto: Claude Haiku 5.5 (de pago, rápido y barato) y, si la cuenta no tiene saldo
-// o el modelo está saturado, un modelo gratuito con salida JSON estructurada. IA_MODELO admite una
-// lista separada por comas con el mismo significado.
-const OPENROUTER_DEFAULT_MODEL = "anthropic/claude-haiku-5.5,nvidia/nemotron-3.5-super-vl:free";
+// o el modelo está saturado, dos modelos gratuitos con salida JSON estructurada; el segundo cubre
+// las caídas intermitentes del proveedor del primero. IA_MODELO admite una lista separada por comas.
+const OPENROUTER_DEFAULT_MODEL = "anthropic/claude-haiku-5.5,nvidia/nemotron-3.5-super-vl:free,baidu/ernie-5.5-flash-preview:free";
 // Errores con los que se pasa al siguiente modelo de la cadena.
 const FALLBACK_STATUS = new Set([402, 408, 429, 502, 503, 529]);
 
